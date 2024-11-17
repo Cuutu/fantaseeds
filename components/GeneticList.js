@@ -38,12 +38,12 @@ export default function GeneticList({ geneticas }) {
         <div className="flex flex-col items-center">
           <span>Llegaste al límite de tu membresía {session.user.membresia}</span>
           <a 
-            href="https://www.instagram.com/fantaseeds" 
+            href="https://wa.me/5491127064165" 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-green-400 hover:text-green-300 underline mt-1"
           >
-            Podés upgradearla vía Instagram
+            Podés upgradearla vía WhatsApp
           </a>
         </div>
       );
@@ -72,12 +72,12 @@ export default function GeneticList({ geneticas }) {
         <div className="flex flex-col items-center">
           <span>Llegaste al límite de tu membresía {session.user.membresia}</span>
           <a 
-            href="https://www.instagram.com/fantaseeds" 
+            href="https://wa.me/5491127064165" 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-green-400 hover:text-green-300 underline mt-1"
           >
-            Podés upgradearla vía Instagram
+            Podés upgradearla vía WhatsApp
           </a>
         </div>
       );
