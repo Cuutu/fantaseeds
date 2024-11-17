@@ -50,34 +50,41 @@ export const authOptions = {
       }
     })
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 días
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.usuario = user.usuario;
         token.email = user.email;
-        token.nombreApellido = user.nombreApellido;
+        token.usuario = user.usuario;
         token.rol = user.rol;
+        token.nombreApellido = user.nombreApellido;
         token.membresia = user.membresia;
       }
       return token;
     },
     async session({ session, token }) {
-      if (session?.user) {
-        const userData = await User.findOne({ email: session.user.email });
-        session.user.id = token.sub;
-        session.user.rol = userData.rol;
-        session.user.membresia = userData.membresia;
+      if (token) {
+        session.user = {
+          id: token.id,
+          email: token.email,
+          usuario: token.usuario,
+          rol: token.rol,
+          nombreApellido: token.nombreApellido,
+          membresia: token.membresia
+        };
       }
       return session;
     }
   },
   pages: {
     signIn: '/login',
+    error: '/login'
   },
-  session: {
-    strategy: 'jwt'
-  }
+  secret: process.env.NEXTAUTH_SECRET
 };
 
 const handler = NextAuth(authOptions);
