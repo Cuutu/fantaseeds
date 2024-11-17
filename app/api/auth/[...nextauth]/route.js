@@ -7,12 +7,20 @@ import bcrypt from 'bcryptjs';
 export const authOptions = {
   providers: [
     CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" }
+      },
       async authorize(credentials) {
         try {
           await dbConnect();
           
-          const user = await User.findOne({ 
-            usuario: credentials.usuario 
+          const user = await User.findOne({
+            $or: [
+              { email: credentials.email },
+              { usuario: credentials.email }
+            ]
           });
 
           if (!user) {
@@ -30,14 +38,14 @@ export const authOptions = {
 
           return {
             id: user._id.toString(),
-            usuario: user.usuario,
             email: user.email,
-            nombreApellido: user.nombreApellido,
+            usuario: user.usuario,
             rol: user.rol,
+            nombreApellido: user.nombreApellido,
             membresia: user.membresia
           };
         } catch (error) {
-          throw new Error(error.message);
+          throw error;
         }
       }
     })
