@@ -1,9 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import { useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import Cart from '@/components/Cart';
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cart } = useCart();
 
   return (
     <nav className="bg-green-800 text-white fixed w-full z-50">
@@ -65,6 +70,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+      {isCartOpen && <Cart onClose={() => setIsCartOpen(false)} />}
     </nav>
   );
 } 
