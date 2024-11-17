@@ -1,5 +1,6 @@
 import dbConnect from '@/lib/db/mongodb';
 import User from '@/models/User';
+import bcrypt from 'bcryptjs';
 
 // Manejador para GET (para verificar si la ruta funciona)
 export async function GET(req) {
@@ -11,10 +12,34 @@ export async function POST(req) {
   try {
     await dbConnect();
 
-    // Datos del administrador
+    // Verificar si ya existe un admin
+    const existingAdmin = await User.findOne({ usuario: "admin" });
+    
+    if (existingAdmin) {
+      // Si existe, actualizar su contraseña
+      const hashedPassword = await bcrypt.hash("admin123456", 10);
+      await User.findOneAndUpdate(
+        { usuario: "admin" },
+        { $set: { password: hashedPassword } }
+      );
+
+      return Response.json({
+        success: true,
+        message: "Contraseña de administrador actualizada",
+        admin: {
+          usuario: existingAdmin.usuario,
+          email: existingAdmin.email,
+          rol: existingAdmin.rol
+        }
+      });
+    }
+
+    // Si no existe, crear nuevo admin
+    const hashedPassword = await bcrypt.hash("admin123456", 10);
+    
     const adminData = {
       usuario: "admin",
-      password: "admin123456",
+      password: hashedPassword,
       nombreApellido: "Administrador Principal",
       email: "admin@fantaseeds.com",
       domicilio: {
@@ -28,25 +53,7 @@ export async function POST(req) {
       membresia: "10G"
     };
 
-    // Verificar si ya existe un admin
-    const existingAdmin = await User.findOne({ usuario: "admin" });
-    
-    if (existingAdmin) {
-      return Response.json({
-        success: false,
-        message: "Ya existe un usuario administrador",
-        admin: {
-          usuario: existingAdmin.usuario,
-          email: existingAdmin.email,
-          rol: existingAdmin.rol
-        }
-      });
-    }
-
-    // Crear el admin
     const admin = await User.create(adminData);
-    
-    console.log('Admin creado:', admin); // Para debugging
 
     return Response.json({
       success: true,
@@ -64,8 +71,7 @@ export async function POST(req) {
       { 
         success: false, 
         message: "Error al crear administrador",
-        error: error.message,
-        stack: error.stack // Para ver el stack trace completo
+        error: error.message
       },
       { status: 500 }
     );
