@@ -8,7 +8,6 @@ const geneticSchema = new mongoose.Schema({
   thc: String,
   stock: {
     type: Number,
-    required: true,
     default: 0
   },
   precio: {
@@ -24,4 +23,5 @@ const geneticSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export default mongoose.models.Genetic || mongoose.model('Genetic', geneticSchema); 
+const Genetic = mongoose.models.Genetic || mongoose.model('Genetic', geneticSchema);
+export default Genetic; 

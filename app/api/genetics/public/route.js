@@ -4,15 +4,24 @@ import Genetic from '@/models/Genetic';
 export async function GET() {
   try {
     await dbConnect();
-    
-    const genetics = await Genetic.find({ 
-      stock: { $gt: 0 },
-      activo: true 
-    }).sort({ nombre: 1 });
+
+    // Primero, vamos a hacer un log de todas las genéticas
+    const allGenetics = await Genetic.find({});
+    console.log('Todas las genéticas:', allGenetics);
+
+    // Luego, hacemos la consulta filtrada
+    const genetics = await Genetic.find({}).sort({ nombre: 1 });
+
+    // Log del resultado
+    console.log('Genéticas filtradas:', genetics);
 
     return Response.json({
       success: true,
-      genetics
+      genetics,
+      total: genetics.length,
+      debug: {
+        totalInDB: allGenetics.length
+      }
     });
 
   } catch (error) {
