@@ -1,5 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
+import GeneticList from '@/components/GeneticList';
+import Cart from '@/components/Cart';
 
 export default function Genetics() {
   const [genetics, setGenetics] = useState([]);
@@ -39,50 +41,11 @@ export default function Genetics() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Nuestras Genéticas</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {genetics.map(genetic => (
-          <div 
-            key={genetic._id} 
-            className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-          >
-            <div className="p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                {genetic.nombre}
-              </h2>
-              
-              <div className="space-y-2">
-                <p className="text-gray-600">
-                  <span className="font-medium">THC:</span> {genetic.thc}%
-                </p>
-                
-                <p className="text-gray-600">
-                  <span className="font-medium">Stock:</span> {genetic.stock} unidades
-                </p>
-                
-                <p className="text-green-600 font-bold text-lg">
-                  ${genetic.precio}
-                </p>
-                
-                {genetic.descripcion && (
-                  <p className="text-gray-600 text-sm mt-2">
-                    {genetic.descripcion}
-                  </p>
-                )}
-              </div>
-
-              <button 
-                className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-300"
-                onClick={() => {/* Aquí irá la lógica para agregar al carrito */}}
-              >
-                Agregar al Carrito
-              </button>
-            </div>
-          </div>
-        ))}
+    <div className="min-h-screen bg-gray-900 pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pr-96">
+        <GeneticList geneticas={genetics} />
       </div>
+      <Cart />
     </div>
   );
 }
