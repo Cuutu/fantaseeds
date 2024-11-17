@@ -34,8 +34,20 @@ export default function GeneticList({ geneticas }) {
     const membershipLimit = getMembershipLimit();
 
     if (currentCartQuantity + quantity > membershipLimit) {
-      setError(`No puedes agregar más de ${membershipLimit}G según tu membresía ${session.user.membresia}`);
-      setTimeout(() => setError(''), 3000);
+      setError(
+        <div className="flex flex-col items-center">
+          <span>Llegaste al límite de tu membresía {session.user.membresia}</span>
+          <a 
+            href="https://www.instagram.com/fantaseeds" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-green-400 hover:text-green-300 underline mt-1"
+          >
+            Podés upgradearla vía Instagram
+          </a>
+        </div>
+      );
+      setTimeout(() => setError(''), 5000);
       return;
     }
 
@@ -56,8 +68,20 @@ export default function GeneticList({ geneticas }) {
     const totalWithNewQuantity = currentCartQuantity - currentItemQuantity + newQuantity;
 
     if (totalWithNewQuantity > membershipLimit) {
-      setError(`La cantidad total no puede superar ${membershipLimit}G según tu membresía ${session.user.membresia}`);
-      setTimeout(() => setError(''), 3000);
+      setError(
+        <div className="flex flex-col items-center">
+          <span>Llegaste al límite de tu membresía {session.user.membresia}</span>
+          <a 
+            href="https://www.instagram.com/fantaseeds" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-green-400 hover:text-green-300 underline mt-1"
+          >
+            Podés upgradearla vía Instagram
+          </a>
+        </div>
+      );
+      setTimeout(() => setError(''), 5000);
       return;
     }
 
