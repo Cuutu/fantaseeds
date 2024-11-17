@@ -21,10 +21,30 @@ export function CartProvider({ children }) {
     });
   };
 
+  const removeFromCart = (geneticId) => {
+    setCart(prevCart => prevCart.filter(item => item.genetic._id !== geneticId));
+  };
+
+  const updateQuantity = (geneticId, quantity) => {
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.genetic._id === geneticId
+          ? { ...item, cantidad: quantity }
+          : item
+      )
+    );
+  };
+
   const clearCart = () => setCart([]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, clearCart }}>
+    <CartContext.Provider value={{ 
+      cart, 
+      addToCart, 
+      removeFromCart, 
+      updateQuantity, 
+      clearCart 
+    }}>
       {children}
     </CartContext.Provider>
   );
