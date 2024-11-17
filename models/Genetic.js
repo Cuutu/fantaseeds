@@ -5,26 +5,20 @@ const geneticSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  precio: {
-    type: Number,
-    required: true
-  },
-  thc: {
-    type: Number,
-    required: true
-  },
+  thc: String,
   stock: {
     type: Number,
     required: true,
     default: 0
   },
-  descripcion: {
-    type: String,
+  precio: {
+    type: Number,
     required: true
   },
-  imagen: {
-    type: String,
-    required: true
+  descripcion: String,
+  activo: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true
