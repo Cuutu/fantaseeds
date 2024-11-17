@@ -85,16 +85,4 @@ export default function Genetics() {
       </div>
     </div>
   );
-} 
-    <div>
-      {genetics.map(genetic => (
-        <div key={genetic._id}>
-          <h2>{genetic.nombre}</h2>
-          <p>THC: {genetic.thc}</p>
-          <p>Precio: ${genetic.precio}</p>
-          <p>Stock: {genetic.stock}</p>
-        </div>
-      ))}
-    </div>
-  );
-} 
+}
