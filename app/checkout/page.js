@@ -1,23 +1,26 @@
 'use client';
 import { useState } from 'react';
-import { useCart } from '@/context/CartContext';
-import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import SuccessModal from '@/components/SuccessModal';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/context/CartContext';
 import emailjs from '@emailjs/browser';
 
 export default function Checkout() {
-  const { cart, clearCart } = useCart();
-  const router = useRouter();
-  const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [orderId, setOrderId] = useState('');
+  const [orderId, setOrderId] = useState(null);
+  const { data: session } = useSession();
+  const router = useRouter();
+  const { cart, clearCart } = useCart();
 
   const handleConfirmarPedido = async () => {
     try {
       setIsLoading(true);
       
+      if (!session?.user) {
+        throw new Error('Usuario no autenticado');
+      }
+
       const orderData = {
         productos: cart.map(item => ({
           genetic: item.genetic._id,
@@ -29,8 +32,6 @@ export default function Checkout() {
         estado: 'pendiente'
       };
 
-      console.log('Enviando orden:', orderData);
-
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
@@ -41,13 +42,20 @@ export default function Checkout() {
 
       const data = await response.json();
 
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al procesar el pedido');
+      }
+
       if (data.success) {
+        setOrderId(data.order._id);
+        
+        // Enviar email
         await emailjs.send(
           process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
           process.env.NEXT_PUBLIC_EMAILJS_ORDER_TEMPLATE_ID,
           {
             from_name: 'Fantaseeds',
-            to_name: 'Admin',
+            to_name: session.user.nombreApellido,
             order_number: data.order._id.slice(-6),
             customer_name: session.user.nombreApellido,
             customer_username: session.user.usuario,
@@ -59,45 +67,19 @@ export default function Checkout() {
             products_list: cart.map(item => 
               `${item.genetic.nombre} (${item.cantidad} unidades)`
             ).join('\n'),
-            message: `
-              Número de Pedido: #${data.order._id.slice(-6)}
-              
-              Datos del Cliente:
-              Usuario: ${session.user.usuario}
-              Nombre y Apellido: ${session.user.nombreApellido}
-              Email: ${session.user.email}
-              Dirección: ${session.user.domicilio ? 
-                `${session.user.domicilio.calle} ${session.user.domicilio.numero}` : 
-                'No especificada'}
-              
-              Productos:
-              ${cart.map(item => `- ${item.genetic.nombre} (${item.cantidad} unidades)`).join('\n')}
-              
-              Total: $${orderData.total}
-            `
           },
           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
         );
 
-        setOrderId(data.order._id);
         setShowSuccessModal(true);
         clearCart();
-      } else {
-        throw new Error(data.error || 'Error al procesar el pedido');
       }
-
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al procesar el pedido: ' + error.message);
+      alert(error.message || 'Error al procesar el pedido');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleCloseModal = () => {
-    setShowSuccessModal(false);
-    clearCart();
-    router.push('/');
   };
 
   return (
@@ -133,11 +115,25 @@ export default function Checkout() {
         {isLoading ? 'Procesando...' : 'Confirmar Pedido'}
       </button>
 
-      <SuccessModal 
-        isOpen={showSuccessModal}
-        orderId={orderId}
-        onClose={handleCloseModal}
-      />
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-white mb-4">¡Pedido Confirmado!</h3>
+            <p className="text-gray-300 mb-4">
+              Tu pedido #{orderId.slice(-6)} ha sido registrado correctamente.
+            </p>
+            <button
+              onClick={() => {
+                setShowSuccessModal(false);
+                router.push('/perfil');
+              }}
+              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
