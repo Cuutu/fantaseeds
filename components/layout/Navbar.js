@@ -70,7 +70,12 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      {isCartOpen && <Cart onClose={() => setIsCartOpen(false)} />}
+      {isCartOpen && (
+        <Cart 
+          isOpen={isCartOpen} 
+          onClose={() => setIsCartOpen(false)} 
+        />
+      )}
     </nav>
   );
 } 
