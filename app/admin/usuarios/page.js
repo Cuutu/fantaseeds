@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import UserModal from '@/components/admin/UserModal';
 import EditUserModal from '@/components/admin/EditUserModal';
 import DeleteUserModal from '@/components/admin/DeleteUserModal';
-import { FiSearch } from 'react-icons/fi';
+import { FiSearch, FiUserPlus } from 'react-icons/fi';
 
 export default function UsersPage() {
   const { data: session, status } = useSession();
@@ -108,44 +108,31 @@ export default function UsersPage() {
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-100">Gestión de Usuarios</h1>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          Nuevo Usuario
-        </button>
-      </div>
-
-      <div className="mb-6">
+    <div className="p-6">
+      <div className="mb-8 space-y-4">
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FiSearch className="h-5 w-5 text-gray-400" />
-          </div>
           <input
             type="text"
-            className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-md leading-5 bg-gray-800 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
             placeholder="Buscar por nombre, usuario o email..."
+            className="w-full p-3 pl-10 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
-        {searchTerm && (
-          <div className="mt-2 text-sm text-gray-400">
-            {filteredUsers.length} resultado(s) encontrado(s)
-          </div>
-        )}
+
+        <div className="flex justify-end">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+          >
+            <FiUserPlus className="h-5 w-5" />
+            Agregar Usuario
+          </button>
+        </div>
       </div>
 
-      {error && (
-        <div className="mb-4 p-3 bg-red-500 bg-opacity-20 border border-red-500 rounded text-red-300">
-          {error}
-        </div>
-      )}
-
-      <div className="bg-gray-800 rounded-lg shadow overflow-hidden">
+      <div className="bg-gray-800 rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-700">
           <thead className="bg-gray-700">
             <tr>
