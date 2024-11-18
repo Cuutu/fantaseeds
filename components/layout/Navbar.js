@@ -8,6 +8,7 @@ import Cart from '@/components/Cart';
 export default function Navbar() {
   const { data: session } = useSession();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cart } = useCart();
 
   return (
@@ -28,10 +29,7 @@ export default function Navbar() {
                 <Link href="/geneticas" className="hover:bg-green-700 px-3 py-2 rounded-md">
                   Genéticas
                 </Link>
-                <Link 
-                  href="/perfil" 
-                  className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-md"
-                >
+                <Link href="/perfil" className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-md">
                   Mi Perfil
                 </Link>
                 <button 
@@ -68,7 +66,94 @@ export default function Navbar() {
               </Link>
             )}
           </div>
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md hover:bg-green-700"
+            >
+              <svg
+                className="h-6 w-6"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
+        {isMobileMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <Link
+                href="/#contact"
+                className="block hover:bg-green-700 px-3 py-2 rounded-md"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contacto
+              </Link>
+              {session && (
+                <>
+                  <Link
+                    href="/geneticas"
+                    className="block hover:bg-green-700 px-3 py-2 rounded-md"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Genéticas
+                  </Link>
+                  <Link
+                    href="/perfil"
+                    className="block hover:bg-green-700 px-3 py-2 rounded-md"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Mi Perfil
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setIsCartOpen(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left hover:bg-green-700 px-3 py-2 rounded-md"
+                  >
+                    Carrito {cart.length > 0 && `(${cart.length})`}
+                  </button>
+                </>
+              )}
+              {session?.user?.rol === 'administrador' && (
+                <Link
+                  href="/admin"
+                  className="block hover:bg-green-700 px-3 py-2 rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Panel Admin
+                </Link>
+              )}
+              {session ? (
+                <button
+                  onClick={() => {
+                    signOut();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left hover:bg-green-700 px-3 py-2 rounded-md text-red-400"
+                >
+                  Cerrar Sesión
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="block hover:bg-green-700 px-3 py-2 rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Iniciar Sesión
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </div>
       {isCartOpen && (
         <Cart 
