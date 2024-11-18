@@ -103,16 +103,16 @@ export default function AdminPedidosPage() {
   }, [session, status]);
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col">
-      {/* Header con fondo azul oscuro */}
-      <div className="bg-gray-800 w-full p-6">
+    <div className="min-h-screen bg-gray-800">
+      {/* Header con título */}
+      <div className="p-6">
         <h1 className="text-3xl font-bold text-white text-center">
           Gestión de Pedidos
         </h1>
       </div>
 
       {/* Contenido principal */}
-      <div className="flex-1 p-6">
+      <div className="p-6">
         <div className="max-w-5xl mx-auto">
           {loading ? (
             <div className="text-center p-4">
