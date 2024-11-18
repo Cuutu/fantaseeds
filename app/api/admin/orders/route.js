@@ -1,10 +1,12 @@
+import mongoose from 'mongoose';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
-import Order from '@/models/Order';
-import Genetic from '@/models/Genetic';
+
+// Importar los modelos en orden
 import User from '@/models/User';
-import mongoose from 'mongoose';
+import Genetic from '@/models/Genetic';
+import Order from '@/models/Order';
 
 export async function GET() {
   try {
@@ -13,9 +15,10 @@ export async function GET() {
 
     await dbConnect();
     console.log('DB conectada');
-    
-    const collections = await mongoose.connection.db.listCollections().toArray();
-    console.log('Colecciones disponibles:', collections.map(c => c.name));
+
+    // Verificar que los modelos estén registrados
+    const models = mongoose.modelNames();
+    console.log('Modelos registrados:', models);
     
     if (!session?.user || session.user.rol !== 'administrador') {
       console.log('No autorizado - rol:', session?.user?.rol);
@@ -27,19 +30,16 @@ export async function GET() {
       });
     }
 
-    const orderCount = await Order.countDocuments();
-    console.log('Cantidad de pedidos:', orderCount);
-
     const orders = await Order.find({})
       .populate({
         path: 'usuario',
-        select: 'nombreApellido email',
-        model: 'users'
+        model: User,
+        select: 'nombreApellido email'
       })
       .populate({
         path: 'productos.genetic',
-        select: 'nombre precio',
-        model: 'genetics'
+        model: Genetic,
+        select: 'nombre precio'
       })
       .sort({ fechaPedido: -1 });
 
