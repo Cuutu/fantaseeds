@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
-import Genetic from '@/models/Genetic';
+import Genetic from '@/models/Genetic'; 
 import User from '@/models/User';
 
 export async function GET() {
