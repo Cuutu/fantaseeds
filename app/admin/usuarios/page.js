@@ -108,90 +108,93 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8 space-y-4">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Buscar por nombre, usuario o email..."
-            className="w-full p-3 pl-10 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+    <div className="p-4 md:p-6 md:pl-8">
+      <div className="max-w-6xl">
+        <div className="mb-8 space-y-6">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-semibold text-white">Usuarios</h1>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+            >
+              <FiUserPlus className="h-5 w-5" />
+              Agregar Usuario
+            </button>
+          </div>
+
+          <div className="relative max-w-2xl">
+            <input
+              type="text"
+              placeholder="Buscar por nombre, usuario o email..."
+              className="w-full p-3 pl-10 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          </div>
         </div>
 
-        <div className="flex justify-end">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-          >
-            <FiUserPlus className="h-5 w-5" />
-            Agregar Usuario
-          </button>
-        </div>
-      </div>
-
-      <div className="bg-gray-800 rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-700">
-          <thead className="bg-gray-700">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Usuario
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Nombre y Apellido
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Membresía
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Acciones
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-gray-800 divide-y divide-gray-700">
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
-                <tr key={user._id} className="hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.usuario}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.nombreApellido}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.membresia}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button 
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setIsEditModalOpen(true);
-                      }}
-                      className="text-blue-400 hover:text-blue-300 mr-2"
-                    >
-                      Editar
-                    </button>
-                    <button 
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setIsDeleteModalOpen(true);
-                      }}
-                      className="text-red-400 hover:text-red-300"
-                    >
-                      Eliminar
-                    </button>
+        <div className="bg-gray-800 rounded-lg overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-700">
+            <thead className="bg-gray-700">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Usuario
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Nombre y Apellido
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Membresía
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-gray-800 divide-y divide-gray-700">
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <tr key={user._id} className="hover:bg-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.usuario}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.nombreApellido}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.membresia}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button 
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setIsEditModalOpen(true);
+                        }}
+                        className="text-blue-400 hover:text-blue-300 mr-2"
+                      >
+                        Editar
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setIsDeleteModalOpen(true);
+                        }}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="px-6 py-4 text-center text-gray-400">
+                    {searchTerm ? 'No se encontraron usuarios' : 'No hay usuarios registrados'}
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="px-6 py-4 text-center text-gray-400">
-                  {searchTerm ? 'No se encontraron usuarios' : 'No hay usuarios registrados'}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <UserModal 
