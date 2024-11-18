@@ -14,24 +14,23 @@ export default function AdminPedidosPage() {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await fetch('/api/admin/orders');
-        const data = await response.json();
+        const response = await fetch('/api/admin/orders', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
         
         if (!response.ok) {
-          throw new Error(data.message || 'Error al cargar los pedidos');
+          throw new Error('Error al cargar los pedidos');
         }
-
-        // Verificar que estamos recibiendo los pedidos correctamente
-        if (data.success && data.orders) {
+        
+        const data = await response.json();
+        if (data.success) {
           setPedidos(data.orders);
-        } else {
-          throw new Error('Formato de respuesta inválido');
         }
       } catch (error) {
-        console.error('Error fetching pedidos:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        console.error('Error al cargar los pedidos:', error);
       }
     };
 
