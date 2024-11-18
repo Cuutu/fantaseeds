@@ -2,6 +2,8 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import '../../../models/Genetic';
+import '../../../models/User';
 
 export async function GET() {
   try {
