@@ -69,9 +69,12 @@ export default function Checkout() {
             customer_name: session.user.nombreApellido,
             customer_username: session.user.usuario,
             customer_email: session.user.email,
-            customer_address: session.user.domicilio ? 
-              `${session.user.domicilio.calle} ${session.user.domicilio.numero}` : 
-              'No especificada',
+            delivery_method: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en sucursal',
+            delivery_address: deliveryMethod === 'envio' ? 
+              `<p style="margin: 8px 0;"><strong>Dirección de envío:</strong><br/>
+               ${shippingAddress.direccion}<br/>
+               ${shippingAddress.ciudad}<br/>
+               CP: ${shippingAddress.codigoPostal}</p>` : '',
             order_total: `$${orderData.total}`,
             products_list: cart.map(item => 
               `${item.genetic.nombre} (${item.cantidad} unidades)`
