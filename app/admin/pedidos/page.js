@@ -103,84 +103,90 @@ export default function AdminPedidosPage() {
   }, [session, status]);
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
-      <div className="max-w-5xl mx-auto pt-8">
-        <h1 className="text-3xl font-bold text-white mb-8 text-center">
+    <div className="min-h-screen bg-gray-900 flex flex-col">
+      {/* Header con fondo azul oscuro */}
+      <div className="bg-gray-800 w-full p-6">
+        <h1 className="text-3xl font-bold text-white text-center">
           Gestión de Pedidos
         </h1>
-        
-        {loading ? (
-          <div className="text-center p-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
-            <p className="mt-2 text-white">Cargando pedidos...</p>
-          </div>
-        ) : error ? (
-          <div className="text-center p-4 text-red-500">Error: {error}</div>
-        ) : pedidos.length === 0 ? (
-          <div className="text-center p-4 text-white">No hay pedidos disponibles</div>
-        ) : (
-          <div className="grid gap-6">
-            {pedidos.map((pedido) => (
-              <div key={pedido._id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                {/* Cabecera del pedido */}
-                <div className="p-4 bg-gray-700 flex justify-between items-center">
-                  <div>
-                    <h3 className="text-xl font-bold text-white">
-                      Pedido #{pedido._id.slice(-6)}
-                    </h3>
-                    <p className="text-gray-300">
-                      {new Date(pedido.fechaPedido).toLocaleDateString()}
-                    </p>
+      </div>
+
+      {/* Contenido principal */}
+      <div className="flex-1 p-6">
+        <div className="max-w-5xl mx-auto">
+          {loading ? (
+            <div className="text-center p-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+              <p className="mt-2 text-white">Cargando pedidos...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center p-4 text-red-500">Error: {error}</div>
+          ) : pedidos.length === 0 ? (
+            <div className="text-center p-4 text-white">No hay pedidos disponibles</div>
+          ) : (
+            <div className="grid gap-6">
+              {pedidos.map((pedido) => (
+                <div key={pedido._id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                  {/* Cabecera del pedido */}
+                  <div className="p-4 bg-gray-700 flex justify-between items-center">
+                    <div>
+                      <h3 className="text-xl font-bold text-white">
+                        Pedido #{pedido._id.slice(-6)}
+                      </h3>
+                      <p className="text-gray-300">
+                        {new Date(pedido.fechaPedido).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <select
+                        value={pedido.estado}
+                        onChange={(e) => actualizarEstado(pedido._id, e.target.value)}
+                        className="bg-gray-600 text-white rounded px-3 py-1 border border-gray-500"
+                      >
+                        {estadosPedido.map(estado => (
+                          <option key={estado.value} value={estado.value}>
+                            {estado.label}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() => handleDeleteClick(pedido)}
+                        className="text-red-500 hover:text-red-400 p-2 transition-colors"
+                        title="Eliminar pedido"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <select
-                      value={pedido.estado}
-                      onChange={(e) => actualizarEstado(pedido._id, e.target.value)}
-                      className="bg-gray-600 text-white rounded px-3 py-1 border border-gray-500"
-                    >
-                      {estadosPedido.map(estado => (
-                        <option key={estado.value} value={estado.value}>
-                          {estado.label}
-                        </option>
+
+                  {/* Información del cliente */}
+                  <div className="p-4 border-b border-gray-700">
+                    <h4 className="font-semibold text-white mb-2">Información del Cliente</h4>
+                    <p className="text-gray-300">{pedido.usuario?.nombreApellido}</p>
+                    <p className="text-gray-300">{pedido.usuario?.email}</p>
+                  </div>
+
+                  {/* Productos */}
+                  <div className="p-4">
+                    <h4 className="font-semibold text-white mb-2">Productos</h4>
+                    <div className="space-y-2">
+                      {pedido.productos.map((producto, index) => (
+                        <div key={index} className="flex justify-between text-gray-300">
+                          <span>{producto.genetic?.nombre} x{producto.cantidad}</span>
+                          <span>${producto.precio}</span>
+                        </div>
                       ))}
-                    </select>
-                    <button
-                      onClick={() => handleDeleteClick(pedido)}
-                      className="text-red-500 hover:text-red-400 p-2 transition-colors"
-                      title="Eliminar pedido"
-                    >
-                      <FaTrash />
-                    </button>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-gray-700 flex justify-between items-center">
+                      <span className="font-bold text-white">Total:</span>
+                      <span className="font-bold text-white">${pedido.total}</span>
+                    </div>
                   </div>
                 </div>
-
-                {/* Información del cliente */}
-                <div className="p-4 border-b border-gray-700">
-                  <h4 className="font-semibold text-white mb-2">Información del Cliente</h4>
-                  <p className="text-gray-300">{pedido.usuario?.nombreApellido}</p>
-                  <p className="text-gray-300">{pedido.usuario?.email}</p>
-                </div>
-
-                {/* Productos */}
-                <div className="p-4">
-                  <h4 className="font-semibold text-white mb-2">Productos</h4>
-                  <div className="space-y-2">
-                    {pedido.productos.map((producto, index) => (
-                      <div key={index} className="flex justify-between text-gray-300">
-                        <span>{producto.genetic?.nombre} x{producto.cantidad}</span>
-                        <span>${producto.precio}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-gray-700 flex justify-between items-center">
-                    <span className="font-bold text-white">Total:</span>
-                    <span className="font-bold text-white">${pedido.total}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Modal de confirmación de eliminación */}
