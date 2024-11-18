@@ -18,11 +18,13 @@ export default function AdminPedidosPage() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          credentials: 'include'
         });
         
         if (!response.ok) {
-          throw new Error('Error al cargar los pedidos');
+          const error = await response.json();
+          throw new Error(error.error || 'Error al cargar los pedidos');
         }
         
         const data = await response.json();

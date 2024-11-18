@@ -10,7 +10,7 @@ export async function GET() {
     const session = await getServerSession(authOptions);
     console.log('Session:', session);
 
-    if (!session?.user?.rol !== 'administrador') {
+    if (!session?.user || session.user.rol !== 'administrador') {
       console.log('No autorizado - rol:', session?.user?.rol);
       return Response.json({ 
         success: false, 
