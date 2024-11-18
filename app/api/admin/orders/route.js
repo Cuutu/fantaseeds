@@ -8,7 +8,10 @@ export async function GET() {
     await dbConnect();
     
     const session = await getServerSession(authOptions);
-    if (session?.user?.rol !== 'administrador') {
+    console.log('Session:', session);
+
+    if (!session?.user?.rol !== 'administrador') {
+      console.log('No autorizado - rol:', session?.user?.rol);
       return Response.json({ 
         success: false, 
         error: 'No autorizado' 
@@ -28,7 +31,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('Error al obtener pedidos:', error);
+    console.error('Error completo:', error);
     return Response.json({ 
       success: false, 
       error: error.message 
