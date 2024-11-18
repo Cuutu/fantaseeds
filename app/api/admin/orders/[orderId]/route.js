@@ -56,4 +56,46 @@ export async function PATCH(request, { params }) {
       status: 500 
     });
   }
+}
+
+export async function DELETE(request, { params }) {
+  try {
+    await dbConnect();
+    
+    const session = await getServerSession(authOptions);
+    if (session?.user?.rol !== 'administrador') {
+      return Response.json({ 
+        success: false, 
+        error: 'No autorizado' 
+      }, { 
+        status: 401 
+      });
+    }
+
+    const { orderId } = params;
+    const deletedOrder = await Order.findByIdAndDelete(orderId);
+
+    if (!deletedOrder) {
+      return Response.json({ 
+        success: false, 
+        error: 'Pedido no encontrado' 
+      }, { 
+        status: 404 
+      });
+    }
+
+    return Response.json({
+      success: true,
+      message: 'Pedido eliminado correctamente'
+    });
+
+  } catch (error) {
+    console.error('Error al eliminar pedido:', error);
+    return Response.json({ 
+      success: false, 
+      error: error.message 
+    }, { 
+      status: 500 
+    });
+  }
 } 
