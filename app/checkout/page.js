@@ -12,6 +12,12 @@ export default function Checkout() {
   const { data: session } = useSession();
   const router = useRouter();
   const { cart, clearCart } = useCart();
+  const [deliveryMethod, setDeliveryMethod] = useState('retiro');
+  const [shippingAddress, setShippingAddress] = useState({
+    direccion: '',
+    ciudad: '',
+    codigoPostal: ''
+  });
 
   const handleConfirmarPedido = async () => {
     try {
@@ -27,9 +33,12 @@ export default function Checkout() {
           cantidad: item.cantidad,
           precio: item.genetic.precio
         })),
-        total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0),
+        total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0) + 
+              (deliveryMethod === 'envio' ? 500 : 0),
         usuario: session.user.id,
-        estado: 'pendiente'
+        estado: 'pendiente',
+        metodoEntrega: deliveryMethod,
+        direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null
       };
 
       const response = await fetch('/api/orders', {
@@ -86,6 +95,67 @@ export default function Checkout() {
     <div className="min-h-screen bg-gray-900 p-4 pt-20">
       <h1 className="text-3xl font-bold text-white mb-8">Finalizar Compra</h1>
       
+      {/* Método de entrega */}
+      <div className="bg-gray-800 rounded-lg p-6 mb-6">
+        <h2 className="text-xl font-bold text-white mb-4">Método de entrega</h2>
+        <div className="flex flex-col space-y-3">
+          <label className="flex items-center space-x-3 text-white cursor-pointer">
+            <input
+              type="radio"
+              name="deliveryMethod"
+              value="retiro"
+              checked={deliveryMethod === 'retiro'}
+              onChange={(e) => setDeliveryMethod(e.target.value)}
+              className="form-radio text-green-500 focus:ring-green-500"
+            />
+            <span>Retiro por sucursal</span>
+          </label>
+          
+          <label className="flex items-center space-x-3 text-white cursor-pointer">
+            <input
+              type="radio"
+              name="deliveryMethod"
+              value="envio"
+              checked={deliveryMethod === 'envio'}
+              onChange={(e) => setDeliveryMethod(e.target.value)}
+              className="form-radio text-green-500 focus:ring-green-500"
+            />
+            <span>Envío a domicilio</span>
+          </label>
+        </div>
+      </div>
+
+      {/* Formulario de dirección */}
+      {deliveryMethod === 'envio' && (
+        <div className="bg-gray-800 rounded-lg p-6 mb-6">
+          <h2 className="text-xl font-bold text-white mb-4">Dirección de envío</h2>
+          <div className="space-y-4">
+            <input
+              type="text"
+              placeholder="Dirección"
+              value={shippingAddress.direccion}
+              onChange={(e) => setShippingAddress({...shippingAddress, direccion: e.target.value})}
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-green-500"
+            />
+            <input
+              type="text"
+              placeholder="Ciudad"
+              value={shippingAddress.ciudad}
+              onChange={(e) => setShippingAddress({...shippingAddress, ciudad: e.target.value})}
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-green-500"
+            />
+            <input
+              type="text"
+              placeholder="Código Postal"
+              value={shippingAddress.codigoPostal}
+              onChange={(e) => setShippingAddress({...shippingAddress, codigoPostal: e.target.value})}
+              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-green-500"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Resumen del Pedido */}
       <div className="bg-gray-800 rounded-lg p-6 mb-6">
         <h2 className="text-xl font-bold text-white mb-4">Resumen del Pedido</h2>
         {cart.map((item, index) => (
@@ -97,11 +167,18 @@ export default function Checkout() {
             <span className="text-green-400">${item.genetic.precio * item.cantidad}</span>
           </div>
         ))}
+        {deliveryMethod === 'envio' && (
+          <div className="flex justify-between items-center text-white mb-4 border-t border-gray-700 pt-4">
+            <span>Costo de envío</span>
+            <span className="text-green-400">$500</span>
+          </div>
+        )}
         <div className="border-t border-gray-700 pt-4 mt-4">
           <div className="flex justify-between items-center text-white">
             <span className="text-xl font-bold">Total</span>
             <span className="text-2xl font-bold text-green-400">
-              ${cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0)}
+              ${cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0) + 
+                (deliveryMethod === 'envio' ? 500 : 0)}
             </span>
           </div>
         </div>
