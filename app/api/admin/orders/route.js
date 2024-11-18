@@ -7,11 +7,12 @@ import User from '@/models/User';
 
 export async function GET() {
   try {
-    await dbConnect();
-    
     const session = await getServerSession(authOptions);
-    console.log('Session:', session);
+    console.log('Session antes de DB:', session);
 
+    await dbConnect();
+    console.log('DB conectada');
+    
     if (!session?.user || session.user.rol !== 'administrador') {
       console.log('No autorizado - rol:', session?.user?.rol);
       return Response.json({ 
@@ -22,35 +23,24 @@ export async function GET() {
       });
     }
 
-    const orders = await Order.find()
-      .populate('usuario', 'nombreApellido email')
-      .populate('productos.genetic', 'nombre precio')
+    const orders = await Order.find({})
+      .populate({
+        path: 'usuario',
+        select: 'nombreApellido email',
+        model: User
+      })
+      .populate({
+        path: 'productos.genetic',
+        select: 'nombre precio',
+        model: Genetic
+      })
       .sort({ fechaPedido: -1 });
 
-    const formattedOrders = orders.map(order => ({
-      _id: order._id,
-      fechaPedido: order.fechaPedido,
-      estado: order.estado,
-      usuario: {
-        nombreApellido: order.usuario?.nombreApellido || 'Usuario no encontrado',
-        email: order.usuario?.email || 'Email no disponible'
-      },
-      productos: order.productos.map(prod => ({
-        cantidad: prod.cantidad,
-        precio: prod.precio || prod.genetic?.precio || 0,
-        genetic: {
-          nombre: prod.genetic?.nombre || 'Producto no disponible',
-          precio: prod.genetic?.precio || 0
-        }
-      })),
-      total: order.total || 0
-    }));
-
-    console.log('Pedidos formateados:', formattedOrders);
+    console.log('Pedidos encontrados:', orders.length);
 
     return Response.json({
       success: true,
-      orders: formattedOrders
+      orders
     });
 
   } catch (error) {
