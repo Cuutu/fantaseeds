@@ -103,9 +103,11 @@ export default function AdminPedidosPage() {
   }, [session, status]);
 
   return (
-    <>
-      <div className="min-h-screen bg-gray-900 p-6">
-        <h1 className="text-3xl font-bold text-white mb-6">Gestión de Pedidos</h1>
+    <div className="min-h-screen bg-gray-900 p-6">
+      <div className="max-w-5xl mx-auto pt-8">
+        <h1 className="text-3xl font-bold text-white mb-8 text-center">
+          Gestión de Pedidos
+        </h1>
         
         {loading ? (
           <div className="text-center p-4">
@@ -207,6 +209,6 @@ export default function AdminPedidosPage() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 } 
