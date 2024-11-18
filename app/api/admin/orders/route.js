@@ -4,6 +4,7 @@ import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
 import Genetic from '@/models/Genetic';
 import User from '@/models/User';
+import mongoose from 'mongoose';
 
 export async function GET() {
   try {
@@ -12,6 +13,9 @@ export async function GET() {
 
     await dbConnect();
     console.log('DB conectada');
+    
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    console.log('Colecciones disponibles:', collections.map(c => c.name));
     
     if (!session?.user || session.user.rol !== 'administrador') {
       console.log('No autorizado - rol:', session?.user?.rol);
@@ -23,16 +27,19 @@ export async function GET() {
       });
     }
 
+    const orderCount = await Order.countDocuments();
+    console.log('Cantidad de pedidos:', orderCount);
+
     const orders = await Order.find({})
       .populate({
         path: 'usuario',
         select: 'nombreApellido email',
-        model: User
+        model: 'users'
       })
       .populate({
         path: 'productos.genetic',
         select: 'nombre precio',
-        model: Genetic
+        model: 'genetics'
       })
       .sort({ fechaPedido: -1 });
 
