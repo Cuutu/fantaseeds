@@ -104,8 +104,8 @@ export default function AdminPedidosPage() {
 
   return (
     <div className="min-h-screen bg-gray-800">
-      {/* Header con título */}
-      <div className="p-6">
+      {/* Header con título - aumentamos el padding-top */}
+      <div className="p-6 pt-12">
         <h1 className="text-3xl font-bold text-white text-center">
           Gestión de Pedidos
         </h1>
