@@ -28,10 +28,19 @@ export default function AdminGenetics() {
   const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de que quieres eliminar esta genética?')) {
       try {
+        console.log('Intentando eliminar genética con ID:', id); // Debug
+
         const response = await fetch(`/api/genetics/${id}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
         });
+        
+        console.log('Respuesta del servidor:', response); // Debug
+        
         const data = await response.json();
+        console.log('Datos de respuesta:', data); // Debug
         
         if (data.success) {
           alert('Genética eliminada correctamente');
@@ -40,7 +49,7 @@ export default function AdminGenetics() {
           alert(data.error || 'Error al eliminar la genética');
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error al eliminar:', error);
         alert('Error al eliminar la genética');
       }
     }
