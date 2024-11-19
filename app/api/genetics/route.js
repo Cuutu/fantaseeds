@@ -43,20 +43,40 @@ export async function POST(request) {
     
     const session = await getServerSession();
     
-    if (!session) {
+    if (!session?.user?.rol !== 'administrador') {
       return Response.json({ 
         success: false,
-        error: 'No has iniciado sesión' 
+        error: 'No autorizado' 
       }, { 
         status: 401 
       });
     }
 
     const data = await request.json();
-    console.log('Datos recibidos:', data); // Para debugging
+    console.log('Datos recibidos en API:', data); // Debug
 
-    const newGenetic = await Genetic.create(data);
+    // Verificar que la imagen viene en los datos
+    if (!data.imagen) {
+      return Response.json({
+        success: false,
+        error: 'La imagen es requerida'
+      }, {
+        status: 400
+      });
+    }
+
+    const newGenetic = await Genetic.create({
+      nombre: data.nombre,
+      precio: data.precio,
+      thc: data.thc,
+      stock: data.stock,
+      descripcion: data.descripcion,
+      imagen: data.imagen,
+      activo: true
+    });
     
+    console.log('Genética creada:', newGenetic); // Debug
+
     return Response.json({
       success: true,
       message: 'Genética creada exitosamente',

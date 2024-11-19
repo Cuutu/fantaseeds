@@ -3,18 +3,25 @@ import mongoose from 'mongoose';
 const geneticSchema = new mongoose.Schema({
   nombre: {
     type: String,
-    required: true
-  },
-  thc: String,
-  stock: {
-    type: Number,
-    default: 0
+    required: [true, 'El nombre es requerido']
   },
   precio: {
     type: Number,
-    required: true
+    required: [true, 'El precio es requerido']
+  },
+  thc: {
+    type: Number,
+    required: [true, 'El THC es requerido']
+  },
+  stock: {
+    type: Number,
+    required: [true, 'El stock es requerido']
   },
   descripcion: String,
+  imagen: {
+    type: String,
+    required: [true, 'La imagen es requerida']
+  },
   activo: {
     type: Boolean,
     default: true
@@ -23,5 +30,4 @@ const geneticSchema = new mongoose.Schema({
   timestamps: true
 });
 
-const Genetic = mongoose.models.Genetic || mongoose.model('Genetic', geneticSchema);
-export default Genetic; 
+export default mongoose.models.Genetic || mongoose.model('Genetic', geneticSchema); 
