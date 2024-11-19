@@ -38,10 +38,17 @@ export default function Hero() {
 
       <div className="relative h-full flex items-center justify-center">
         <div className="text-center px-4">
-          <div className="space-y-2">
-            <h1 className="text-white font-bold text-4xl sm:text-5xl md:text-6xl tracking-widest">
-              FANTASEEDS
-            </h1>
+          <div className="space-y-4">
+            <div className="relative w-full max-w-lg mx-auto">
+              <Image
+                src="/images/fantaseeds-logo.png"
+                alt="FANTASEEDS"
+                width={500}
+                height={150}
+                className="w-full h-auto"
+                priority
+              />
+            </div>
             <p className="text-base sm:text-lg md:text-xl text-gray-300">
               Club Cannábico Medicinal
             </p>
@@ -53,22 +60,21 @@ export default function Hero() {
           >
             Conocenos
           </button>
-
-          {/* Indicador de scroll */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg 
-              className="w-6 h-6 text-white"
-              fill="none" 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth="2" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
-          </div>
         </div>
+      </div>
+
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg 
+          className="w-6 h-6 text-white"
+          fill="none" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth="2" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
       </div>
     </div>
   );
