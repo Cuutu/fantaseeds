@@ -59,8 +59,7 @@ export async function DELETE(request, { params }) {
     await dbConnect();
     
     const session = await getServerSession(authOptions);
-    if (!session?.user?.rol === 'administrador') {
-      console.log('Usuario no autorizado:', session?.user);
+    if (session?.user?.rol !== 'administrador') {
       return Response.json({ 
         success: false, 
         error: 'No autorizado' 
@@ -70,12 +69,9 @@ export async function DELETE(request, { params }) {
     }
 
     const { id } = params;
-    console.log('Intentando eliminar genética:', id);
-
     const deletedGenetic = await Genetic.findByIdAndDelete(id);
     
     if (!deletedGenetic) {
-      console.log('Genética no encontrada');
       return Response.json({ 
         success: false, 
         error: 'Genética no encontrada' 
@@ -84,7 +80,6 @@ export async function DELETE(request, { params }) {
       });
     }
 
-    console.log('Genética eliminada:', deletedGenetic);
     return Response.json({
       success: true,
       message: 'Genética eliminada correctamente'
