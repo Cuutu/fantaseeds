@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { FiTrash2, FiEdit, FiPlus, FiSearch } from 'react-icons/fi';
-import DeleteGeneticModal from './DeleteGeneticModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 import Image from 'next/image';
 
 export default function GeneticList({ genetics, onGeneticDeleted, onAddGenetic }) {
@@ -13,41 +13,33 @@ export default function GeneticList({ genetics, onGeneticDeleted, onAddGenetic }
   const [filter, setFilter] = useState('');
 
   const handleDeleteClick = (genetic) => {
-    if (genetic.stock > 0) {
-      const confirmar = window.confirm(`Esta genética tiene ${genetic.stock} unidades en stock. ¿Estás seguro de eliminarla?`);
-      if (!confirmar) return;
-    }
     setSelectedGenetic(genetic);
     setShowDeleteModal(true);
   };
 
-  const handleDelete = async (geneticId) => {
-    console.log('Intentando eliminar genética:', geneticId); // Debug
+  const handleConfirmDelete = async () => {
+    if (!selectedGenetic) return;
     
-    if (window.confirm('¿Estás seguro de que quieres eliminar esta genética?')) {
-      try {
-        const response = await fetch(`/api/genetics/${geneticId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        console.log('Respuesta del servidor:', response); // Debug
-        
-        const data = await response.json();
-        console.log('Datos de respuesta:', data); // Debug
-        
-        if (data.success) {
-          alert('Genética eliminada correctamente');
-          window.location.reload(); // Forzar recarga de la página
-        } else {
-          throw new Error(data.error || 'Error al eliminar la genética');
+    try {
+      const response = await fetch(`/api/genetics/${selectedGenetic._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
         }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Error al eliminar la genética: ' + error.message);
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        onGeneticDeleted();
+        setShowDeleteModal(false);
+        setSelectedGenetic(null);
+      } else {
+        throw new Error(data.error || 'Error al eliminar la genética');
       }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al eliminar la genética: ' + error.message);
     }
   };
 
@@ -133,6 +125,13 @@ export default function GeneticList({ genetics, onGeneticDeleted, onAddGenetic }
           </table>
         </div>
       </div>
+
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+        geneticName={selectedGenetic?.nombre}
+      />
     </div>
   );
 } 

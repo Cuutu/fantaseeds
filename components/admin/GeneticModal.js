@@ -5,69 +5,75 @@ import { FiUpload } from 'react-icons/fi';
 export default function GeneticModal({ isOpen, onClose, onGeneticCreated }) {
   const [formData, setFormData] = useState({
     nombre: '',
+    precio: '',
     thc: '',
     stock: '',
-    precio: '',
-    descripcion: '',
-    imagen: ''
+    descripcion: ''
   });
-  const [imagePreview, setImagePreview] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
-        setFormData({ ...formData, imagen: reader.result });
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedFile);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
     try {
-      const formData = new FormData();
-      
-      // Convertir la imagen a base64
-      if (file) {
+      // Verificar que haya una imagen
+      if (!file) {
+        throw new Error('Por favor selecciona una imagen');
+      }
+
+      // Convertir imagen a base64
+      const base64Image = await new Promise((resolve) => {
         const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
         reader.readAsDataURL(file);
-        reader.onload = async () => {
-          const base64Image = reader.result;
-          
-          const geneticData = {
-            nombre: formData.get('nombre'),
-            precio: Number(formData.get('precio')),
-            thc: Number(formData.get('thc')),
-            stock: Number(formData.get('stock')),
-            descripcion: formData.get('descripcion'),
-            imagen: base64Image,
-            activo: true
-          };
+      });
 
-          const response = await fetch('/api/genetics', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(geneticData)
-          });
+      const geneticData = {
+        ...formData,
+        precio: Number(formData.precio),
+        thc: Number(formData.thc),
+        stock: Number(formData.stock),
+        imagen: base64Image,
+        activo: true
+      };
 
-          const data = await response.json();
-          if (data.success) {
-            onGeneticCreated();
-            onClose();
-          } else {
-            throw new Error(data.error);
-          }
-        };
+      const response = await fetch('/api/genetics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(geneticData)
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        onGeneticCreated();
+        onClose();
+      } else {
+        throw new Error(data.error || 'Error al crear la genética');
       }
     } catch (error) {
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
