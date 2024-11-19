@@ -190,7 +190,7 @@ export default function Checkout() {
       <button
         onClick={handleConfirmarPedido}
         disabled={isLoading || cart.length === 0}
-        className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:opacity-50"
+        className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-800 disabled:opacity-50"
       >
         {isLoading ? 'Procesando...' : 'Confirmar Pedido'}
       </button>
