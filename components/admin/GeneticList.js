@@ -21,29 +21,33 @@ export default function GeneticList({ genetics, onGeneticDeleted, onAddGenetic }
     setShowDeleteModal(true);
   };
 
-  const handleDelete = async (id) => {
-    if (!selectedGenetic) return;
+  const handleDelete = async (geneticId) => {
+    console.log('Intentando eliminar genética:', geneticId); // Debug
     
-    try {
-      const response = await fetch(`/api/genetics/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
+    if (window.confirm('¿Estás seguro de que quieres eliminar esta genética?')) {
+      try {
+        const response = await fetch(`/api/genetics/${geneticId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        console.log('Respuesta del servidor:', response); // Debug
+        
+        const data = await response.json();
+        console.log('Datos de respuesta:', data); // Debug
+        
+        if (data.success) {
+          alert('Genética eliminada correctamente');
+          window.location.reload(); // Forzar recarga de la página
+        } else {
+          throw new Error(data.error || 'Error al eliminar la genética');
         }
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        onGeneticDeleted();
-        setShowDeleteModal(false);
-        setSelectedGenetic(null);
-      } else {
-        throw new Error(data.error || 'Error al eliminar la genética');
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar la genética: ' + error.message);
       }
-    } catch (error) {
-      console.error('Error:', error);
-      setError(error.message);
     }
   };
 

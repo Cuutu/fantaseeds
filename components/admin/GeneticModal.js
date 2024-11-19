@@ -29,39 +29,45 @@ export default function GeneticModal({ isOpen, onClose, onGeneticCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
     try {
-      const response = await fetch('/api/genetics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const formData = new FormData();
+      
+      // Convertir la imagen a base64
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+          const base64Image = reader.result;
+          
+          const geneticData = {
+            nombre: formData.get('nombre'),
+            precio: Number(formData.get('precio')),
+            thc: Number(formData.get('thc')),
+            stock: Number(formData.get('stock')),
+            descripcion: formData.get('descripcion'),
+            imagen: base64Image,
+            activo: true
+          };
 
-      const data = await response.json();
+          const response = await fetch('/api/genetics', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(geneticData)
+          });
 
-      if (data.success) {
-        onGeneticCreated();
-        onClose();
-        setFormData({
-          nombre: '',
-          thc: '',
-          stock: '',
-          precio: '',
-          descripcion: '',
-          imagen: ''
-        });
-        setImagePreview(null);
-      } else {
-        throw new Error(data.error || 'Error al crear genética');
+          const data = await response.json();
+          if (data.success) {
+            onGeneticCreated();
+            onClose();
+          } else {
+            throw new Error(data.error);
+          }
+        };
       }
     } catch (error) {
       setError(error.message);
-    } finally {
-      setLoading(false);
     }
   };
 

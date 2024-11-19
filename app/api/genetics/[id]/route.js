@@ -56,10 +56,14 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
+    console.log('Iniciando proceso de eliminación...');
     await dbConnect();
     
     const session = await getServerSession(authOptions);
+    console.log('Sesión del usuario:', session);
+    
     if (session?.user?.rol !== 'administrador') {
+      console.log('Usuario no autorizado:', session?.user);
       return Response.json({ 
         success: false, 
         error: 'No autorizado' 
@@ -69,9 +73,11 @@ export async function DELETE(request, { params }) {
     }
 
     const { id } = params;
-    const deletedGenetic = await Genetic.findByIdAndDelete(id);
-    
-    if (!deletedGenetic) {
+    console.log('ID a eliminar:', id);
+
+    const genetic = await Genetic.findById(id);
+    if (!genetic) {
+      console.log('Genética no encontrada');
       return Response.json({ 
         success: false, 
         error: 'Genética no encontrada' 
@@ -80,16 +86,20 @@ export async function DELETE(request, { params }) {
       });
     }
 
+    const deletedGenetic = await Genetic.findByIdAndDelete(id);
+    console.log('Genética eliminada:', deletedGenetic);
+
     return Response.json({
       success: true,
-      message: 'Genética eliminada correctamente'
+      message: 'Genética eliminada correctamente',
+      deletedGenetic
     });
 
   } catch (error) {
-    console.error('Error al eliminar genética:', error);
+    console.error('Error completo al eliminar:', error);
     return Response.json({ 
       success: false, 
-      error: error.message 
+      error: error.message || 'Error al eliminar genética'
     }, { 
       status: 500 
     });
