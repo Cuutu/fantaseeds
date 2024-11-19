@@ -1,92 +1,114 @@
 'use client';
 import { useState, useEffect } from 'react';
-import GeneticList from '@/components/admin/GeneticList';
-import GeneticModal from '@/components/admin/GeneticModal';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function AdminGenetics() {
   const [genetics, setGenetics] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const { data: session } = useSession();
   const router = useRouter();
 
+  useEffect(() => {
+    fetchGenetics();
+  }, []);
+
   const fetchGenetics = async () => {
     try {
-      setLoading(true);
       const response = await fetch('/api/genetics');
-      if (!response.ok) {
-        throw new Error('Error al cargar las genéticas');
-      }
       const data = await response.json();
-      setGenetics(data);
+      if (data.success) {
+        setGenetics(data.genetics);
+      }
     } catch (error) {
-      console.error('Error fetching genetics:', error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
+      console.error('Error:', error);
     }
   };
 
-  useEffect(() => {
-    if (!session || session.user.rol !== 'admin') {
-      router.push('/');
-      return;
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar esta genética?')) {
+      try {
+        const response = await fetch(`/api/genetics/${id}`, {
+          method: 'DELETE',
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('Genética eliminada correctamente');
+          fetchGenetics(); // Recargar la lista
+        } else {
+          alert(data.error || 'Error al eliminar la genética');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar la genética');
+      }
     }
-    fetchGenetics();
-  }, [session, router]);
-
-  const handleGeneticCreated = () => {
-    fetchGenetics();
   };
 
-  const handleGeneticDeleted = async () => {
-    console.log('Genética eliminada, actualizando lista...');
-    await fetchGenetics();
+  const handleEdit = (id) => {
+    router.push(`/admin/genetics/${id}/edit`);
   };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-white">Cargando...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-6">
-        <div className="bg-red-500 bg-opacity-20 border border-red-500 rounded p-4 text-red-300">
-          {error}
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-green-400">Gestión de Genéticas</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
-        >
-          Nueva Genética
-        </button>
+    <div className="min-h-screen bg-gray-900 p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold text-white">Gestión de Genéticas</h1>
+          <Link 
+            href="/admin/genetics/new"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+          >
+            + Nueva Genética
+          </Link>
+        </div>
+
+        <div className="bg-gray-800 rounded-lg overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-700">
+                <th className="px-6 py-3 text-left text-white">IMAGEN</th>
+                <th className="px-6 py-3 text-left text-white">NOMBRE</th>
+                <th className="px-6 py-3 text-left text-white">THC</th>
+                <th className="px-6 py-3 text-left text-white">PRECIO</th>
+                <th className="px-6 py-3 text-left text-white">STOCK</th>
+                <th className="px-6 py-3 text-left text-white">ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody>
+              {genetics.map((genetic) => (
+                <tr key={genetic._id} className="border-t border-gray-700">
+                  <td className="px-6 py-4">
+                    <img 
+                      src={genetic.imagen || '/placeholder.jpg'} 
+                      alt={genetic.nombre}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  </td>
+                  <td className="px-6 py-4 text-white">{genetic.nombre}</td>
+                  <td className="px-6 py-4 text-white">{genetic.thc}</td>
+                  <td className="px-6 py-4 text-white">${genetic.precio}</td>
+                  <td className="px-6 py-4 text-white">{genetic.stock}</td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => handleEdit(genetic._id)}
+                      className="text-blue-400 hover:text-blue-300 mr-4"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDelete(genetic._id)}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      <GeneticList 
-        genetics={genetics} 
-        onGeneticDeleted={handleGeneticDeleted}
-      />
-
-      <GeneticModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onGeneticCreated={handleGeneticCreated}
-      />
     </div>
   );
 } 
