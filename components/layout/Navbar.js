@@ -73,7 +73,14 @@ export default function Navbar() {
                         Perfil
                       </Link>
                       
-                      {session.user.role === 'admin' && (
+                      <Link href="/pedidos"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Pedidos
+                      </Link>
+                      
+                      {session.user.role === 'administrador' && (
                         <Link href="/admin"
                           className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
                           onClick={() => setIsUserMenuOpen(false)}
@@ -151,6 +158,11 @@ export default function Navbar() {
                     className="block px-3 py-2 text-gray-300 hover:text-green-400"
                     onClick={() => setIsMenuOpen(false)}>
                     Perfil
+                  </Link>
+                  <Link href="/pedidos"
+                    className="block px-3 py-2 text-gray-300 hover:text-green-400"
+                    onClick={() => setIsMenuOpen(false)}>
+                    Pedidos
                   </Link>
                   {session.user.role === 'admin' && (
                     <Link href="/admin"
