@@ -18,9 +18,9 @@ export default function LoadingScreen() {
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center">
       <div className="text-center space-y-12">
-        <div className="relative w-64 h-24 mb-8">
+        <div className="relative w-96 h-32 mb-8">
           <Image
-            src="https://i.imgur.com/XTwltQ6.png.png"
+            src="https://i.imgur.com/XTwltQ6.png"
             alt="FANTASEEDS"
             fill
             className="object-contain"
@@ -28,9 +28,11 @@ export default function LoadingScreen() {
           />
         </div>
         
-        <div className="flex justify-center">
+        {/* Contenedor del spinner centrado horizontalmente */}
+        {/*<div className="flex justify-center">
+          {/* Spinner circular animado con borde verde en la parte superior 
           <div className="w-8 h-8 border-4 border-t-green-500 border-white rounded-full animate-spin"></div>
-        </div>
+        </div>*/}
       </div>
     </div>
   );
