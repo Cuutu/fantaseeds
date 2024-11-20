@@ -1,180 +1,101 @@
 'use client';
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
-import { useState } from 'react';
-import { useCart } from '@/context/CartContext';
-import Cart from '@/components/Cart';
-import { FiShoppingCart, FiX, FiMenu } from 'react-icons/fi';
+import Image from 'next/image';
 
 export default function Navbar() {
-  const { data: session } = useSession();
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { cart } = useCart();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const cartItemsCount = cart.reduce((total, item) => total + item.cantidad, 0);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="fixed w-full bg-green-800 shadow-lg z-50">
-      <div className="max-w-7xl mx-auto px-4">
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-black shadow-lg' : 'bg-black/80 backdrop-blur-sm'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center">
-              <Image
-                src="https://i.imgur.com/RHbv7QS.png"
-                alt="FANTASEEDS"
-                width={120}
-                height={40}
-                className="h-10 w-auto"
-                priority
-              />
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0">
+            <Image
+              src="/images/fantaseeds-logo.png"
+              alt="FANTASEEDS"
+              width={120}
+              height={40}
+              className="w-auto h-8"
+            />
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link href="/#about" 
+              className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
+              Nosotros
             </Link>
-          </div>
-          <div className="flex items-center gap-4 md:hidden">
-            {session && (
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="text-white hover:text-green-200 transition-colors relative"
-              >
-                <FiShoppingCart className="h-6 w-6" />
-                {cartItemsCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItemsCount}
-                  </span>
-                )}
-              </button>
-            )}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-white hover:text-green-200 transition-colors"
-            >
-              {isMobileMenuOpen ? (
-                <FiX className="h-6 w-6" />
-              ) : (
-                <FiMenu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-          <div className="hidden md:flex md:items-center md:space-x-4">
-            <Link href="/#contact" className="hover:bg-green-700 px-3 py-2 rounded-md">
+            <Link href="/#reprocann"
+              className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
+              Reprocann
+            </Link>
+            <Link href="/geneticas"
+              className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
+              Genéticas
+            </Link>
+            <Link href="/#contact"
+              className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg 
+                       transition-all duration-200 text-sm uppercase tracking-wider">
               Contacto
             </Link>
-            {session && (
-              <>
-                <Link href="/geneticas" className="hover:bg-green-700 px-3 py-2 rounded-md">
-                  Genéticas
-                </Link>
-                <Link href="/perfil" className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-md">
-                  Mi Perfil
-                </Link>
-                <button
-                  onClick={() => setIsCartOpen(true)}
-                  className="text-white hover:text-green-200 transition-colors relative"
-                >
-                  <FiShoppingCart className="h-6 w-6" />
-                  {cartItemsCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                      {cartItemsCount}
-                    </span>
-                  )}
-                </button>
-              </>
-            )}
-            {session?.user?.rol === 'administrador' && (
-              <Link href="/admin" className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-md">
-                Panel Admin
-              </Link>
-            )}
-            {session ? (
-              <button
-                onClick={() => signOut()}
-                className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-md"
-              >
-                Cerrar Sesión
-              </button>
-            ) : (
-              <Link href="/login" className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-md">
-                Iniciar Sesión
-              </Link>
-            )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg text-gray-400 hover:text-white focus:outline-none"
+          >
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {isMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
-        {isMobileMenuOpen && (
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link
-                href="/#contact"
-                className="block hover:bg-green-700 px-3 py-2 rounded-md"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-black/95 backdrop-blur-sm rounded-lg mt-2">
+              <Link href="/#about"
+                className="block px-3 py-2 text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider"
+                onClick={() => setIsMenuOpen(false)}>
+                Nosotros
+              </Link>
+              <Link href="/#reprocann"
+                className="block px-3 py-2 text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider"
+                onClick={() => setIsMenuOpen(false)}>
+                Reprocann
+              </Link>
+              <Link href="/geneticas"
+                className="block px-3 py-2 text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider"
+                onClick={() => setIsMenuOpen(false)}>
+                Genéticas
+              </Link>
+              <Link href="/#contact"
+                className="block px-3 py-2 text-green-400 hover:text-green-300 transition-colors duration-200 text-sm uppercase tracking-wider"
+                onClick={() => setIsMenuOpen(false)}>
                 Contacto
               </Link>
-              {session && (
-                <>
-                  <Link
-                    href="/geneticas"
-                    className="block hover:bg-green-700 px-3 py-2 rounded-md"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Genéticas
-                  </Link>
-                  <Link
-                    href="/perfil"
-                    className="block hover:bg-green-700 px-3 py-2 rounded-md"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Mi Perfil
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setIsCartOpen(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full text-left hover:bg-green-700 px-3 py-2 rounded-md"
-                  >
-                    Carrito {cart.length > 0 && `(${cart.length})`}
-                  </button>
-                </>
-              )}
-              {session?.user?.rol === 'administrador' && (
-                <Link
-                  href="/admin"
-                  className="block hover:bg-green-700 px-3 py-2 rounded-md"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Panel Admin
-                </Link>
-              )}
-              {session ? (
-                <button
-                  onClick={() => {
-                    signOut();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left hover:bg-green-700 px-3 py-2 rounded-md text-red-400"
-                >
-                  Cerrar Sesión
-                </button>
-              ) : (
-                <Link
-                  href="/login"
-                  className="block hover:bg-green-700 px-3 py-2 rounded-md"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Iniciar Sesión
-                </Link>
-              )}
             </div>
           </div>
         )}
       </div>
-      {isCartOpen && (
-        <Cart 
-          isOpen={isCartOpen} 
-          onClose={() => setIsCartOpen(false)} 
-        />
-      )}
     </nav>
   );
 } 
