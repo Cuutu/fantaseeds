@@ -3,6 +3,7 @@ import './globals.css';
 import Providers from '@/components/Providers';
 import Navbar from '@/components/layout/Navbar';
 import { CartProvider } from '@/context/CartContext';
+import Footer from '@/components/layout/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 const orbitron = Orbitron({ 
@@ -23,7 +24,10 @@ export default function RootLayout({ children }) {
         <CartProvider>
           <Providers>
             <Navbar />
-            {children}
+            <main>
+              {children}
+            </main>
+            <Footer />
           </Providers>
         </CartProvider>
       </body>
