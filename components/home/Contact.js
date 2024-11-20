@@ -62,13 +62,26 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-16 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-16 relative">
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url("https://i.imgur.com/2RJ5Shi.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: '0.1'
+        }}
+      />
+      
+      <div className="absolute inset-0 bg-gray-900/90 z-0" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="relative max-w-2xl mx-auto">
           <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg blur opacity-25"></div>
           <div className="absolute -inset-1 bg-blue-500 rounded-lg opacity-10"></div>
           
-          <div className="relative bg-gray-800 p-8 rounded-lg shadow-xl">
+          <div className="relative bg-gray-800/90 p-8 rounded-lg shadow-xl backdrop-blur-sm">
             <h2 className="text-3xl font-bold text-center mb-8 text-green-400">
               Contactanos
             </h2>
