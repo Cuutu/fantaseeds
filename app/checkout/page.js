@@ -83,8 +83,11 @@ export default function Checkout() {
           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
         );
 
-        setShowSuccessModal(true);
+        // Limpiar carrito
         clearCart();
+        
+        // En lugar de mostrar el modal de éxito, redirigimos a pedidos
+        router.push('/pedidos');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -194,26 +197,6 @@ export default function Checkout() {
       >
         {isLoading ? 'Procesando...' : 'Confirmar Pedido'}
       </button>
-
-      {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold text-white mb-4">¡Pedido Confirmado!</h3>
-            <p className="text-gray-300 mb-4">
-              Tu pedido #{orderId.slice(-6)} ha sido registrado correctamente.
-            </p>
-            <button
-              onClick={() => {
-                setShowSuccessModal(false);
-                router.push('/perfil');
-              }}
-              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
-            >
-              Aceptar
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 } 
