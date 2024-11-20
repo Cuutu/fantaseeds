@@ -62,7 +62,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-16 relative">
+    <section id="contact" className="py-16 relative min-h-screen">
       <div 
         className="absolute inset-0 z-0"
         style={{
@@ -70,11 +70,11 @@ export default function Contact() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          opacity: '0.1'
+          opacity: '1'
         }}
       />
       
-      <div className="absolute inset-0 bg-gray-900/90 z-0" />
+      <div className="absolute inset-0 bg-gray-900/95 z-1" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="relative max-w-2xl mx-auto">
