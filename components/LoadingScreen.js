@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function LoadingScreen() {
   const [show, setShow] = useState(true);
@@ -17,17 +18,14 @@ export default function LoadingScreen() {
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center">
       <div className="text-center space-y-12">
-        <div className="space-y-4">
-          <h1 className="text-white text-6xl font-bold tracking-wider" 
-              style={{ 
-                fontFamily: "'Orbitron', sans-serif",
-                letterSpacing: '0.15em'
-              }}>
-            FANTASEEDS
-          </h1>
-          <h2 className="text-white text-2xl tracking-[0.3em] font-light">
-            BUENOS AIRES
-          </h2>
+        <div className="relative w-64 h-24 mb-8">
+          <Image
+            src="https://i.imgur.com/XTwltQ6.png.png"
+            alt="FANTASEEDS"
+            fill
+            className="object-contain"
+            priority
+          />
         </div>
         
         <div className="flex justify-center">

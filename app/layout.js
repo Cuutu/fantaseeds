@@ -4,6 +4,7 @@ import Providers from '@/components/Providers';
 import Navbar from '@/components/layout/Navbar';
 import { CartProvider } from '@/context/CartContext';
 import Footer from '@/components/layout/Footer';
+import LoadingScreen from '@/components/LoadingScreen';
 
 const inter = Inter({ subsets: ['latin'] });
 const orbitron = Orbitron({ 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
         <CartProvider>
           <Providers>
             <Navbar />
+            <LoadingScreen />
             <main>
               {children}
             </main>
