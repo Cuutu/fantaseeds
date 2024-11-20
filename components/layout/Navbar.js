@@ -2,10 +2,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,11 +49,59 @@ export default function Navbar() {
               className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
               Genéticas
             </Link>
-            <Link href="/#contact"
-              className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg 
-                       transition-all duration-200 text-sm uppercase tracking-wider">
-              Contacto
-            </Link>
+            
+            {session ? (
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider flex items-center"
+                >
+                  <span>Mi Cuenta</span>
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {/* Dropdown Menu */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-black ring-1 ring-black ring-opacity-5">
+                    <div className="py-1" role="menu">
+                      <Link href="/perfil"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Perfil
+                      </Link>
+                      
+                      {session.user.role === 'admin' && (
+                        <Link href="/admin"
+                          className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Panel Administrador
+                        </Link>
+                      )}
+                      
+                      <button
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          signOut();
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
+                      >
+                        Cerrar Sesión
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link href="/#contact"
+                className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg 
+                         transition-all duration-200 text-sm uppercase tracking-wider">
+                Contacto
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -73,25 +124,51 @@ export default function Navbar() {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-black/95 backdrop-blur-sm rounded-lg mt-2">
               <Link href="/#about"
-                className="block px-3 py-2 text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider"
+                className="block px-3 py-2 text-gray-300 hover:text-green-400"
                 onClick={() => setIsMenuOpen(false)}>
                 Nosotros
               </Link>
               <Link href="/#reprocann"
-                className="block px-3 py-2 text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider"
+                className="block px-3 py-2 text-gray-300 hover:text-green-400"
                 onClick={() => setIsMenuOpen(false)}>
                 Reprocann
               </Link>
               <Link href="/geneticas"
-                className="block px-3 py-2 text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider"
+                className="block px-3 py-2 text-gray-300 hover:text-green-400"
                 onClick={() => setIsMenuOpen(false)}>
                 Genéticas
               </Link>
-              <Link href="/#contact"
-                className="block px-3 py-2 text-green-400 hover:text-green-300 transition-colors duration-200 text-sm uppercase tracking-wider"
-                onClick={() => setIsMenuOpen(false)}>
-                Contacto
-              </Link>
+              
+              {session ? (
+                <>
+                  <Link href="/perfil"
+                    className="block px-3 py-2 text-gray-300 hover:text-green-400"
+                    onClick={() => setIsMenuOpen(false)}>
+                    Perfil
+                  </Link>
+                  {session.user.role === 'admin' && (
+                    <Link href="/admin"
+                      className="block px-3 py-2 text-gray-300 hover:text-green-400"
+                      onClick={() => setIsMenuOpen(false)}>
+                      Panel Administrador
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      signOut();
+                    }}
+                    className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400">
+                    Cerrar Sesión
+                  </button>
+                </>
+              ) : (
+                <Link href="/#contact"
+                  className="block px-3 py-2 text-green-400 hover:text-green-300"
+                  onClick={() => setIsMenuOpen(false)}>
+                  Contacto
+                </Link>
+              )}
             </div>
           </div>
         )}
