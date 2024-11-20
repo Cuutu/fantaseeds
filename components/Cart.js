@@ -18,6 +18,7 @@ export default function Cart({ isOpen, onClose }) {
   }, 0);
 
   const handleCheckout = () => {
+    onClose();
     router.push('/checkout');
   };
 

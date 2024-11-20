@@ -29,7 +29,7 @@ export default function GeneticList({ geneticas }) {
       return;
     }
 
-    const quantity = parseInt(quantities[genetic._id] || 1);
+    const quantity = parseInt(quantities[genetic._id] || 10);
     const currentCartQuantity = getCurrentCartQuantity();
     const membershipLimit = getMembershipLimit();
 
@@ -142,14 +142,16 @@ export default function GeneticList({ geneticas }) {
 
               {/* Cantidad y Botón */}
               <div className="flex items-center gap-2 sm:gap-4">
-                <input
-                  type="number"
-                  min="1"
-                  max={getMembershipLimit()}
-                  value={quantities[genetic._id] || 1}
-                  onChange={(e) => handleQuantityChange(genetic, e.target.value)}
-                  className="w-full bg-gray-700/30 border border-gray-600 rounded-lg px-2 sm:px-3 py-2 text-white focus:outline-none focus:border-green-500 text-sm"
-                />
+                <select
+                  value={quantities[genetic._id] || 10}
+                  onChange={(e) => setQuantities({
+                    ...quantities,
+                    [genetic._id]: parseInt(e.target.value)
+                  })}
+                  className="bg-gray-700 text-white rounded px-2 py-1"
+                >
+                  <option value={10}>10</option>
+                </select>
                 <button
                   onClick={() => handleAddToCart(genetic)}
                   className="flex-1 bg-green-600 hover:bg-green-500 text-white py-2 px-3 sm:px-4 rounded-lg transition-colors duration-300 text-sm sm:text-base"

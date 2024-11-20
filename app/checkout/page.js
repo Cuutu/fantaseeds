@@ -86,8 +86,13 @@ export default function Checkout() {
         // Limpiar carrito
         clearCart();
         
-        // En lugar de mostrar el modal de éxito, redirigimos a pedidos
-        router.push('/pedidos');
+        // Mostrar modal de éxito
+        setShowSuccessModal(true);
+        
+        // Redirigir después de 5 segundos
+        setTimeout(() => {
+          router.push('/pedidos');
+        }, 5000);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -197,6 +202,29 @@ export default function Checkout() {
       >
         {isLoading ? 'Procesando...' : 'Confirmar Pedido'}
       </button>
+
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 p-8 rounded-lg max-w-md w-full mx-4">
+            <h3 className="text-2xl font-bold text-white mb-4">¡Pedido Confirmado!</h3>
+            <p className="text-gray-300 mb-4">
+              Tu pedido #{orderId?.slice(-6)} ha sido registrado correctamente.
+              Te hemos enviado un email con los detalles.
+            </p>
+            <p className="text-gray-400 text-sm mb-4">
+              Serás redirigido a tus pedidos en 5 segundos...
+            </p>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-800"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
