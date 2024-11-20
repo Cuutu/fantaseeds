@@ -66,7 +66,7 @@ export default function Navbar() {
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-black ring-1 ring-black ring-opacity-5">
                     <div className="py-1" role="menu">
-                      {session.user.role === 'administrador' ? (
+                      {session.user.rol === 'administrador' ? (
                         <Link href="/admin"
                           className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
                           onClick={() => setIsUserMenuOpen(false)}
@@ -154,7 +154,7 @@ export default function Navbar() {
               
               {session ? (
                 <>
-                  {session.user.role === 'administrador' ? (
+                  {session.user.rol === 'administrador' ? (
                     <Link href="/admin"
                       className="block px-3 py-2 text-gray-300 hover:text-green-400"
                       onClick={() => setIsMenuOpen(false)}>
