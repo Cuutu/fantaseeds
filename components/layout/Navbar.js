@@ -4,13 +4,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { FiShoppingCart } from 'react-icons/fi';
+import { useCart } from '@/context/CartContext';
+import Cart from '@/components/Cart';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { data: session } = useSession();
-  const [cartCount, setCartCount] = useState(0);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cart } = useCart();
+  
+  const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,15 +59,17 @@ export default function Navbar() {
                   className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
                   Genéticas
                 </Link>
-                <Link href="/carrito" 
-                  className="text-gray-300 hover:text-green-400 transition-colors duration-200 relative">
+                <button 
+                  onClick={() => setIsCartOpen(true)}
+                  className="text-gray-300 hover:text-green-400 transition-colors duration-200 relative"
+                >
                   <FiShoppingCart className="h-5 w-5" />
                   {cartCount > 0 && (
                     <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                       {cartCount}
                     </span>
                   )}
-                </Link>
+                </button>
               </>
             )}
             
@@ -170,14 +177,17 @@ export default function Navbar() {
                     onClick={() => setIsMenuOpen(false)}>
                     Genéticas
                   </Link>
-                  <Link href="/carrito"
-                    className="block px-3 py-2 text-gray-300 hover:text-green-400"
-                    onClick={() => setIsMenuOpen(false)}>
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsCartOpen(true);
+                    }}
+                    className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400">
                     <div className="flex items-center space-x-2">
                       <FiShoppingCart className="h-5 w-5" />
                       <span>Carrito {cartCount > 0 && `(${cartCount})`}</span>
                     </div>
-                  </Link>
+                  </button>
                 </>
               )}
               
@@ -227,6 +237,9 @@ export default function Navbar() {
             </div>
           </div>
         )}
+
+        {/* Cart Modal */}
+        <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
       </div>
     </nav>
   );
