@@ -96,11 +96,17 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <Link href="/#contact"
-                className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg 
-                         transition-all duration-200 text-sm uppercase tracking-wider">
-                Contacto
-              </Link>
+              <div className="flex items-center space-x-4">
+                <Link href="/#contact"
+                  className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
+                  Contacto
+                </Link>
+                <Link href="/login"
+                  className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg 
+                           transition-all duration-200 text-sm uppercase tracking-wider">
+                  Iniciar Sesión
+                </Link>
+              </div>
             )}
           </div>
 
@@ -163,11 +169,18 @@ export default function Navbar() {
                   </button>
                 </>
               ) : (
-                <Link href="/#contact"
-                  className="block px-3 py-2 text-green-400 hover:text-green-300"
-                  onClick={() => setIsMenuOpen(false)}>
-                  Contacto
-                </Link>
+                <>
+                  <Link href="/#contact"
+                    className="block px-3 py-2 text-gray-300 hover:text-green-400"
+                    onClick={() => setIsMenuOpen(false)}>
+                    Contacto
+                  </Link>
+                  <Link href="/login"
+                    className="block px-3 py-2 text-green-400 hover:text-green-300 font-medium"
+                    onClick={() => setIsMenuOpen(false)}>
+                    Iniciar Sesión
+                  </Link>
+                </>
               )}
             </div>
           </div>
