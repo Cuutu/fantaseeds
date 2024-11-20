@@ -70,7 +70,7 @@ export default function Contact() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          opacity: '1'
+          opacity: '0.4'
         }}
       />
       
