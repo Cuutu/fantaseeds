@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import ScrollReveal from '@/components/animations/ScrollReveal';
 
 function FAQ() {
   const [openStates, setOpenStates] = useState({});
@@ -64,31 +65,35 @@ function FAQ() {
   return (
     <section id="faq" className="py-16 bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-5xl font-bold text-center mb-16 text-green-500">
-          Preguntas Frecuentes (FAQ)
-        </h2>
+        <ScrollReveal>
+          <h2 className="text-5xl font-bold text-center mb-16 text-green-500">
+            Preguntas Frecuentes (FAQ)
+          </h2>
+        </ScrollReveal>
         
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col space-y-0">
             {faqs.map((faq, index) => (
-              <div key={index} className="border-t border-gray-700">
-                <button
-                  className="w-full text-left flex justify-between items-center py-6"
-                  onClick={() => toggleQuestion(index)}
-                >
-                  <h3 className="text-xl font-medium text-gray-300 uppercase">
-                    {faq.question}
-                  </h3>
-                  <span className="ml-4 text-2xl text-gray-400">
-                    {openStates[index] ? '−' : '+'}
-                  </span>
-                </button>
-                {openStates[index] && (
-                  <div className="pb-6 text-gray-400 leading-relaxed">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
+              <ScrollReveal key={index} delay={index * 100}>
+                <div className="border-t border-gray-700">
+                  <button
+                    className="w-full text-left flex justify-between items-center py-6"
+                    onClick={() => toggleQuestion(index)}
+                  >
+                    <h3 className="text-xl font-medium text-gray-300 uppercase">
+                      {faq.question}
+                    </h3>
+                    <span className="ml-4 text-2xl text-gray-400">
+                      {openStates[index] ? '−' : '+'}
+                    </span>
+                  </button>
+                  {openStates[index] && (
+                    <div className="pb-6 text-gray-400 leading-relaxed">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              </ScrollReveal>
             ))}
             <div className="border-t border-gray-700"></div>
           </div>
