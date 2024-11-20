@@ -66,7 +66,7 @@ export default function Contact() {
       <div 
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url("https://i.imgur.com/2RJ5Shi.jpg")',
+          backgroundImage: 'url("https://i.imgur.com/jmIiczf.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
