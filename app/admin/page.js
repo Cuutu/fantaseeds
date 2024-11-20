@@ -58,11 +58,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-100">Dashboard</h1>
-
-      {/* Tarjetas de estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div>
+      <h1 className="text-3xl font-bold text-white mb-8 mt-4">Dashboard</h1>
+      
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-gray-800 p-6 rounded-lg shadow">
           <div className="flex items-center justify-between">
             <div>
@@ -72,76 +72,11 @@ export default function DashboardPage() {
             <FiUsers className="h-8 w-8 text-green-500" />
           </div>
         </div>
-
-        <div className="bg-gray-800 p-6 rounded-lg shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Membresía 10G</p>
-              <p className="text-2xl font-bold text-gray-100">{stats.membershipDistribution['10G']}</p>
-            </div>
-            <FiAward className="h-8 w-8 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="bg-gray-800 p-6 rounded-lg shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Membresía 20G</p>
-              <p className="text-2xl font-bold text-gray-100">{stats.membershipDistribution['20G']}</p>
-            </div>
-            <FiAward className="h-8 w-8 text-purple-500" />
-          </div>
-        </div>
-
-        <div className="bg-gray-800 p-6 rounded-lg shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Membresía 30G</p>
-              <p className="text-2xl font-bold text-gray-100">{stats.membershipDistribution['30G']}</p>
-            </div>
-            <FiAward className="h-8 w-8 text-yellow-500" />
-          </div>
-        </div>
+        
+        {/* ... resto de las cards ... */}
       </div>
-
-      {/* Tabla de usuarios recientes */}
-      <div className="bg-gray-800 rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-100">Usuarios Recientes</h2>
-        </div>
-        <div className="p-6">
-          <table className="min-w-full divide-y divide-gray-700">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Usuario
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Membresía
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              {stats.recentUsers.map((user) => (
-                <tr key={user._id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    {user.nombreApellido}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    {user.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    {user.membresia}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      
+      {/* ... resto del contenido ... */}
     </div>
   );
 } 
