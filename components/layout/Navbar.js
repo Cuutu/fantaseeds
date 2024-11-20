@@ -24,7 +24,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Image
-              src="/images/fantaseeds-logo.png"
+              src="https://i.imgur.com/RHbv7QS.png"
               alt="FANTASEEDS"
               width={120}
               height={40}
