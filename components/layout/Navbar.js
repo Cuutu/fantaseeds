@@ -22,7 +22,7 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
               <Image
-                src="https://imgur.com/Z1Y65oS.png"
+                src="https://i.imgur.com/RHbv7QS.png"
                 alt="FANTASEEDS"
                 width={120}
                 height={40}
