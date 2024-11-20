@@ -66,12 +66,21 @@ export default function Navbar() {
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-black ring-1 ring-black ring-opacity-5">
                     <div className="py-1" role="menu">
-                      <Link href="/perfil"
-                        className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        Perfil
-                      </Link>
+                      {session.user.role === 'administrador' ? (
+                        <Link href="/admin"
+                          className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Panel Administrador
+                        </Link>
+                      ) : (
+                        <Link href="/perfil"
+                          className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Perfil
+                        </Link>
+                      )}
                       
                       <Link href="/pedidos"
                         className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
@@ -79,15 +88,6 @@ export default function Navbar() {
                       >
                         Pedidos
                       </Link>
-                      
-                      {session.user.role === 'administrador' && (
-                        <Link href="/admin"
-                          className="block px-4 py-2 text-sm text-gray-300 hover:text-green-400 hover:bg-gray-900"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          Panel Administrador
-                        </Link>
-                      )}
                       
                       <button
                         onClick={() => {
@@ -154,23 +154,24 @@ export default function Navbar() {
               
               {session ? (
                 <>
-                  <Link href="/perfil"
-                    className="block px-3 py-2 text-gray-300 hover:text-green-400"
-                    onClick={() => setIsMenuOpen(false)}>
-                    Perfil
-                  </Link>
-                  <Link href="/pedidos"
-                    className="block px-3 py-2 text-gray-300 hover:text-green-400"
-                    onClick={() => setIsMenuOpen(false)}>
-                    Pedidos
-                  </Link>
-                  {session.user.role === 'admin' && (
+                  {session.user.role === 'administrador' ? (
                     <Link href="/admin"
                       className="block px-3 py-2 text-gray-300 hover:text-green-400"
                       onClick={() => setIsMenuOpen(false)}>
                       Panel Administrador
                     </Link>
+                  ) : (
+                    <Link href="/perfil"
+                      className="block px-3 py-2 text-gray-300 hover:text-green-400"
+                      onClick={() => setIsMenuOpen(false)}>
+                      Perfil
+                    </Link>
                   )}
+                  <Link href="/pedidos"
+                    className="block px-3 py-2 text-gray-300 hover:text-green-400"
+                    onClick={() => setIsMenuOpen(false)}>
+                    Pedidos
+                  </Link>
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
