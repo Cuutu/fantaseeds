@@ -49,9 +49,7 @@ export default function Hero() {
                 priority
               />
             </div>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300">
-              Club Cannábico Medicinal
-            </p>
+
           </div>
           <button 
             onClick={scrollToAbout}
