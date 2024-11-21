@@ -58,7 +58,7 @@ export default function Hero() {
                 className="mt-6 sm:mt-8 bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full 
                           transition duration-300 ease-in-out transform hover:scale-105 text-sm sm:text-base"
               >
-                Conocenos
+                ¡INSCRIBITE!
               </button>
             </ScrollReveal>
           </div>
