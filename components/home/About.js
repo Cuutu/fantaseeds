@@ -17,7 +17,7 @@ export default function About() {
               <h3 className="text-2xl font-semibold mb-6 text-white">¿Quiénes Somos?</h3>
               <p className="text-gray-300 text-lg leading-relaxed space-y-4">
                 FANTASEEDS es un club cannábico comprometido con proporcionar acceso seguro y legal al cannabis medicinal. 
-                <br /><br />
+                <br />
                 Nuestro compromiso es brindar una alternativa confiable y profesional para aquellos que buscan 
                 mejorar su calidad de vida a través del cannabis medicinal.
               </p>
