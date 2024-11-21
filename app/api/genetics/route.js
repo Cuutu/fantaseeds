@@ -43,7 +43,7 @@ export async function POST(request) {
     
     const session = await getServerSession();
     
-    if (!session?.user?.rol !== 'administrador') {
+    if (session?.user?.rol !== 'administrador') {
       return Response.json({ 
         success: false,
         error: 'No autorizado' 
@@ -53,9 +53,8 @@ export async function POST(request) {
     }
 
     const data = await request.json();
-    console.log('Datos recibidos en API:', data); // Debug
+    console.log('Datos recibidos en API:', data);
 
-    // Verificar que la imagen viene en los datos
     if (!data.imagen) {
       return Response.json({
         success: false,
@@ -75,8 +74,6 @@ export async function POST(request) {
       activo: true
     });
     
-    console.log('Genética creada:', newGenetic); // Debug
-
     return Response.json({
       success: true,
       message: 'Genética creada exitosamente',
