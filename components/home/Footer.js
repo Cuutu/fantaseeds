@@ -40,8 +40,16 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-green-700 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} FANTASEEDS. Todos los derechos reservados.</p>
+        <div className="mt-8 pt-8 border-t border-green-700 text-center text-sm flex justify-between items-center">
+          <p>&copy; {new Date().getFullYear()} Fantaseeds. Todos los derechos reservados.</p>
+          <a 
+            href="https://www.instagram.com/fantaseeds.ong" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-green-300 transition-colors"
+          >
+            <FaInstagram className="text-xl" />
+          </a>
         </div>
       </div>
     </footer>
