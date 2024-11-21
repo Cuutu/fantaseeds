@@ -15,27 +15,27 @@ export default function Gallery() {
   
   const images = [
     {
-      src: "/public/images/weed.webp",
+      src: "/images/weed1.webp",
       alt: "Instalaciones del Club"
     },
     {
-      src: "https://i.imgur.com/8I9VORo.png",
+      src: "/images/weed2.webp",
       alt: "Cultivo Indoor"
     },
     {
-      src: "https://i.imgur.com/OCngmuA.png",
+      src: "/images/weed3.webp",
       alt: "Terpenos"
     },
     {
-      src: "https://i.imgur.com/UEDUqYQ.png",
+      src: "/images/weed4.webp",
       alt: "Calidad"
     },
     {
-      src: "https://i.imgur.com/fNPmV5y.png",
+      src: "/images/weed5.webp",
       alt: "Cultivo"
     },
     {
-      src: "https://i.imgur.com/GdDHWBa.png",
+      src: "/images/weed6.webp",
       alt: "Instalaciones del Club"
     }
   ];
