@@ -1,6 +1,7 @@
 import dbConnect from '@/lib/db/mongodb';
 import Genetic from '@/models/Genetic';
 import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function GET(request) {
   try {
@@ -41,12 +42,19 @@ export async function POST(request) {
   try {
     await dbConnect();
     
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     
+    console.log('Session completa:', session); // Debug
+    console.log('Rol del usuario:', session?.user?.rol); // Debug
+
     if (session?.user?.rol !== 'administrador') {
       return Response.json({ 
         success: false,
-        error: 'No autorizado' 
+        error: 'No autorizado',
+        debug: {
+          session: session,
+          userRole: session?.user?.rol
+        }
       }, { 
         status: 401 
       });
