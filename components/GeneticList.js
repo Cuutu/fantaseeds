@@ -33,6 +33,22 @@ export default function GeneticList({ geneticas }) {
     const currentCartQuantity = getCurrentCartQuantity();
     const membershipLimit = getMembershipLimit();
 
+    // Verificar el stock disponible
+    const currentInCart = cart.find(item => item.genetic._id === genetic._id)?.cantidad || 0;
+    const totalRequested = currentInCart + quantity;
+
+    if (totalRequested > genetic.stock) {
+      setError(
+        <div className="flex flex-col items-center">
+          <span>No hay stock suficiente. Stock disponible: {genetic.stock} unidades</span>
+          <span>Ya tienes {currentInCart} unidades en el carrito</span>
+        </div>
+      );
+      setTimeout(() => setError(''), 5000);
+      return;
+    }
+
+    // Verificar límite de membresía
     if (currentCartQuantity + quantity > membershipLimit) {
       setError(
         <div className="flex flex-col items-center">
