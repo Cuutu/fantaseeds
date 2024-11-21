@@ -7,7 +7,7 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
-            Bienvenidos a FANTASEEDS
+            SOBRE EL CLUB
           </h2>
         </ScrollReveal>
         
@@ -15,9 +15,14 @@ export default function About() {
           <ScrollReveal delay={200}>
             <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
               <h3 className="text-2xl font-semibold mb-6 text-white">¿Quiénes Somos?</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                FANTASEEDS es un club cannábico comprometido con proporcionar 
-                acceso seguro y legal al cannabis medicinal.
+              <p className="text-gray-300 text-lg leading-relaxed space-y-4">
+                FANTASEEDS es un club cannábico comprometido con proporcionar acceso seguro y legal al cannabis medicinal. 
+                <br /><br />
+                Nos especializamos en el cultivo de genéticas premium y contamos con un equipo de expertos dedicados a garantizar 
+                la más alta calidad en nuestros productos.
+                <br /><br />
+                Nuestro compromiso es brindar una alternativa confiable y profesional para aquellos que buscan 
+                mejorar su calidad de vida a través del cannabis medicinal.
               </p>
             </div>
           </ScrollReveal>
