@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import ScrollReveal from '../ScrollReveal';
+import ScrollReveal from '@/components/animations/ScrollReveal';
 
 export default function Gallery() {
   const images = [
