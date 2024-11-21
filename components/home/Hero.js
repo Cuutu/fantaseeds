@@ -5,10 +5,10 @@ import Image from 'next/image';
 import ScrollReveal from '@/components/animations/ScrollReveal';
 
 export default function Hero() {
-  const scrollToAbout = (e) => {
+  const scrollToContact = (e) => {
     e.preventDefault();
-    const aboutSection = document.getElementById('about');
-    aboutSection?.scrollIntoView({
+    const contactSection = document.getElementById('contact');
+    contactSection?.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
@@ -54,7 +54,7 @@ export default function Hero() {
             </div>
             <ScrollReveal delay={200}>
               <button 
-                onClick={scrollToAbout}
+                onClick={scrollToContact}
                 className="mt-6 sm:mt-8 bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full 
                           transition duration-300 ease-in-out transform hover:scale-105 text-sm sm:text-base"
               >
