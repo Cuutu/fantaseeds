@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Slider from 'react-slick';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import ScrollReveal from '../ScrollReveal';
+import ScrollReveal from '@/components/animations/ScrollReveal';
 
 // Importar los estilos de slick
 import "slick-carousel/slick/slick.css";
