@@ -1,3 +1,5 @@
+import { FaInstagram } from 'react-icons/fa';
+
 function Footer() {
   return (
     <footer className="bg-green-800 text-white">
@@ -23,7 +25,17 @@ function Footer() {
             <h3 className="text-lg font-semibold mb-4">Contacto</h3>
             <ul className="space-y-2 text-sm">
               <li>Email: info@fantaseeds.com</li>
-              <li>Instagram: @fantaseeds</li>
+              <li className="flex items-center gap-2">
+                <a 
+                  href="https://www.instagram.com/fantaseeds.ong" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:text-green-300 transition-colors"
+                >
+                  <FaInstagram className="text-xl" />
+                  <span>@fantaseeds.ong</span>
+                </a>
+              </li>
               <li>WhatsApp: +54 (XX) XXXX-XXXX</li>
             </ul>
           </div>
