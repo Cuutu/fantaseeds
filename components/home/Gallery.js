@@ -15,7 +15,7 @@ export default function Gallery() {
   
   const images = [
     {
-      src: "https://i.imgur.com/xJbzgw1.png",
+      src: "/public/images/weed.webp",
       alt: "Instalaciones del Club"
     },
     {
