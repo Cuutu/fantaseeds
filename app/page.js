@@ -8,7 +8,20 @@ import Gallery from '@/components/home/Gallery';
 
 export default function Home() {
   return (
-    <main>
+    <main 
+      className="min-h-screen" 
+      style={{
+        background: `linear-gradient(
+          180deg, 
+          #2C2C2C 0%,    /* Gris oscuro elegante */
+          #3E3E3E 20%,   /* Gris medio oscuro */
+          #4A4A4A 40%,   /* Gris medio */
+          #575757 60%,   /* Gris medio claro */
+          #636363 80%,   /* Gris claro suave */
+          #707070 100%   /* Gris claro elegante */
+        )`
+      }}
+    >
       <Hero />
       <About />
       <Gallery />
