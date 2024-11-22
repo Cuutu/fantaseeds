@@ -85,7 +85,7 @@ export default function Contact() {
             
             <div className="relative bg-gray-800/90 p-8 rounded-lg shadow-xl backdrop-blur-sm">
               <ScrollReveal delay={200}>
-                <h2 className="text-3xl font-bold text-center mb-8 text-green-400">
+                <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
                   Contactanos
                 </h2>
               </ScrollReveal>

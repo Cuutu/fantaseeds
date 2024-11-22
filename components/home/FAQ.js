@@ -66,7 +66,7 @@ function FAQ() {
     <section id="faq" className="py-16" style={{ backgroundColor: '#1E1E1E' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <h2 className="text-5xl font-bold text-center mb-16 text-green-500">
+          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
             Preguntas Frecuentes (FAQ)
           </h2>
         </ScrollReveal>
