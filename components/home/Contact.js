@@ -75,7 +75,13 @@ export default function Contact() {
         }}
       />
       
-      <div className="absolute inset-0 z-1" style={{ backgroundColor: '#2D2D2D' }} />
+      <div 
+        className="absolute inset-0 z-1" 
+        style={{ 
+          backgroundColor: '#2D2D2D',
+          opacity: '0.85'
+        }} 
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <ScrollReveal>
