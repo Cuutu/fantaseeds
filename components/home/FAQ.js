@@ -63,7 +63,7 @@ function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-16 bg-gray-800">
+    <section id="faq" className="py-16" style={{ backgroundColor: '#515151' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <h2 className="text-5xl font-bold text-center mb-16 text-green-500">
