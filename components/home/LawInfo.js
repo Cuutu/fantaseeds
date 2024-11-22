@@ -3,7 +3,7 @@ import ScrollReveal from '@/components/animations/ScrollReveal';
 
 export default function LawInfo() {
   return (
-    <section id="law" className="py-20" style={{ backgroundColor: '#3E3E3E' }}>
+    <section id="law" className="py-20" style={{ backgroundColor: '#2D2D2D' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
