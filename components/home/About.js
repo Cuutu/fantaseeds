@@ -19,7 +19,7 @@ export default function About() {
                 FANTASEEDS es un club cannábico comprometido con proporcionar acceso seguro y legal al cannabis medicinal. 
                 <br />
                 Nuestro compromiso es brindar una alternativa confiable y profesional para aquellos que buscan 
-                mejorar su calidad de vida a través del cannabis medicinal.
+                mejorar su calidad de vida a través del cannabis medicinal..
               </p>
             </div>
           </ScrollReveal>
