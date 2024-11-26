@@ -6,9 +6,17 @@ import { useSession } from 'next-auth/react';
 export default function Perfil() {
   const { data: session } = useSession();
   const [isEditing, setIsEditing] = useState(false);
-  
-  // Debugging - para ver qué contiene la sesión
-  console.log('Session data:', session);
+  const [formData, setFormData] = useState({
+    calle: session?.user?.domicilio?.calle || '',
+    numero: session?.user?.domicilio?.numero || '',
+    codigoPostal: session?.user?.domicilio?.codigoPostal || ''
+  });
+
+  if (!session) {
+    return <div className="min-h-screen bg-gray-900 p-8 flex items-center justify-center">
+      <p className="text-white">Cargando...</p>
+    </div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 p-8">
