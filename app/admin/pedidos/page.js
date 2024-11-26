@@ -186,40 +186,35 @@ export default function AdminPedidosPage() {
                   </div>
 
                   {/* Productos */}
-                  <div className="p-4">
-                    <h4 className="font-semibold text-white mb-2">Productos</h4>
-                    <div className="space-y-2">
-                      {pedido.productos.map((producto, index) => (
-                        <div key={index} className="flex justify-between text-gray-300">
-                          <span>{producto.genetic?.nombre} x{producto.cantidad}</span>
-                          <span>${producto.precio}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-gray-700 flex justify-between items-center">
-                      <span className="font-bold text-white">Total:</span>
-                      <span className="font-bold text-white">${pedido.total}</span>
+                  <div className="mb-4">
+                    <h4 className="text-white font-semibold mb-2">Productos</h4>
+                    {pedido.productos.map((producto, index) => (
+                      <div key={index} className="flex justify-between text-gray-300">
+                        <span>{producto.genetic.nombre} x{producto.cantidad}</span>
+                        <span>${producto.precio}</span>
+                      </div>
+                    ))}
+                    <div className="mt-2 text-right font-bold text-white">
+                      Total: ${pedido.total}
                     </div>
                   </div>
 
                   {/* Método de pago y comprobante */}
-                  <div className="border-t border-gray-700 pt-4 mt-4">
+                  <div className="mb-4">
                     <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
-                    <p className="text-gray-300 mb-2">
-                      {pedido.metodoPago === 'efectivo' ? 'Pago en Sucursal' : 'Transferencia Bancaria'}
-                    </p>
-
-                    {pedido.metodoPago === 'transferencia' && (
-                      <button
-                        onClick={() => handleVerComprobante(pedido._id)}
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
-                        </svg>
-                        Ver Comprobante
-                      </button>
-                    )}
+                    <div className="flex justify-between items-center">
+                      <p className="text-gray-300">
+                        {pedido.metodoPago === 'efectivo' ? 'Pago en Sucursal' : 'Transferencia Bancaria'}
+                      </p>
+                      {pedido.metodoPago === 'transferencia' && (
+                        <button
+                          onClick={() => handleVerComprobante(pedido._id)}
+                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+                        >
+                          Ver Comprobante
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
