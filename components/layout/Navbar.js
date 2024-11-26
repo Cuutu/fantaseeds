@@ -12,8 +12,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { data: session } = useSession();
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cart } = useCart();
+  const { cart, isOpen, setIsOpen } = useCart();
   
   const cartCount = cart.reduce((total, item) => total + item.cantidad, 0);
 
@@ -60,7 +59,7 @@ export default function Navbar() {
                   Genéticas
                 </Link>
                 <button 
-                  onClick={() => setIsCartOpen(true)}
+                  onClick={() => setIsOpen(true)}
                   className="text-gray-300 hover:text-green-400 transition-colors duration-200 relative"
                 >
                   <FiShoppingCart className="h-5 w-5" />
@@ -180,7 +179,7 @@ export default function Navbar() {
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
-                      setIsCartOpen(true);
+                      setIsOpen(true);
                     }}
                     className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400">
                     <div className="flex items-center space-x-2">
@@ -239,7 +238,7 @@ export default function Navbar() {
         )}
 
         {/* Cart Modal */}
-        <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+        <Cart />
       </div>
     </nav>
   );
