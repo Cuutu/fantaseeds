@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
-const CartContext = createContext();
+export const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
@@ -138,53 +138,18 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <>
-      <CartContext.Provider value={{
-        cart,
-        addToCart,
-        removeFromCart,
-        clearCart,
-        isOpen,
-        setIsOpen
-      }}>
-        {children}
-      </CartContext.Provider>
-
-      {showLimitModal && (
-        <div className="fixed inset-0 z-50 overflow-auto backdrop-blur-sm bg-black/40 flex items-center justify-center">
-          <div className="relative bg-gray-800/90 rounded-lg p-8 m-4 max-w-sm w-full shadow-xl">
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold text-white">
-                Límite de Membresía Alcanzado
-              </h3>
-            </div>
-            
-            <div className="mb-6">
-              <p className="text-gray-300">
-                Llegaste al límite de tu membresía. ¿Querés aumentar tu límite?{' '}
-                <a 
-                  href="https://api.whatsapp.com/send/?phone=5491127064165&text&type=phone_number&app_absent=0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-500 hover:text-green-400 font-medium"
-                >
-                  Hacé click acá para upgradear
-                </a>
-              </p>
-            </div>
-
-            <div className="text-center">
-              <button
-                onClick={() => setShowLimitModal(false)}
-                className="w-full bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-              >
-                Aceptar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    <CartContext.Provider value={{
+      cart,
+      setCart,
+      addToCart,
+      removeFromCart,
+      clearCart,
+      isOpen,
+      setIsOpen,
+      getTotalUnits
+    }}>
+      {children}
+    </CartContext.Provider>
   );
 }
 
