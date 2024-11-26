@@ -2,31 +2,41 @@
 import { useEffect, useState } from 'react';
 import GeneticList from '@/components/GeneticList';
 import Cart from '@/components/Cart';
+import { useRouter } from 'next/navigation';
 
 export default function Genetics() {
   const [genetics, setGenetics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
+
+  const fetchGenetics = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/genetics/public');
+      const data = await response.json();
+      
+      if (data.success) {
+        setGenetics(data.genetics);
+      } else {
+        setError(data.error);
+      }
+    } catch (error) {
+      setError('Error al cargar las genéticas');
+      console.error('Error fetching genetics:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchGenetics = async () => {
-      try {
-        const response = await fetch('/api/genetics/public');
-        const data = await response.json();
-        if (data.success) {
-          setGenetics(data.genetics);
-        } else {
-          setError(data.error);
-        }
-      } catch (error) {
-        setError('Error al cargar las genéticas');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchGenetics();
   }, []);
+
+  const refreshCatalog = () => {
+    fetchGenetics();
+    router.refresh();
+  };
 
   if (loading) return (
     <div className="flex justify-center items-center min-h-screen">
@@ -43,7 +53,10 @@ export default function Genetics() {
   return (
     <div className="min-h-screen bg-gray-900 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:pr-96">
-        <GeneticList geneticas={genetics} />
+        <GeneticList 
+          geneticas={genetics} 
+          onUpdate={refreshCatalog}
+        />
       </div>
       <Cart />
     </div>

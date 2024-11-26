@@ -1,7 +1,6 @@
 import dbConnect from '@/lib/db/mongodb';
 import Genetic from '@/models/Genetic';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function GET(request) {
   try {
@@ -20,8 +19,6 @@ export async function GET(request) {
 
     const genetics = await Genetic.find({}).sort({ nombre: 1 });
     
-    console.log('Genéticas encontradas:', genetics); // Para debugging
-
     return Response.json({
       success: true,
       genetics
@@ -41,58 +38,17 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     await dbConnect();
-    
-    const session = await getServerSession(authOptions);
-    
-    console.log('Session completa:', session); // Debug
-    console.log('Rol del usuario:', session?.user?.rol); // Debug
-
-    if (session?.user?.rol !== 'administrador') {
-      return Response.json({ 
-        success: false,
-        error: 'No autorizado',
-        debug: {
-          session: session,
-          userRole: session?.user?.rol
-        }
-      }, { 
-        status: 401 
-      });
-    }
-
     const data = await request.json();
-    console.log('Datos recibidos en API:', data);
-
-    if (!data.imagen) {
-      return Response.json({
-        success: false,
-        error: 'La imagen es requerida'
-      }, {
-        status: 400
-      });
-    }
-
-    const newGenetic = await Genetic.create({
-      nombre: data.nombre,
-      precio: data.precio,
-      thc: data.thc,
-      stock: data.stock,
-      descripcion: data.descripcion,
-      imagen: data.imagen,
-      activo: true
-    });
+    const newGenetic = await Genetic.create(data);
     
     return Response.json({
       success: true,
-      message: 'Genética creada exitosamente',
       genetic: newGenetic
     });
-
   } catch (error) {
-    console.error('Error en POST /api/genetics:', error);
     return Response.json({ 
       success: false, 
-      error: 'Error al crear genética: ' + error.message
+      error: error.message 
     }, { 
       status: 500 
     });
