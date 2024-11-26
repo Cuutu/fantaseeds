@@ -5,45 +5,42 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const addToCart = (genetic, quantity = 1) => {
+  const addToCart = (item) => {
     setCart(prevCart => {
-      const existingProduct = prevCart.find(item => item.genetic._id === genetic._id);
+      const existingItem = prevCart.find(i => i.genetic._id === item.genetic._id);
       
-      if (existingProduct) {
-        return prevCart.map(item =>
-          item.genetic._id === genetic._id
-            ? { ...item, cantidad: item.cantidad + quantity }
-            : item
+      if (existingItem) {
+        return prevCart.map(i => 
+          i.genetic._id === item.genetic._id 
+            ? { ...i, cantidad: i.cantidad + item.cantidad }
+            : i
         );
       }
-      return [...prevCart, { genetic, cantidad: quantity }];
+      
+      return [...prevCart, item];
     });
+    // Abrir carrito automáticamente
+    setIsOpen(true);
   };
 
   const removeFromCart = (geneticId) => {
     setCart(prevCart => prevCart.filter(item => item.genetic._id !== geneticId));
   };
 
-  const updateQuantity = (geneticId, quantity) => {
-    setCart(prevCart =>
-      prevCart.map(item =>
-        item.genetic._id === geneticId
-          ? { ...item, cantidad: quantity }
-          : item
-      )
-    );
+  const clearCart = () => {
+    setCart([]);
   };
 
-  const clearCart = () => setCart([]);
-
   return (
-    <CartContext.Provider value={{ 
-      cart, 
-      addToCart, 
-      removeFromCart, 
-      updateQuantity, 
-      clearCart 
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      removeFromCart,
+      clearCart,
+      isOpen,
+      setIsOpen
     }}>
       {children}
     </CartContext.Provider>
