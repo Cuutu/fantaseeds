@@ -27,21 +27,27 @@ const orderSchema = new mongoose.Schema({
   },
   estado: {
     type: String,
-    enum: ['pendiente', 'completado', 'cancelado'],
     default: 'pendiente'
-  },
-  fechaPedido: {
-    type: Date,
-    default: Date.now
   },
   metodoPago: {
     type: String,
     enum: ['efectivo', 'transferencia'],
     required: true
   },
-  comprobante: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Comprobante'
+  metodoEntrega: {
+    type: String,
+    enum: ['retiro', 'envio'],
+    required: true
+  },
+  direccionEnvio: {
+    type: Object,
+    required: function() {
+      return this.metodoEntrega === 'envio';
+    }
+  },
+  fechaPedido: {
+    type: Date,
+    default: Date.now
   }
 }, {
   timestamps: true

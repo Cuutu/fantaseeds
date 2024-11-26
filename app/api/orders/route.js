@@ -22,24 +22,36 @@ export async function POST(request) {
 
     const data = await request.json();
     
+    if (!data.metodoPago) {
+      return Response.json({ 
+        success: false, 
+        error: 'El método de pago es requerido' 
+      }, { 
+        status: 400 
+      });
+    }
+
     // Crear el pedido
     const order = await Order.create({
       usuario: session.user.id,
       productos: data.productos,
       total: data.total,
       estado: 'pendiente',
+      metodoPago: data.metodoPago,
       metodoEntrega: data.metodoEntrega,
       direccionEnvio: data.direccionEnvio
     });
 
-    // Crear el comprobante
-    const comprobante = await Comprobante.create({
-      pedido: order._id,
-      usuario: session.user.id,
-      archivo: Buffer.from(data.comprobante.archivo, 'base64'),
-      nombreArchivo: data.comprobante.nombreArchivo,
-      tipoArchivo: data.comprobante.tipoArchivo
-    });
+    // Si es transferencia, crear el comprobante
+    if (data.metodoPago === 'transferencia' && data.comprobante) {
+      await Comprobante.create({
+        pedido: order._id,
+        usuario: session.user.id,
+        archivo: Buffer.from(data.comprobante.archivo, 'base64'),
+        nombreArchivo: data.comprobante.nombreArchivo,
+        tipoArchivo: data.comprobante.tipoArchivo
+      });
+    }
 
     // Actualizar stock
     for (const producto of data.productos) {
@@ -52,8 +64,7 @@ export async function POST(request) {
     return Response.json({
       success: true,
       message: 'Pedido creado exitosamente',
-      order,
-      comprobanteId: comprobante._id
+      order
     });
 
   } catch (error) {

@@ -24,12 +24,12 @@ export default function Checkout() {
 
   const handleConfirmarPedido = async () => {
     try {
-      if (!comprobante) {
-        alert('Por favor, sube un comprobante de pago');
+      if (!paymentMethod) {
+        alert('Por favor, seleccione un método de pago');
         return;
       }
 
-      setIsUploading(true);
+      setIsLoading(true);
 
       const orderData = {
         productos: cart.map(item => ({
@@ -39,9 +39,10 @@ export default function Checkout() {
         })),
         total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0) + 
               (deliveryMethod === 'envio' ? 500 : 0),
-        comprobante: comprobante,
+        metodoPago: paymentMethod,
         metodoEntrega: deliveryMethod,
-        direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null
+        direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
+        comprobante: paymentMethod === 'transferencia' ? comprobante : null
       };
 
       const response = await fetch('/api/orders', {
@@ -92,7 +93,7 @@ export default function Checkout() {
       console.error('Error:', error);
       alert(error.message || 'Error al procesar el pedido');
     } finally {
-      setIsUploading(false);
+      setIsLoading(false);
     }
   };
 
