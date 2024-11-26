@@ -78,29 +78,6 @@ export default function Checkout() {
           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
         );
 
-        // Email para el cliente (Resend)
-        const emailResponse = await fetch('/api/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            customerEmail: session.user.email,
-            customerName: session.user.nombreApellido,
-            orderNumber: data.order._id.slice(-6),
-            orderDetails: cart,
-            deliveryMethod: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en sucursal',
-            shippingAddress: deliveryMethod === 'envio' ? 
-              `${shippingAddress.direccion}, ${shippingAddress.ciudad} (CP: ${shippingAddress.codigoPostal})` : 
-              null,
-            total: orderData.total
-          }),
-        });
-
-        if (!emailResponse.ok) {
-          console.error('Error al enviar email de confirmación al cliente');
-        }
-
         clearCart();
         setShowSuccessModal(true);
         
