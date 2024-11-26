@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
 export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
