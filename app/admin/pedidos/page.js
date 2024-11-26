@@ -263,21 +263,49 @@ export default function AdminPedidosPage() {
               <h3 className="text-xl font-bold text-white">Comprobante de Pago</h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white transition-colors"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
+            
             <div className="p-4">
-              <img
-                src={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
-                alt="Comprobante de pago"
-                className="max-w-full h-auto rounded-lg"
-              />
+              <div className="bg-gray-900 rounded-lg overflow-hidden">
+                {selectedComprobante.tipoArchivo.includes('image') ? (
+                  <img
+                    src={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
+                    alt="Comprobante de pago"
+                    className="w-full h-auto max-h-[70vh] object-contain"
+                  />
+                ) : (
+                  <div className="p-8 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <p className="text-gray-300">Archivo PDF</p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="p-4 border-t border-gray-700 flex justify-end">
+            
+            <div className="p-4 border-t border-gray-700 flex justify-end gap-3">
+              {/* Botón para ver en tamaño completo */}
+              <a
+                href={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                  <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                </svg>
+                Ver completo
+              </a>
+              
+              {/* Botón de descarga */}
               <a
                 href={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
                 download={selectedComprobante.nombreArchivo}
