@@ -1,11 +1,24 @@
 'use client';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Cargar carrito del localStorage al iniciar
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  // Guardar carrito en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (item) => {
     setCart(prevCart => {
@@ -21,7 +34,6 @@ export function CartProvider({ children }) {
       
       return [...prevCart, item];
     });
-    // Abrir carrito automáticamente
     setIsOpen(true);
   };
 
@@ -31,6 +43,7 @@ export function CartProvider({ children }) {
 
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem('cart');
   };
 
   return (
