@@ -2,6 +2,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FiEdit2 } from 'react-icons/fi';
 
 // Función simple para formatear precios
 const formatPrice = (price) => `$${price}`;
@@ -171,10 +172,10 @@ export default function PerfilPage() {
               <h1 className="text-2xl font-bold text-white">Mi Perfil</h1>
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="px-4 py-2 bg-green-600 rounded-lg text-white flex items-center gap-2"
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg transition-colors"
               >
-                <span className="material-icons">edit</span>
-                {isEditing ? 'Cancelar' : 'Editar Perfil'}
+                <FiEdit2 className="w-4 h-4" />
+                Editar Perfil
               </button>
             </div>
 
