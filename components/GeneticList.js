@@ -8,7 +8,8 @@ export default function GeneticList({ geneticas }) {
   const { data: session } = useSession();
   const [membresia, setMembresia] = useState('10G');
   const [disponible, setDisponible] = useState(10);
-  const { cart } = useCart();
+  const { cart, addToCart } = useCart();
+  const [selectedQuantities, setSelectedQuantities] = useState({});
 
   useEffect(() => {
     if (session?.user) {
@@ -34,11 +35,27 @@ export default function GeneticList({ geneticas }) {
     }
   }, [session, cart]);
 
+  // Manejar cambio de cantidad
+  const handleQuantityChange = (geneticId, quantity) => {
+    setSelectedQuantities({
+      ...selectedQuantities,
+      [geneticId]: quantity
+    });
+  };
+
+  // Manejar agregar al carrito
+  const handleAddToCart = (genetic) => {
+    const quantity = parseInt(selectedQuantities[genetic._id] || 10); // Default a 10 si no hay selección
+    addToCart({
+      genetic,
+      cantidad: quantity
+    });
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.isArray(geneticas) && geneticas.map((genetic) => (
         <div key={genetic._id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-          {/* Imagen */}
           <div className="relative h-64 w-full">
             <Image
               src={genetic.imagen}
@@ -52,12 +69,10 @@ export default function GeneticList({ geneticas }) {
             </div>
           </div>
 
-          {/* Contenido */}
           <div className="p-4">
             <h3 className="text-xl font-bold text-white mb-2">{genetic.nombre}</h3>
             <p className="text-gray-400 mb-4">{genetic.descripcion}</p>
 
-            {/* Estadísticas */}
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <span className="text-gray-400">THC</span>
@@ -69,11 +84,11 @@ export default function GeneticList({ geneticas }) {
               </div>
             </div>
 
-            {/* Selector y Botón */}
             <div className="flex items-center gap-4">
               <select 
                 className="bg-gray-700 text-white rounded px-3 py-2 w-24"
-                defaultValue="10"
+                value={selectedQuantities[genetic._id] || 10}
+                onChange={(e) => handleQuantityChange(genetic._id, e.target.value)}
               >
                 {[...Array(10)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
@@ -81,12 +96,15 @@ export default function GeneticList({ geneticas }) {
                   </option>
                 ))}
               </select>
-              <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex-grow transition-colors">
-                Agregar
+              <button 
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex-grow transition-colors"
+                onClick={() => handleAddToCart(genetic)}
+                disabled={!session || genetic.stock <= 0}
+              >
+                {genetic.stock <= 0 ? 'Sin Stock' : 'Agregar'}
               </button>
             </div>
 
-            {/* Disponibilidad */}
             <div className="text-sm text-gray-400 mt-2">
               Disponible: {disponible}G de {membresia}
             </div>
