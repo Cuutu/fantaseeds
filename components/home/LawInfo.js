@@ -18,7 +18,7 @@ export default function LawInfo() {
                 Marco Legal
               </h3>
               <p className="text-gray-300 text-lg leading-relaxed">
-                La Ley 27.350 establece el marco regulatorio para la investigación médica 
+                La Ley 27350 establece el marco regulatorio para la investigación médica 
                 y científica del uso medicinal de la planta de cannabis y sus derivados.
               </p>
             </div>
