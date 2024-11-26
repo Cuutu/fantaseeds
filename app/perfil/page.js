@@ -4,13 +4,11 @@ import { FiEdit2 } from 'react-icons/fi';
 import { useSession } from 'next-auth/react';
 
 export default function Perfil() {
-  const [isEditing, setIsEditing] = useState(false);
   const { data: session } = useSession();
-  const [formData, setFormData] = useState({
-    calle: '',
-    numero: '',
-    codigoPostal: ''
-  });
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // Debugging - para ver qué contiene la sesión
+  console.log('Session data:', session);
 
   return (
     <div className="min-h-screen bg-gray-900 p-8">
@@ -37,23 +35,25 @@ export default function Perfil() {
             <div className="space-y-6">
               <div>
                 <p className="text-gray-400 text-sm mb-1">Nombre y Apellido</p>
-                <p className="text-white text-lg">{session?.user?.nombreApellido || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.nombreApellido}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Usuario</p>
-                <p className="text-white text-lg">{session?.user?.usuario || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.usuario}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Email</p>
-                <p className="text-white text-lg">{session?.user?.email || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.email}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Membresía</p>
-                <p className="text-white text-lg">{session?.user?.membresia || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.membresia}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Fecha de Alta</p>
-                <p className="text-white text-lg">{session?.user?.fechaAlta || 'No especificado'}</p>
+                <p className="text-white text-lg">
+                  {new Date(session?.user?.fechaAlta).toLocaleDateString('es-AR')}
+                </p>
               </div>
             </div>
           </div>
