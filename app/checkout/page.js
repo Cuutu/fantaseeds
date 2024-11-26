@@ -18,14 +18,17 @@ export default function Checkout() {
     ciudad: '',
     codigoPostal: ''
   });
+  const [comprobante, setComprobante] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleConfirmarPedido = async () => {
     try {
-      setIsLoading(true);
-      
-      if (!session?.user) {
-        throw new Error('Usuario no autenticado');
+      if (!comprobante) {
+        alert('Por favor, sube un comprobante de pago');
+        return;
       }
+
+      setIsUploading(true);
 
       const orderData = {
         productos: cart.map(item => ({
@@ -35,8 +38,7 @@ export default function Checkout() {
         })),
         total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0) + 
               (deliveryMethod === 'envio' ? 500 : 0),
-        usuario: session.user.id,
-        estado: 'pendiente',
+        comprobante: comprobante,
         metodoEntrega: deliveryMethod,
         direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null
       };
@@ -89,8 +91,35 @@ export default function Checkout() {
       console.error('Error:', error);
       alert(error.message || 'Error al procesar el pedido');
     } finally {
-      setIsLoading(false);
+      setIsUploading(false);
     }
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        // Convertir el archivo a Base64
+        const base64 = await convertFileToBase64(file);
+        setComprobante({
+          archivo: base64,
+          nombreArchivo: file.name,
+          tipoArchivo: file.type
+        });
+      } catch (error) {
+        console.error('Error al procesar el archivo:', error);
+        alert('Error al procesar el archivo');
+      }
+    }
+  };
+
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(',')[1]); // Obtener solo los datos Base64
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   return (
@@ -186,12 +215,52 @@ export default function Checkout() {
         </div>
       </div>
 
+      {/* Sección de comprobante */}
+      <div className="bg-gray-800 rounded-lg p-6 mb-6">
+        <h2 className="text-xl font-bold text-white mb-4">Comprobante de Pago</h2>
+        <div className="space-y-4">
+          <div className="border-2 border-dashed border-gray-600 rounded-lg p-4">
+            <input
+              type="file"
+              onChange={handleFileChange}
+              accept="image/*,.pdf"
+              className="hidden"
+              id="comprobante"
+            />
+            <label
+              htmlFor="comprobante"
+              className="flex flex-col items-center justify-center cursor-pointer"
+            >
+              <span className="text-gray-400 mb-2">
+                {comprobante ? comprobante.nombreArchivo : 'Subir comprobante'}
+              </span>
+              <button
+                type="button"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Seleccionar archivo
+              </button>
+            </label>
+          </div>
+          
+          {comprobante && (
+            <div className="text-green-400 text-sm">
+              ✓ Archivo seleccionado: {comprobante.nombreArchivo}
+            </div>
+          )}
+        </div>
+      </div>
+
       <button
         onClick={handleConfirmarPedido}
-        disabled={isLoading || cart.length === 0}
-        className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-800 disabled:opacity-50"
+        disabled={isUploading || !comprobante}
+        className={`w-full py-3 rounded-lg text-white font-bold ${
+          isUploading || !comprobante
+            ? 'bg-gray-600 cursor-not-allowed'
+            : 'bg-green-600 hover:bg-green-700'
+        }`}
       >
-        {isLoading ? 'Procesando...' : 'Confirmar Pedido'}
+        {isUploading ? 'Procesando...' : 'Confirmar Pedido'}
       </button>
 
       {showSuccessModal && (

@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import Comprobante from '@/models/Comprobante';
 import Genetic from '@/models/Genetic';
 
 export async function POST(request) {
@@ -20,19 +21,24 @@ export async function POST(request) {
     }
 
     const data = await request.json();
-    console.log('Datos recibidos:', data); // Para debug
     
-    // Crear el pedido asegurándonos de que todos los campos requeridos estén presentes
+    // Crear el pedido
     const order = await Order.create({
       usuario: session.user.id,
-      productos: data.productos.map(p => ({
-        genetic: p.genetic, // Este debe ser el ObjectId del producto
-        cantidad: p.cantidad,
-        precio: p.precio
-      })),
+      productos: data.productos,
       total: data.total,
       estado: 'pendiente',
-      fechaPedido: new Date()
+      metodoEntrega: data.metodoEntrega,
+      direccionEnvio: data.direccionEnvio
+    });
+
+    // Crear el comprobante
+    const comprobante = await Comprobante.create({
+      pedido: order._id,
+      usuario: session.user.id,
+      archivo: Buffer.from(data.comprobante.archivo, 'base64'),
+      nombreArchivo: data.comprobante.nombreArchivo,
+      tipoArchivo: data.comprobante.tipoArchivo
     });
 
     // Actualizar stock
@@ -46,11 +52,12 @@ export async function POST(request) {
     return Response.json({
       success: true,
       message: 'Pedido creado exitosamente',
-      order
+      order,
+      comprobanteId: comprobante._id
     });
 
   } catch (error) {
-    console.error('Error completo:', error);
+    console.error('Error:', error);
     return Response.json({ 
       success: false, 
       error: error.message 
