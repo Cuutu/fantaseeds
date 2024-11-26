@@ -15,9 +15,9 @@ export default function AdminPedidosPage() {
 
   const estadosPedido = [
     { value: 'pendiente', label: 'Pendiente', color: 'bg-yellow-500' },
-    { value: 'pendiente_retiro', label: 'Pendiente de retiro', color: 'bg-orange-500' },
-    { value: 'pendiente_envio', label: 'Pendiente de envío', color: 'bg-blue-500' },
     { value: 'en_curso', label: 'En curso', color: 'bg-purple-500' },
+    { value: 'pendiente_envio', label: 'Pendiente de envío', color: 'bg-blue-500' },
+    { value: 'pendiente_retiro', label: 'Pendiente de retiro', color: 'bg-orange-500' },
     { value: 'completada', label: 'Completada', color: 'bg-green-500' },
     { value: 'cancelada', label: 'Cancelada', color: 'bg-red-500' }
   ];
