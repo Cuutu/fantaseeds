@@ -38,7 +38,9 @@ export const authOptions = {
             email: user.email,
             usuario: user.usuario,
             rol: user.rol,
-            nombreApellido: user.nombreApellido
+            nombreApellido: user.nombreApellido,
+            membresia: user.membresia,
+            fechaAlta: user.fechaAlta
           };
         } catch (error) {
           throw new Error(error.message);
@@ -54,6 +56,8 @@ export const authOptions = {
         token.usuario = user.usuario;
         token.rol = user.rol;
         token.nombreApellido = user.nombreApellido;
+        token.membresia = user.membresia;
+        token.fechaAlta = user.fechaAlta;
       }
       return token;
     },
@@ -64,6 +68,8 @@ export const authOptions = {
         session.user.usuario = token.usuario;
         session.user.rol = token.rol;
         session.user.nombreApellido = token.nombreApellido;
+        session.user.membresia = token.membresia;
+        session.user.fechaAlta = token.fechaAlta;
       }
       return session;
     }
