@@ -101,16 +101,28 @@ export default function Checkout() {
     const file = e.target.files[0];
     if (file) {
       try {
-        // Convertir el archivo a Base64
+        // Validar el tipo de archivo
+        const validTypes = ['image/jpeg', 'image/png', 'application/pdf', 'image/heic'];
+        if (!validTypes.includes(file.type) && !file.name.toLowerCase().endsWith('.heic')) {
+          throw new Error('Tipo de archivo no válido. Por favor, sube una imagen (JPG, PNG, HEIC) o PDF.');
+        }
+
+        // Validar tamaño (por ejemplo, máximo 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+        if (file.size > maxSize) {
+          throw new Error('El archivo es demasiado grande. El tamaño máximo es 5MB.');
+        }
+
         const base64 = await convertFileToBase64(file);
         setComprobante({
           archivo: base64,
           nombreArchivo: file.name,
-          tipoArchivo: file.type
+          tipoArchivo: file.type || 'image/heic' // Manejar HEIC específicamente
         });
       } catch (error) {
         console.error('Error al procesar el archivo:', error);
-        alert('Error al procesar el archivo');
+        alert(error.message || 'Error al procesar el archivo');
+        e.target.value = ''; // Limpiar el input
       }
     }
   };
@@ -119,7 +131,10 @@ export default function Checkout() {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(',')[1]); // Obtener solo los datos Base64
+      reader.onload = () => {
+        const base64String = reader.result.split(',')[1];
+        resolve(base64String);
+      };
       reader.onerror = (error) => reject(error);
     });
   };
@@ -255,14 +270,14 @@ export default function Checkout() {
                 <p>Titular: FANTASEEDS SRL</p>
               </div>
 
-              {/* Subir comprobante */}
+              {/* Sección de subir comprobante */}
               <div className="mt-4">
                 <h3 className="text-white font-semibold mb-2">Subir Comprobante:</h3>
                 <div className="border-2 border-dashed border-gray-600 rounded-lg p-4">
                   <input
                     type="file"
                     onChange={handleFileChange}
-                    accept="image/*,.pdf"
+                    accept=".jpg,.jpeg,.png,.pdf,.heic" // Aceptar más tipos de archivo
                     className="hidden"
                     id="comprobante"
                   />
@@ -270,22 +285,19 @@ export default function Checkout() {
                     htmlFor="comprobante"
                     className="flex flex-col items-center justify-center cursor-pointer"
                   >
-                    <span className="text-gray-400 mb-2">
-                      {comprobante ? comprobante.nombreArchivo : 'Subir comprobante'}
-                    </span>
                     <button
                       type="button"
                       className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
                     >
-                      Seleccionar archivo
+                      {comprobante ? 'Cambiar comprobante' : 'Seleccionar comprobante'}
                     </button>
+                    {comprobante && (
+                      <span className="text-green-400 text-sm mt-2">
+                        ✓ {comprobante.nombreArchivo}
+                      </span>
+                    )}
                   </label>
                 </div>
-                {comprobante && (
-                  <div className="text-green-400 text-sm mt-2">
-                    ✓ Archivo seleccionado: {comprobante.nombreArchivo}
-                  </div>
-                )}
               </div>
             </div>
           )}

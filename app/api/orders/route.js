@@ -49,7 +49,8 @@ export async function POST(request) {
         usuario: session.user.id,
         archivo: Buffer.from(data.comprobante.archivo, 'base64'),
         nombreArchivo: data.comprobante.nombreArchivo,
-        tipoArchivo: data.comprobante.tipoArchivo
+        tipoArchivo: data.comprobante.tipoArchivo,
+        tamano: Buffer.from(data.comprobante.archivo, 'base64').length
       });
     }
 

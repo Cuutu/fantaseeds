@@ -23,6 +23,10 @@ const comprobanteSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  tamano: {
+    type: Number,
+    required: true
+  },
   fechaSubida: {
     type: Date,
     default: Date.now
