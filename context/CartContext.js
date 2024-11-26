@@ -16,13 +16,20 @@ export function CartProvider({ children }) {
     const fetchUserMembresia = async () => {
       if (session?.status === 'authenticated' && session?.data?.user?.id) {
         try {
-          const response = await fetch('/api/user/profile');
+          const response = await fetch(`/api/users/${session.data.user.id}`);
+          
+          if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+          }
+          
           const data = await response.json();
-          if (data.success) {
+          if (data.user?.membresia) {
             setUserMembresia(data.user.membresia);
+            console.log('Membresía obtenida:', data.user.membresia);
           }
         } catch (error) {
           console.error('Error al obtener la membresía:', error);
+          setUserMembresia('10G'); // valor por defecto si hay error
         }
       }
     };
@@ -32,12 +39,10 @@ export function CartProvider({ children }) {
 
   // Función para obtener el límite según la membresía
   const getMembresiaLimit = (membresia) => {
-    const limits = {
-      '10G': 10,
-      '20G': 20,
-      '30G': 30
-    };
+    if (!membresia) return 10; // valor por defecto
+    
     const numeroMembresia = parseInt(membresia?.replace('G', '')) || 10;
+    console.log('Número de membresía:', numeroMembresia);
     return numeroMembresia;
   };
 
@@ -86,10 +91,12 @@ export function CartProvider({ children }) {
     const currentTotal = getTotalUnits();
     const newTotal = currentTotal + item.cantidad;
 
-    console.log('Membresía:', userMembresia);
-    console.log('Límite:', membresiaLimit);
-    console.log('Total actual:', currentTotal);
-    console.log('Nuevo total:', newTotal);
+    console.log({
+      Membresia: userMembresia,
+      Limite: membresiaLimit,
+      'Total actual': currentTotal,
+      'Nuevo total': newTotal
+    });
 
     if (newTotal > membresiaLimit) {
       showMembresieLimitMessage();
