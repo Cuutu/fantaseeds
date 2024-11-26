@@ -37,7 +37,8 @@ export function CartProvider({ children }) {
       '20G': 20,
       '30G': 30
     };
-    return limits[membresia] || 10;
+    const numeroMembresia = parseInt(membresia?.replace('G', '')) || 10;
+    return numeroMembresia;
   };
 
   // Función para calcular el total de unidades en el carrito
@@ -84,6 +85,11 @@ export function CartProvider({ children }) {
     const membresiaLimit = getMembresiaLimit(userMembresia);
     const currentTotal = getTotalUnits();
     const newTotal = currentTotal + item.cantidad;
+
+    console.log('Membresía:', userMembresia);
+    console.log('Límite:', membresiaLimit);
+    console.log('Total actual:', currentTotal);
+    console.log('Nuevo total:', newTotal);
 
     if (newTotal > membresiaLimit) {
       showMembresieLimitMessage();
