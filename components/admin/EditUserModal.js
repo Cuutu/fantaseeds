@@ -9,12 +9,13 @@ export default function EditUserModal({ isOpen, onClose, onUserUpdated, user }) 
     membresia: user.membresia || '',
     rol: user.rol || 'usuario'
   });
-  const [changePassword, setChangePassword] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch(`/api/users/${user._id}`, {
         method: 'PUT',
@@ -37,10 +38,68 @@ export default function EditUserModal({ isOpen, onClose, onUserUpdated, user }) 
       }
     } catch (error) {
       console.error('Error:', error);
-      alert(error.message);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/users/${user._id}`, {
+        method: 'DELETE'
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        onUserUpdated();
+        onClose();
+      } else {
+        throw new Error(data.error || 'Error al eliminar usuario');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Modal de confirmación de eliminación
+  if (showDeleteConfirm) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full">
+          <h3 className="text-xl font-bold text-white mb-4">Confirmar Eliminación</h3>
+          <p className="text-gray-300 mb-4">
+            ¿Estás seguro que deseas eliminar al usuario {user.usuario}?
+          </p>
+          <p className="text-red-400 text-sm mb-6">
+            Esta acción no se puede deshacer.
+          </p>
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={() => setShowDeleteConfirm(false)}
+              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleDelete}
+              disabled={loading}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+            >
+              {loading ? 'Eliminando...' : 'Eliminar Usuario'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Modal principal de edición
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full">
@@ -97,21 +156,31 @@ export default function EditUserModal({ isOpen, onClose, onUserUpdated, user }) 
             </div>
           )}
 
-          <div className="flex justify-end space-x-3 mt-6">
+          <div className="flex justify-between mt-6">
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-600 rounded-lg text-white"
+              onClick={() => setShowDeleteConfirm(true)}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
             >
-              Cancelar
+              Eliminar Usuario
             </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 bg-green-600 rounded-lg text-white disabled:opacity-50"
-            >
-              {loading ? 'Guardando...' : 'Guardar Cambios'}
-            </button>
+            
+            <div className="space-x-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-600 rounded-lg text-white hover:bg-gray-700"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-4 py-2 bg-green-600 rounded-lg text-white hover:bg-green-700 disabled:opacity-50"
+              >
+                {loading ? 'Guardando...' : 'Guardar Cambios'}
+              </button>
+            </div>
           </div>
         </form>
       </div>
