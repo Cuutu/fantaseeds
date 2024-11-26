@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
@@ -21,6 +21,7 @@ export default function Checkout() {
   const [comprobante, setComprobante] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('');
+  const fileInputRef = useRef(null);
 
   const handleConfirmarPedido = async () => {
     try {
@@ -97,6 +98,10 @@ export default function Checkout() {
     }
   };
 
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -107,8 +112,8 @@ export default function Checkout() {
           throw new Error('Tipo de archivo no válido. Por favor, sube una imagen (JPG, PNG, HEIC) o PDF.');
         }
 
-        // Validar tamaño (por ejemplo, máximo 5MB)
-        const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+        // Validar tamaño (máximo 5MB)
+        const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
           throw new Error('El archivo es demasiado grande. El tamaño máximo es 5MB.');
         }
@@ -117,12 +122,12 @@ export default function Checkout() {
         setComprobante({
           archivo: base64,
           nombreArchivo: file.name,
-          tipoArchivo: file.type || 'image/heic' // Manejar HEIC específicamente
+          tipoArchivo: file.type || 'image/heic'
         });
       } catch (error) {
         console.error('Error al procesar el archivo:', error);
         alert(error.message || 'Error al procesar el archivo');
-        e.target.value = ''; // Limpiar el input
+        e.target.value = '';
       }
     }
   };
@@ -275,28 +280,28 @@ export default function Checkout() {
                 <h3 className="text-white font-semibold mb-2">Subir Comprobante:</h3>
                 <div className="border-2 border-dashed border-gray-600 rounded-lg p-4">
                   <input
+                    ref={fileInputRef}
                     type="file"
                     onChange={handleFileChange}
-                    accept=".jpg,.jpeg,.png,.pdf,.heic" // Aceptar más tipos de archivo
+                    accept=".jpg,.jpeg,.png,.pdf,.heic"
                     className="hidden"
-                    id="comprobante"
                   />
-                  <label
-                    htmlFor="comprobante"
-                    className="flex flex-col items-center justify-center cursor-pointer"
+                  <button
+                    type="button"
+                    onClick={handleFileSelect}
+                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors text-lg"
                   >
-                    <button
-                      type="button"
-                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
-                    >
-                      {comprobante ? 'Cambiar comprobante' : 'Seleccionar comprobante'}
-                    </button>
-                    {comprobante && (
-                      <span className="text-green-400 text-sm mt-2">
-                        ✓ {comprobante.nombreArchivo}
-                      </span>
-                    )}
-                  </label>
+                    {comprobante ? 'Cambiar comprobante' : 'Seleccionar comprobante'}
+                  </button>
+                  
+                  {comprobante && (
+                    <div className="mt-4 text-green-400 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span>{comprobante.nombreArchivo}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -308,17 +313,17 @@ export default function Checkout() {
       <button
         onClick={handleConfirmarPedido}
         disabled={
-          isUploading || 
+          isLoading || 
           (paymentMethod === 'transferencia' && !comprobante) ||
           !paymentMethod
         }
         className={`w-full py-3 rounded-lg text-white font-bold ${
-          isUploading || (paymentMethod === 'transferencia' && !comprobante) || !paymentMethod
+          isLoading || (paymentMethod === 'transferencia' && !comprobante) || !paymentMethod
             ? 'bg-gray-600 cursor-not-allowed'
             : 'bg-green-600 hover:bg-green-700'
         }`}
       >
-        {isUploading ? 'Procesando...' : 'Confirmar Pedido'}
+        {isLoading ? 'Procesando...' : 'Confirmar Pedido'}
       </button>
 
       {showSuccessModal && (
