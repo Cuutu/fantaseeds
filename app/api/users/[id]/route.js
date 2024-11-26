@@ -1,6 +1,7 @@
 import dbConnect from '@/lib/db/mongodb';
 import User from '@/models/User';
 import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function PUT(request, { params }) {
   try {
@@ -95,7 +96,29 @@ export async function GET(request, { params }) {
   try {
     await dbConnect();
     
-    const user = await User.findById(params.id).select('-password');
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return Response.json({ 
+        success: false, 
+        error: 'No autorizado' 
+      }, { 
+        status: 401 
+      });
+    }
+
+    const { id } = params;
+    
+    // Verificar que el usuario solo pueda ver su propia información
+    if (session.user.id !== id && session.user.rol !== 'administrador') {
+      return Response.json({ 
+        success: false, 
+        error: 'No autorizado' 
+      }, { 
+        status: 403 
+      });
+    }
+
+    const user = await User.findById(id).select('-password');
     
     if (!user) {
       return Response.json({ 
@@ -108,13 +131,11 @@ export async function GET(request, { params }) {
 
     return Response.json({
       success: true,
-      user: {
-        ...user.toObject(),
-        id: user._id
-      }
+      user
     });
 
   } catch (error) {
+    console.error('Error en GET /api/users/[id]:', error);
     return Response.json({ 
       success: false, 
       error: error.message 
