@@ -16,22 +16,24 @@ export default function Perfil() {
     <div className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Encabezado */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Mi Perfil</h1>
-          <button
-            onClick={() => setIsEditing(!isEditing)}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            <FiEdit2 className="w-4 h-4" />
-            {isEditing ? 'Guardar' : 'Editar Perfil'}
-          </button>
         </div>
 
         {/* Contenido Principal */}
         <div className="grid md:grid-cols-2 gap-12">
           {/* Información Personal */}
           <div className="bg-gray-800/50 rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-6">Información Personal</h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-white">Información Personal</h2>
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <FiEdit2 className="w-4 h-4" />
+                {isEditing ? 'Guardar' : 'Editar Perfil'}
+              </button>
+            </div>
             <div className="space-y-6">
               <div>
                 <p className="text-gray-400 text-sm mb-1">Nombre y Apellido</p>
