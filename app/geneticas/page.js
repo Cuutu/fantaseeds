@@ -23,7 +23,7 @@ export default function Genetics() {
       }
 
       const data = await response.json();
-      console.log('Genéticas cargadas:', data);
+      console.log('Datos recibidos:', data);
 
       if (data.success) {
         setGenetics(data.genetics);
@@ -41,22 +41,6 @@ export default function Genetics() {
   useEffect(() => {
     fetchGenetics();
   }, []);
-
-  useEffect(() => {
-    const handleRouteChange = () => {
-      fetchGenetics();
-    };
-
-    window.addEventListener('focus', handleRouteChange);
-    return () => {
-      window.removeEventListener('focus', handleRouteChange);
-    };
-  }, []);
-
-  const refreshCatalog = async () => {
-    await fetchGenetics();
-    router.refresh();
-  };
 
   if (loading) {
     return (
@@ -77,10 +61,7 @@ export default function Genetics() {
   return (
     <div className="min-h-screen bg-gray-900 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:pr-96">
-        <GeneticList 
-          geneticas={genetics} 
-          onUpdate={refreshCatalog}
-        />
+        <GeneticList geneticas={genetics} />
       </div>
       <Cart />
     </div>
