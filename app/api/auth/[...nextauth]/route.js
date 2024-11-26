@@ -27,33 +27,25 @@ export const authOptions = {
             throw new Error('Usuario no encontrado');
           }
 
-          const isValid = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
-
+          const isValid = await bcrypt.compare(credentials.password, user.password);
+          
           if (!isValid) {
             throw new Error('Contraseña incorrecta');
           }
 
           return {
-            id: user._id.toString(),
+            id: user._id,
             email: user.email,
             usuario: user.usuario,
             rol: user.rol,
-            nombreApellido: user.nombreApellido,
-            membresia: user.membresia
+            nombreApellido: user.nombreApellido
           };
         } catch (error) {
-          throw error;
+          throw new Error(error.message);
         }
       }
     })
   ],
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 días
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -62,29 +54,27 @@ export const authOptions = {
         token.usuario = user.usuario;
         token.rol = user.rol;
         token.nombreApellido = user.nombreApellido;
-        token.membresia = user.membresia;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user = {
-          id: token.id,
-          email: token.email,
-          usuario: token.usuario,
-          rol: token.rol,
-          nombreApellido: token.nombreApellido,
-          membresia: token.membresia
-        };
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.usuario = token.usuario;
+        session.user.rol = token.rol;
+        session.user.nombreApellido = token.nombreApellido;
       }
       return session;
     }
   },
   pages: {
     signIn: '/login',
-    error: '/login'
   },
-  secret: process.env.NEXTAUTH_SECRET
+  session: {
+    strategy: 'jwt',
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

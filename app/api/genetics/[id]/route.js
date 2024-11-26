@@ -1,13 +1,76 @@
 import dbConnect from '@/lib/db/mongodb';
 import Genetic from '@/models/Genetic';
 import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function DELETE(request, { params }) {
   try {
     await dbConnect();
     
-    const session = await getServerSession();
-    console.log('Sesión del usuario:', session);
+    // Obtener la sesión usando authOptions
+    const session = await getServerSession(authOptions);
+    console.log('Sesión actual:', session);
+
+    // Verificar autorización
+    if (!session?.user) {
+      console.log('No hay sesión de usuario');
+      return Response.json({ 
+        success: false, 
+        error: 'No has iniciado sesión' 
+      }, { 
+        status: 401 
+      });
+    }
+
+    if (session.user.rol !== 'administrador') {
+      console.log('Usuario no es administrador:', session.user.rol);
+      return Response.json({ 
+        success: false, 
+        error: 'No tienes permisos de administrador' 
+      }, { 
+        status: 403 
+      });
+    }
+
+    const { id } = params;
+    console.log('Intentando eliminar genética:', id);
+
+    const deletedGenetic = await Genetic.findByIdAndDelete(id);
+    
+    if (!deletedGenetic) {
+      return Response.json({ 
+        success: false, 
+        error: 'Genética no encontrada' 
+      }, { 
+        status: 404 
+      });
+    }
+
+    console.log('Genética eliminada exitosamente:', deletedGenetic);
+
+    return Response.json({
+      success: true,
+      message: 'Genética eliminada correctamente',
+      genetic: deletedGenetic
+    });
+
+  } catch (error) {
+    console.error('Error al eliminar genética:', error);
+    return Response.json({ 
+      success: false, 
+      error: error.message 
+    }, { 
+      status: 500 
+    });
+  }
+}
+
+// Agregar método PUT para actualización
+export async function PUT(request, { params }) {
+  try {
+    await dbConnect();
+    
+    const session = await getServerSession(authOptions);
     
     if (!session?.user || session.user.rol !== 'administrador') {
       return Response.json({ 
@@ -19,14 +82,11 @@ export async function DELETE(request, { params }) {
     }
 
     const { id } = params;
-    console.log('ID a eliminar:', id);
+    const updateData = await request.json();
 
-    console.log('Iniciando proceso de eliminación...');
-    
-    // En lugar de eliminar, marcamos como inactivo
     const updatedGenetic = await Genetic.findByIdAndUpdate(
       id,
-      { activo: false },
+      updateData,
       { new: true }
     );
 
@@ -39,15 +99,13 @@ export async function DELETE(request, { params }) {
       });
     }
 
-    console.log('Genética eliminada:', updatedGenetic);
-
     return Response.json({
       success: true,
       genetic: updatedGenetic
     });
 
   } catch (error) {
-    console.error('Error en DELETE /api/genetics/[id]:', error);
+    console.error('Error en PUT /api/genetics/[id]:', error);
     return Response.json({ 
       success: false, 
       error: error.message 
