@@ -37,23 +37,23 @@ export default function Perfil() {
             <div className="space-y-6">
               <div>
                 <p className="text-gray-400 text-sm mb-1">Nombre y Apellido</p>
-                <p className="text-white text-lg">{session?.user?.nombreApellido}</p>
+                <p className="text-white text-lg">{session?.user?.nombreApellido || 'No especificado'}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Usuario</p>
-                <p className="text-white text-lg">{session?.user?.usuario}</p>
+                <p className="text-white text-lg">{session?.user?.usuario || 'No especificado'}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Email</p>
-                <p className="text-white text-lg">{session?.user?.email}</p>
+                <p className="text-white text-lg">{session?.user?.email || 'No especificado'}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Membresía</p>
-                <p className="text-white text-lg">{session?.user?.membresia}</p>
+                <p className="text-white text-lg">{session?.user?.membresia || 'No especificado'}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-1">Fecha de Alta</p>
-                <p className="text-white text-lg">{session?.user?.fechaAlta}</p>
+                <p className="text-white text-lg">{session?.user?.fechaAlta || 'No especificado'}</p>
               </div>
             </div>
           </div>
