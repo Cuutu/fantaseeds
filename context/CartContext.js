@@ -8,12 +8,12 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [userMembresia, setUserMembresia] = useState(null);
-  const { data: session } = useSession();
+  const session = useSession();
 
   // Obtener membresía del usuario desde la base de datos
   useEffect(() => {
     const fetchUserMembresia = async () => {
-      if (session?.user?.id) {
+      if (session?.status === 'authenticated' && session?.data?.user?.id) {
         try {
           const response = await fetch('/api/user/profile');
           const data = await response.json();
@@ -58,6 +58,24 @@ export function CartProvider({ children }) {
   }, [cart]);
 
   const addToCart = (item) => {
+    // Si el usuario no está autenticado, permitir agregar sin límite
+    if (session?.status !== 'authenticated') {
+      setCart(prevCart => {
+        const existingItem = prevCart.find(i => i.genetic._id === item.genetic._id);
+        if (existingItem) {
+          return prevCart.map(i => 
+            i.genetic._id === item.genetic._id 
+              ? { ...i, cantidad: existingItem.cantidad + item.cantidad }
+              : i
+          );
+        }
+        return [...prevCart, item];
+      });
+      setIsOpen(true);
+      return true;
+    }
+
+    // Si está autenticado, aplicar límites de membresía
     const membresiaLimit = getMembresiaLimit(userMembresia);
     const currentTotal = getTotalUnits();
     const newTotal = currentTotal + item.cantidad;
