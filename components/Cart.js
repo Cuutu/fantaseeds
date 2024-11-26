@@ -27,6 +27,11 @@ export default function Cart() {
     router.push('/checkout');
   };
 
+  const handleRemoveItem = (geneticId) => {
+    const updatedCart = cart.filter(item => item.genetic._id !== geneticId);
+    setCart(updatedCart);
+  };
+
   return (
     <div className="fixed right-0 top-0 h-full w-96 bg-gray-800 shadow-xl p-6 overflow-y-auto z-50">
       <div className="flex justify-between items-center mb-6">
@@ -45,33 +50,29 @@ export default function Cart() {
         <p className="text-gray-400 text-center">El carrito está vacío</p>
       ) : (
         <>
-          {cart.map((item, index) => (
-            <div key={index} className="bg-gray-700 rounded-lg p-4 mb-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-white font-medium">{item.genetic.nombre}</h3>
-                  <p className="text-gray-400 text-sm">
-                    Cantidad: {item.cantidad} unidades
-                  </p>
-                  <p className="text-green-500 font-medium">
-                    ${item.genetic.precio * item.cantidad}
-                  </p>
+          <div className="flex-1 overflow-y-auto">
+            {cart.map((item) => (
+              <div key={item.genetic._id} className="bg-gray-700/50 rounded-lg p-4 mb-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-white font-medium">{item.genetic.nombre}</h3>
+                    <p className="text-gray-400">Cantidad: {item.cantidad} unidades</p>
+                    <p className="text-green-500">${item.genetic.precio * item.cantidad}</p>
+                  </div>
+                  <button
+                    onClick={() => handleRemoveItem(item.genetic._id)}
+                    className="text-red-500 hover:text-red-400 transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
                 </div>
-                <button
-                  onClick={() => removeFromCart(item.genetic._id)}
-                  className="text-red-400 hover:text-red-500 transition-colors"
-                >
-                  <FaTrash />
-                </button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           <div className="mt-6 border-t border-gray-700 pt-4">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-gray-400">Stock disponible:</span>
-              <span className="text-white">{cart.length} unidades</span>
-            </div>
             <div className="flex justify-between items-center mb-6">
               <span className="text-lg font-bold text-white">Total:</span>
               <span className="text-lg font-bold text-green-500">${total}</span>
