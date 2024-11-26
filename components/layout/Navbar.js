@@ -59,7 +59,7 @@ export default function Navbar() {
                   Genéticas
                 </Link>
                 <button 
-                  onClick={() => setIsOpen(true)}
+                  onClick={() => setIsOpen(!isOpen)}
                   className="text-gray-300 hover:text-green-400 transition-colors duration-200 relative"
                 >
                   <FiShoppingCart className="h-5 w-5" />
@@ -179,7 +179,7 @@ export default function Navbar() {
                   <button
                     onClick={() => {
                       setIsMenuOpen(false);
-                      setIsOpen(true);
+                      setIsOpen(!isOpen);
                     }}
                     className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400">
                     <div className="flex items-center space-x-2">
