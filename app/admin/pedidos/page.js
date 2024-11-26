@@ -182,6 +182,34 @@ export default function AdminPedidosPage() {
                       <span className="font-bold text-white">${pedido.total}</span>
                     </div>
                   </div>
+
+                  {/* Método de pago y comprobante */}
+                  <div className="border-t border-gray-700 pt-4 mt-4">
+                    <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
+                    <p className="text-gray-300">
+                      {pedido.metodoPago === 'efectivo' ? 'Pago en Sucursal' : 'Transferencia Bancaria'}
+                    </p>
+
+                    {pedido.metodoPago === 'transferencia' && pedido.comprobante && (
+                      <div className="mt-4">
+                        <h4 className="text-white font-semibold mb-2">Comprobante:</h4>
+                        <div className="relative">
+                          <img
+                            src={`data:${pedido.comprobante.tipoArchivo};base64,${pedido.comprobante.archivo}`}
+                            alt="Comprobante de pago"
+                            className="max-w-md rounded-lg shadow-lg"
+                          />
+                          <a
+                            href={`data:${pedido.comprobante.tipoArchivo};base64,${pedido.comprobante.archivo}`}
+                            download={pedido.comprobante.nombreArchivo}
+                            className="absolute top-2 right-2 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm"
+                          >
+                            Descargar
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

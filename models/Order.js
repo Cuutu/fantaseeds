@@ -33,6 +33,15 @@ const orderSchema = new mongoose.Schema({
   fechaPedido: {
     type: Date,
     default: Date.now
+  },
+  metodoPago: {
+    type: String,
+    enum: ['efectivo', 'transferencia'],
+    required: true
+  },
+  comprobante: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comprobante'
   }
 }, {
   timestamps: true

@@ -20,6 +20,7 @@ export default function Checkout() {
   });
   const [comprobante, setComprobante] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const handleConfirmarPedido = async () => {
     try {
@@ -215,47 +216,91 @@ export default function Checkout() {
         </div>
       </div>
 
-      {/* Sección de comprobante */}
+      {/* Método de Pago */}
       <div className="bg-gray-800 rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-bold text-white mb-4">Comprobante de Pago</h2>
+        <h2 className="text-xl font-bold text-white mb-4">Método de Pago</h2>
         <div className="space-y-4">
-          <div className="border-2 border-dashed border-gray-600 rounded-lg p-4">
-            <input
-              type="file"
-              onChange={handleFileChange}
-              accept="image/*,.pdf"
-              className="hidden"
-              id="comprobante"
-            />
-            <label
-              htmlFor="comprobante"
-              className="flex flex-col items-center justify-center cursor-pointer"
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setPaymentMethod('efectivo')}
+              className={`px-4 py-2 rounded-lg ${
+                paymentMethod === 'efectivo'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-700 text-gray-300'
+              }`}
             >
-              <span className="text-gray-400 mb-2">
-                {comprobante ? comprobante.nombreArchivo : 'Subir comprobante'}
-              </span>
-              <button
-                type="button"
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                Seleccionar archivo
-              </button>
-            </label>
+              Pagar en Sucursal
+            </button>
+            <button
+              onClick={() => setPaymentMethod('transferencia')}
+              className={`px-4 py-2 rounded-lg ${
+                paymentMethod === 'transferencia'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-700 text-gray-300'
+              }`}
+            >
+              Transferencia Bancaria
+            </button>
           </div>
-          
-          {comprobante && (
-            <div className="text-green-400 text-sm">
-              ✓ Archivo seleccionado: {comprobante.nombreArchivo}
+
+          {/* Mostrar datos bancarios si selecciona transferencia */}
+          {paymentMethod === 'transferencia' && (
+            <div className="mt-4 p-4 bg-gray-700 rounded-lg">
+              <h3 className="text-white font-semibold mb-2">Datos para la transferencia:</h3>
+              <div className="text-gray-300 space-y-2">
+                <p>Banco: Santander</p>
+                <p>CBU: XXXX XXXX XXXX</p>
+                <p>Alias: FANTASEEDS.CLUB</p>
+                <p>Titular: FANTASEEDS SRL</p>
+              </div>
+
+              {/* Subir comprobante */}
+              <div className="mt-4">
+                <h3 className="text-white font-semibold mb-2">Subir Comprobante:</h3>
+                <div className="border-2 border-dashed border-gray-600 rounded-lg p-4">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/*,.pdf"
+                    className="hidden"
+                    id="comprobante"
+                  />
+                  <label
+                    htmlFor="comprobante"
+                    className="flex flex-col items-center justify-center cursor-pointer"
+                  >
+                    <span className="text-gray-400 mb-2">
+                      {comprobante ? comprobante.nombreArchivo : 'Subir comprobante'}
+                    </span>
+                    <button
+                      type="button"
+                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    >
+                      Seleccionar archivo
+                    </button>
+                  </label>
+                </div>
+                {comprobante && (
+                  <div className="text-green-400 text-sm mt-2">
+                    ✓ Archivo seleccionado: {comprobante.nombreArchivo}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
       </div>
 
+      {/* Botón de confirmar pedido */}
       <button
         onClick={handleConfirmarPedido}
-        disabled={isUploading || !comprobante}
+        disabled={
+          isUploading || 
+          (paymentMethod === 'transferencia' && !comprobante) ||
+          !paymentMethod
+        }
         className={`w-full py-3 rounded-lg text-white font-bold ${
-          isUploading || !comprobante
+          isUploading || (paymentMethod === 'transferencia' && !comprobante) || !paymentMethod
             ? 'bg-gray-600 cursor-not-allowed'
             : 'bg-green-600 hover:bg-green-700'
         }`}
