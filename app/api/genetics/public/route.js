@@ -1,20 +1,32 @@
 import dbConnect from '@/lib/db/mongodb';
 import Genetic from '@/models/Genetic';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     await dbConnect();
 
-    // Modificamos la consulta para solo obtener genéticas activas
-    const genetics = await Genetic.find({ activo: true }).sort({ nombre: 1 });
+    console.log('Consultando genéticas públicas...');
 
-    // Log para debugging
-    console.log('Genéticas públicas encontradas:', genetics.length);
+    const genetics = await Genetic.find({
+      activo: true
+    }).sort({ nombre: 1 });
+
+    console.log(`Encontradas ${genetics.length} genéticas activas`);
 
     return Response.json({
       success: true,
       genetics,
-      total: genetics.length
+      total: genetics.length,
+      timestamp: new Date().toISOString()
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     });
 
   } catch (error) {
