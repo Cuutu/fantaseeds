@@ -85,17 +85,12 @@ export default function GeneticList({ geneticas }) {
             </div>
 
             <div className="flex items-center gap-4">
-              <select 
-                className="bg-gray-700 text-white rounded px-3 py-2 w-24"
-                value={selectedQuantities[genetic._id] || 10}
-                onChange={(e) => handleQuantityChange(genetic._id, e.target.value)}
-              >
-                {[...Array(10)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-              </select>
+              <input 
+                type="number"
+                value={10}
+                readOnly
+                className="bg-gray-700 text-white rounded px-3 py-2 w-24 cursor-not-allowed opacity-75"
+              />
               <button 
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex-grow transition-colors"
                 onClick={() => handleAddToCart(genetic)}
