@@ -10,6 +10,8 @@ export default function AdminPedidosPage() {
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pedidoToDelete, setPedidoToDelete] = useState(null);
+  const [selectedComprobante, setSelectedComprobante] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const estadosPedido = [
     { value: 'pendiente', label: 'Pendiente', color: 'bg-yellow-500' },
@@ -63,6 +65,23 @@ export default function AdminPedidosPage() {
     } catch (error) {
       console.error('Error:', error);
       alert('Error al eliminar el pedido');
+    }
+  };
+
+  const handleVerComprobante = async (pedidoId) => {
+    try {
+      const response = await fetch(`/api/comprobantes/${pedidoId}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setSelectedComprobante(data.comprobante);
+        setShowModal(true);
+      } else {
+        alert('Error al cargar el comprobante');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al cargar el comprobante');
     }
   };
 
@@ -186,28 +205,20 @@ export default function AdminPedidosPage() {
                   {/* Método de pago y comprobante */}
                   <div className="border-t border-gray-700 pt-4 mt-4">
                     <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
-                    <p className="text-gray-300">
+                    <p className="text-gray-300 mb-2">
                       {pedido.metodoPago === 'efectivo' ? 'Pago en Sucursal' : 'Transferencia Bancaria'}
                     </p>
 
-                    {pedido.metodoPago === 'transferencia' && pedido.comprobante && (
-                      <div className="mt-4">
-                        <h4 className="text-white font-semibold mb-2">Comprobante:</h4>
-                        <div className="relative">
-                          <img
-                            src={`data:${pedido.comprobante.tipoArchivo};base64,${pedido.comprobante.archivo}`}
-                            alt="Comprobante de pago"
-                            className="max-w-md rounded-lg shadow-lg"
-                          />
-                          <a
-                            href={`data:${pedido.comprobante.tipoArchivo};base64,${pedido.comprobante.archivo}`}
-                            download={pedido.comprobante.nombreArchivo}
-                            className="absolute top-2 right-2 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm"
-                          >
-                            Descargar
-                          </a>
-                        </div>
-                      </div>
+                    {pedido.metodoPago === 'transferencia' && (
+                      <button
+                        onClick={() => handleVerComprobante(pedido._id)}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
+                        </svg>
+                        Ver Comprobante
+                      </button>
                     )}
                   </div>
                 </div>
@@ -239,6 +250,44 @@ export default function AdminPedidosPage() {
               >
                 Eliminar
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para mostrar el comprobante */}
+      {showModal && selectedComprobante && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 rounded-lg max-w-4xl w-full">
+            <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-white">Comprobante de Pago</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-4">
+              <img
+                src={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
+                alt="Comprobante de pago"
+                className="max-w-full h-auto rounded-lg"
+              />
+            </div>
+            <div className="p-4 border-t border-gray-700 flex justify-end">
+              <a
+                href={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
+                download={selectedComprobante.nombreArchivo}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+                Descargar
+              </a>
             </div>
           </div>
         </div>

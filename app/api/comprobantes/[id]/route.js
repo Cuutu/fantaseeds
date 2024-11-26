@@ -18,7 +18,7 @@ export async function GET(request, { params }) {
       });
     }
 
-    const comprobante = await Comprobante.findById(params.id);
+    const comprobante = await Comprobante.findOne({ pedido: params.id });
     
     if (!comprobante) {
       return Response.json({ 
@@ -35,8 +35,9 @@ export async function GET(request, { params }) {
     return Response.json({
       success: true,
       comprobante: {
-        ...comprobante._doc,
-        archivo: base64
+        archivo: base64,
+        tipoArchivo: comprobante.tipoArchivo,
+        nombreArchivo: comprobante.nombreArchivo
       }
     });
 
