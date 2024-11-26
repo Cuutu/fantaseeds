@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
-import emailjs from '@emailjs/browser';
+import emailjs from 'emailjs-com';
 
 export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,9 +56,7 @@ export default function Checkout() {
       }
 
       if (data.success) {
-        setOrderId(data.order._id);
-        
-        // Enviar email
+        // Email para el administrador (EmailJS)
         await emailjs.send(
           process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
           process.env.NEXT_PUBLIC_EMAILJS_ORDER_TEMPLATE_ID,
@@ -71,10 +69,7 @@ export default function Checkout() {
             customer_email: session.user.email,
             delivery_method: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en sucursal',
             delivery_address: deliveryMethod === 'envio' ? 
-              `<p style="margin: 8px 0;"><strong>Dirección de envío:</strong><br/>
-               ${shippingAddress.direccion}<br/>
-               ${shippingAddress.ciudad}<br/>
-               CP: ${shippingAddress.codigoPostal}</p>` : '',
+              `${shippingAddress.direccion}, ${shippingAddress.ciudad} (CP: ${shippingAddress.codigoPostal})` : '',
             order_total: `$${orderData.total}`,
             products_list: cart.map(item => 
               `${item.genetic.nombre} (${item.cantidad} unidades)`
@@ -83,13 +78,32 @@ export default function Checkout() {
           process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
         );
 
-        // Limpiar carrito
+        // Email para el cliente (Resend)
+        const emailResponse = await fetch('/api/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            customerEmail: session.user.email,
+            customerName: session.user.nombreApellido,
+            orderNumber: data.order._id.slice(-6),
+            orderDetails: cart,
+            deliveryMethod: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en sucursal',
+            shippingAddress: deliveryMethod === 'envio' ? 
+              `${shippingAddress.direccion}, ${shippingAddress.ciudad} (CP: ${shippingAddress.codigoPostal})` : 
+              null,
+            total: orderData.total
+          }),
+        });
+
+        if (!emailResponse.ok) {
+          console.error('Error al enviar email de confirmación al cliente');
+        }
+
         clearCart();
-        
-        // Mostrar modal de éxito
         setShowSuccessModal(true);
         
-        // Redirigir después de 5 segundos
         setTimeout(() => {
           router.push('/pedidos');
         }, 5000);
