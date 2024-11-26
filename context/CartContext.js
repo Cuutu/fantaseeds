@@ -9,6 +9,7 @@ export function CartProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   const [userMembresia, setUserMembresia] = useState(null);
   const session = useSession();
+  const [showLimitModal, setShowLimitModal] = useState(false);
 
   // Obtener membresía del usuario desde la base de datos
   useEffect(() => {
@@ -57,6 +58,10 @@ export function CartProvider({ children }) {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
+  const showMembresieLimitMessage = () => {
+    setShowLimitModal(true);
+  };
+
   const addToCart = (item) => {
     // Si el usuario no está autenticado, permitir agregar sin límite
     if (session?.status !== 'authenticated') {
@@ -81,7 +86,7 @@ export function CartProvider({ children }) {
     const newTotal = currentTotal + item.cantidad;
 
     if (newTotal > membresiaLimit) {
-      alert(`Tu membresía ${userMembresia} tiene un límite de ${membresiaLimit} unidades. No puedes agregar más productos.`);
+      showMembresieLimitMessage();
       return false;
     }
 
@@ -93,7 +98,7 @@ export function CartProvider({ children }) {
         const updatedTotal = currentTotal - existingItem.cantidad + updatedQuantity;
         
         if (updatedTotal > membresiaLimit) {
-          alert(`Tu membresía ${userMembresia} tiene un límite de ${membresiaLimit} unidades. No puedes agregar más productos.`);
+          showMembresieLimitMessage();
           return prevCart;
         }
 
@@ -120,16 +125,53 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider value={{
-      cart,
-      addToCart,
-      removeFromCart,
-      clearCart,
-      isOpen,
-      setIsOpen
-    }}>
-      {children}
-    </CartContext.Provider>
+    <>
+      <CartContext.Provider value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        isOpen,
+        setIsOpen
+      }}>
+        {children}
+      </CartContext.Provider>
+
+      {showLimitModal && (
+        <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-40 flex items-center justify-center">
+          <div className="relative bg-gray-800 rounded-lg p-8 m-4 max-w-sm w-full">
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold text-white">
+                Límite de Membresía Alcanzado
+              </h3>
+            </div>
+            
+            <div className="mb-6">
+              <p className="text-gray-300">
+                Llegaste al límite de tu membresía. ¿Querés aumentar tu límite?{' '}
+                <a 
+                  href="https://api.whatsapp.com/send/?phone=5491127064165&text&type=phone_number&app_absent=0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-500 hover:text-green-400 font-medium"
+                >
+                  Hacé click acá para upgradear
+                </a>
+              </p>
+            </div>
+
+            <div className="text-center">
+              <button
+                onClick={() => setShowLimitModal(false)}
+                className="w-full bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
