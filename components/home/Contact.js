@@ -178,7 +178,7 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 
+                    className="w-full bg-[#556B2F] hover:bg-[#4A5D29] text-white font-medium py-3 px-4 
                              rounded-lg transition-colors duration-300"
                     disabled={status === 'sending'}
                   >
