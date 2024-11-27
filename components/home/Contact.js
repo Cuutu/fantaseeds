@@ -89,10 +89,10 @@ export default function Contact() {
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg blur opacity-25"></div>
             <div className="absolute -inset-1 bg-blue-500 rounded-lg opacity-10"></div>
             
-            <div className="relative bg-gray-800/90 p-8 rounded-lg shadow-xl backdrop-blur-sm">
+            <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm">
               <ScrollReveal delay={200}>
                 <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
-                  Contactanos
+                  Inscripción
                 </h2>
               </ScrollReveal>
               
@@ -106,7 +106,7 @@ export default function Contact() {
                       type="text"
                       id="nombre"
                       required
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg 
+                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
                                text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       value={formData.nombre}
                       onChange={(e) => setFormData({...formData, nombre: e.target.value})}
@@ -121,7 +121,7 @@ export default function Contact() {
                       type="email"
                       id="email"
                       required
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg 
+                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
                                text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -135,7 +135,7 @@ export default function Contact() {
                     <input
                       type="tel"
                       id="telefono"
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg 
+                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
                                text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       value={formData.telefono}
                       onChange={(e) => setFormData({...formData, telefono: e.target.value})}
@@ -149,7 +149,7 @@ export default function Contact() {
                     <select
                       id="motivo"
                       required
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg 
+                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
                                text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       value={formData.motivo}
                       onChange={(e) => setFormData({...formData, motivo: e.target.value})}
@@ -169,7 +169,7 @@ export default function Contact() {
                       id="mensaje"
                       required
                       rows={4}
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg 
+                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
                                text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       value={formData.mensaje}
                       onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
