@@ -26,7 +26,8 @@ export default function About() {
                  Contamos con distintos tipos de membresía y las cuotas sociales se abonan del 1 al 5 de cada mes.
                  <br />
                  El retiro se realiza por nuestra sede en CABA.
-              </p>
+                 <br />
+                 Nuestro objetivo principal es brindar una alternativa confiable y profesional para aquellos que buscan mejorar su calidad de vida a través del cannabis medicinal.              </p>
             </div>
           </ScrollReveal>
 
