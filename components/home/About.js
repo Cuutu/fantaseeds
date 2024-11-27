@@ -16,10 +16,16 @@ export default function About() {
             <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
               <h3 className="text-2xl font-semibold mb-6 text-white">¿Quiénes Somos?</h3>
               <p className="text-gray-300 text-lg leading-relaxed space-y-4">
-                FANTASEEDS es un club cannábico comprometido con proporcionar acceso seguro y legal al cannabis medicinal. 
+                Somos una ONG DE LA SALUD de cannabis medicinal.
                 <br />
-                Nuestro compromiso es brindar una alternativa confiable y profesional para aquellos que buscan 
-                mejorar su calidad de vida a través del cannabis medicinal..
+                 Ofrecemos un servicio seguro, legal y exclusivo, cumpliendo con los más altos estándares de calidad. 
+                 <br />
+                 Somos cultivadores solidarios de nuestros pacientes. 
+                 Utilizamos hidroponía y sustratos orgánicos sin pesticidas, disponiendo así de geneticas altas en THC y CBD.
+                 <br />
+                 Contamos con distintos tipos de membresía y las cuotas sociales se abonan del 1 al 5 de cada mes.
+                 <br />
+                 El retiro se realiza por nuestra sede en CABA.
               </p>
             </div>
           </ScrollReveal>
