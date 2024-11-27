@@ -32,7 +32,7 @@ export default function Hero() {
       <div 
         className="absolute inset-0"
         style={{
-          backdropFilter: 'blur(4px)',
+          backdropFilter: 'blur(2px)',
           background: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6))'
         }}
       />

@@ -1,4 +1,4 @@
 export const metadata = {
-  title: 'Fantaseeds',
-  description: 'Club Cannábico',
+  title: 'fantaseeds',
+  description: 'ONG DE LA SALUD',
 }; 

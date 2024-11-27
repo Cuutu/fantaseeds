@@ -14,7 +14,7 @@ const poppins = Poppins({
 
 export const metadata = {
   title: 'FANTASEEDS',
-  description: 'Club Cannábico Medicinal',
+  description: 'ONG DE LA SALUD',
 };
 
 export default function RootLayout({ children }) {
