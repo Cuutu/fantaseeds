@@ -272,19 +272,33 @@ export default function AdminPedidosPage() {
                     alt="Comprobante de pago"
                     className="w-full h-auto max-h-[70vh] object-contain"
                   />
+                ) : selectedComprobante.tipoArchivo === 'application/pdf' ? (
+                  <object
+                    data={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
+                    type="application/pdf"
+                    className="w-full h-[70vh]"
+                  >
+                    <embed
+                      src={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
+                      type="application/pdf"
+                      className="w-full h-[70vh]"
+                    />
+                    <p className="text-gray-300 text-center py-4">
+                      Si no puedes ver el PDF, puedes descargarlo usando el botón de abajo
+                    </p>
+                  </object>
                 ) : (
                   <div className="p-8 text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
-                    <p className="text-gray-300">Archivo PDF</p>
+                    <p className="text-gray-300">Archivo no previsualizable</p>
                   </div>
                 )}
               </div>
             </div>
             
             <div className="p-4 border-t border-gray-700 flex justify-end gap-3">
-              {/* Botón para ver en tamaño completo */}
               <a
                 href={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
                 target="_blank"
@@ -298,7 +312,6 @@ export default function AdminPedidosPage() {
                 Ver completo
               </a>
               
-              {/* Botón de descarga */}
               <a
                 href={`data:${selectedComprobante.tipoArchivo};base64,${selectedComprobante.archivo}`}
                 download={selectedComprobante.nombreArchivo}
