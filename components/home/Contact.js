@@ -86,10 +86,10 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <ScrollReveal>
           <div className="relative max-w-2xl mx-auto">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg blur opacity-25"></div>
-            <div className="absolute -inset-1 bg-blue-500 rounded-lg opacity-10"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
+            <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
             
-            <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm">
+            <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-amber-500/30">
               <ScrollReveal delay={200}>
                 <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
                   Inscripción
