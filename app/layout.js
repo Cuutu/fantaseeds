@@ -27,8 +27,8 @@ export const crimsonText = Crimson_Text({
   weight: ['400', '600', '700'], 
   subsets: ['latin'] 
 });
-const tajawal = Tajawal({
-  weight: ['400', '600', '700'],
+export const tajawal = Tajawal({
+  weight: ['400', '500', '700'],
   subsets: ['latin']
 });
 
