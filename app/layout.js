@@ -34,7 +34,7 @@ const tajawal = Tajawal({
 
 export const metadata = {
   title: 'FANTASEEDS',
-  description: 'ONG DE LA SALUD',
+  description: 'ONG DE LA SALUD.',
 };
 
 export default function RootLayout({ children }) {
