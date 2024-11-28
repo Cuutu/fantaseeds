@@ -43,7 +43,7 @@ export default function Hero() {
             <div className="space-y-4">
               <div className="relative w-full max-w-lg mx-auto">
                 <Image
-                  src="https://cdn.discordapp.com/attachments/1126673961514696816/1311166551684153425/logo.2.png?ex=6747de82&is=67468d02&hm=2fb17a49f2f68b2ee4d4578646623e06d0bd1a636745edd67e18ff510dbfbb5f&"
+                  src="https://imgur.com/067cd6f2-07dc-4b1b-a118-b6b81a878694.png"
                   alt="FANTASEEDS"
                   width={500}
                   height={150}
