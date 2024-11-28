@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import ScrollReveal from '@/components/animations/ScrollReveal';
 import { Playfair_Display } from 'next/font/google';
+import { Tajawal } from 'next/font/google';
 
 // Importar los estilos de slick
 import "slick-carousel/slick/slick.css";
@@ -12,6 +13,10 @@ import "slick-carousel/slick/slick-theme.css";
 
 // Inicializar la fuente
 const playfair = Playfair_Display({ subsets: ['latin'] });
+const tajawal = Tajawal({ 
+  weight: ['400', '500', '700'],
+  subsets: ['latin']
+});
 
 export default function Gallery() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -83,7 +88,7 @@ export default function Gallery() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 className="text-white text-2xl font-semibold text-center">
+                      <h3 className={`text-white text-2xl font-semibold text-center ${tajawal.className}`}>
                         {image.alt}
                       </h3>
                     </div>

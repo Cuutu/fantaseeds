@@ -4,8 +4,13 @@ import { useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 import ScrollReveal from '@/components/animations/ScrollReveal';
 import { Crimson_Text } from 'next/font/google';
+import { Tajawal } from 'next/font/google';
 
 const crimsonText = Crimson_Text({ weight: ['400', '600', '700'], subsets: ['latin'] });
+const tajawal = Tajawal({ 
+  weight: ['400', '500', '700'],
+  subsets: ['latin']
+});
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -102,58 +107,58 @@ export default function Contact() {
               <ScrollReveal delay={400}>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="nombre" className="block text-sm font-semibold text-gray-300 mb-2">
+                    <label htmlFor="nombre" className={`block text-sm font-medium text-gray-300 mb-2 ${tajawal.className}`}>
                       Nombre y Apellido *
                     </label>
                     <input
                       type="text"
                       id="nombre"
                       required
-                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
-                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
+                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent ${tajawal.className}`}
                       value={formData.nombre}
                       onChange={(e) => setFormData({...formData, nombre: e.target.value})}
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                    <label htmlFor="email" className={`block text-sm font-medium text-gray-300 mb-2 ${tajawal.className}`}>
                       Email *
                     </label>
                     <input
                       type="email"
                       id="email"
                       required
-                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
-                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
+                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent ${tajawal.className}`}
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="telefono" className="block text-sm font-medium text-gray-300 mb-2">
+                    <label htmlFor="telefono" className={`block text-sm font-medium text-gray-300 mb-2 ${tajawal.className}`}>
                       Teléfono
                     </label>
                     <input
                       type="tel"
                       id="telefono"
-                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
-                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
+                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent ${tajawal.className}`}
                       value={formData.telefono}
                       onChange={(e) => setFormData({...formData, telefono: e.target.value})}
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="motivo" className="block text-sm font-medium text-gray-300 mb-2">
+                    <label htmlFor="motivo" className={`block text-sm font-medium text-gray-300 mb-2 ${tajawal.className}`}>
                       Motivo de contacto *
                     </label>
                     <select
                       id="motivo"
                       required
-                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
-                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
+                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent ${tajawal.className}`}
                       value={formData.motivo}
                       onChange={(e) => setFormData({...formData, motivo: e.target.value})}
                     >
@@ -165,15 +170,15 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="mensaje" className="block text-sm font-medium text-gray-300 mb-2">
+                    <label htmlFor="mensaje" className={`block text-sm font-medium text-gray-300 mb-2 ${tajawal.className}`}>
                       Mensaje *
                     </label>
                     <textarea
                       id="mensaje"
                       required
                       rows={4}
-                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
-                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 bg-black border border-gray-700 rounded-lg 
+                               text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent ${tajawal.className}`}
                       value={formData.mensaje}
                       onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
                     />

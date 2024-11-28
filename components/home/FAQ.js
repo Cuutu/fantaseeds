@@ -1,9 +1,13 @@
 'use client';
 import { useState } from 'react';
 import ScrollReveal from '@/components/animations/ScrollReveal';
-import { Raleway } from 'next/font/google';
+import { Raleway, Tajawal } from 'next/font/google';
 
 const raleway = Raleway({ subsets: ['latin'] });
+const tajawal = Tajawal({ 
+  weight: ['400', '500', '700'],
+  subsets: ['latin']
+});
 
 function FAQ() {
   const [openStates, setOpenStates] = useState({});
@@ -91,7 +95,7 @@ function FAQ() {
                     </span>
                   </button>
                   {openStates[index] && (
-                    <div className="pb-6 text-gray-400 leading-relaxed">
+                    <div className={`pb-6 text-gray-400 leading-relaxed ${tajawal.className}`}>
                       {faq.answer}
                     </div>
                   )}

@@ -1,19 +1,14 @@
 'use client';
 import ScrollReveal from '@/components/animations/ScrollReveal';
-import { 
-  Raleway,
-  Playfair_Display,
-  Roboto_Slab,
-  EB_Garamond,
-  Crimson_Text
-} from 'next/font/google';
+import { Roboto_Slab} from 'next/font/google';
+import { Tajawal } from 'next/font/google';
 
 // Inicializar las fuentes
-const raleway = Raleway({ subsets: ['latin'] });
-const playfair = Playfair_Display({ subsets: ['latin'] });
 const robotoSlab = Roboto_Slab({ subsets: ['latin'] });
-const ebGaramond = EB_Garamond({ subsets: ['latin'] });
-const crimsonText = Crimson_Text({ weight: ['400', '600', '700'], subsets: ['latin'] });
+const tajawal = Tajawal({ 
+  weight: ['400', '500', '700'],
+  subsets: ['latin']
+});
 
 export default function LawInfo() {
   return (
@@ -31,7 +26,7 @@ export default function LawInfo() {
               <h3 className="text-2xl font-semibold mb-6 text-white">
                 Marco Legal
               </h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
+              <p className={`text-gray-300 text-lg leading-relaxed ${tajawal.className}`}>
                 La Ley 27350 establece el marco regulatorio para la investigación médica 
                 y científica del uso medicinal de la planta de cannabis y sus derivados.
               </p>
@@ -43,7 +38,7 @@ export default function LawInfo() {
               <h3 className="text-2xl font-semibold mb-6 text-white">
                 Derechos Garantizados
               </h3>
-              <ul className="space-y-4 text-gray-300 text-lg">
+              <ul className={`space-y-4 text-gray-300 text-lg ${tajawal.className}`}>
                 <li className="flex items-center">
                   <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
                   Acceso al tratamiento

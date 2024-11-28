@@ -1,5 +1,11 @@
 'use client';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import { Tajawal } from 'next/font/google';
+
+const tajawal = Tajawal({ 
+  weight: ['400', '500', '700'],
+  subsets: ['latin']
+});
 
 export default function About() {
   return (
@@ -15,7 +21,7 @@ export default function About() {
           <ScrollReveal delay={200}>
             <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
               <h3 className="text-2xl font-semibold mb-6 text-white">¿Quiénes Somos?</h3>
-              <p className="text-gray-300 text-lg leading-relaxed space-y-4">
+              <p className={`text-gray-300 text-lg leading-relaxed space-y-4 ${tajawal.className}`}>
                 Somos una ONG DE LA SALUD de cannabis medicinal.
                 <br />
                  Ofrecemos un servicio seguro, legal y exclusivo, cumpliendo con los más altos estándares de calidad. 
@@ -34,7 +40,7 @@ export default function About() {
           <ScrollReveal delay={400}>
             <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
               <h3 className="text-2xl font-semibold mb-6 text-white">Nuestra Misión</h3>
-              <ul className="space-y-4 text-gray-300 text-lg">
+              <ul className={`space-y-4 text-gray-300 text-lg ${tajawal.className}`}>
                 <li className="flex items-center">
                   <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
                   Cultivar genéticas premium

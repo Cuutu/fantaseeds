@@ -4,7 +4,8 @@ import {
   Roboto_Slab,
   EB_Garamond,
   Crimson_Text,
-  Poppins
+  Poppins,
+  Tajawal
 } from 'next/font/google';
 import './globals.css';
 import Providers from '@/components/Providers';
@@ -25,6 +26,10 @@ const ebGaramond = EB_Garamond({ subsets: ['latin'] });
 const crimsonText = Crimson_Text({ 
   weight: ['400', '600', '700'], 
   subsets: ['latin'] 
+});
+const tajawal = Tajawal({
+  weight: ['400', '600', '700'],
+  subsets: ['latin']
 });
 
 export const metadata = {
