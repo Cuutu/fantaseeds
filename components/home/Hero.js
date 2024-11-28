@@ -43,7 +43,7 @@ export default function Hero() {
             <div className="space-y-4">
               <div className="relative w-full max-w-lg mx-auto">
                 <Image
-                  src="https://imgur.com/067cd6f2-07dc-4b1b-a118-b6b81a878694.png"
+                  src="https://i.imgur.com/YcJ9dfr.png"
                   alt="FANTASEEDS"
                   width={500}
                   height={150}
