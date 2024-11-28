@@ -4,10 +4,14 @@ import Image from 'next/image';
 import Slider from 'react-slick';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import { Playfair_Display } from 'next/font/google';
 
 // Importar los estilos de slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+// Inicializar la fuente
+const playfair = Playfair_Display({ subsets: ['latin'] });
 
 export default function Gallery() {
   const [currentSlide, setCurrentSlide] = useState(0);
