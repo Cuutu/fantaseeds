@@ -1,6 +1,9 @@
 'use client';
 import ScrollReveal from '@/components/animations/ScrollReveal';
-import { ebGaramond } from 'next/font/google';
+import { EB_Garamond } from 'next/font/google';
+
+// Inicializar la fuente fuera del componente
+const ebGaramond = EB_Garamond({ subsets: ['latin'] });
 
 export default function ReprocannInfo() {
   return (
