@@ -1,4 +1,11 @@
-import { Poppins } from 'next/font/google';
+import { 
+  Raleway,
+  Playfair_Display,
+  Roboto_Slab,
+  EB_Garamond,
+  Crimson_Text,
+  Poppins
+} from 'next/font/google';
 import './globals.css';
 import Providers from '@/components/Providers';
 import Navbar from '@/components/layout/Navbar';
@@ -6,10 +13,18 @@ import { CartProvider } from '@/context/CartContext';
 import Footer from '@/components/layout/Footer';
 import LoadingScreen from '@/components/LoadingScreen';
 
-const poppins = Poppins({
-  weight: ['300', '400', '500', '600', '700'],
-  subsets: ['latin'],
-  display: 'swap',
+// Inicializar las fuentes
+const parkinsans = Poppins({ 
+  weight: ['400', '600', '700'],
+  subsets: ['latin'] 
+});
+const raleway = Raleway({ subsets: ['latin'] });
+const playfair = Playfair_Display({ subsets: ['latin'] });
+const robotoSlab = Roboto_Slab({ subsets: ['latin'] });
+const ebGaramond = EB_Garamond({ subsets: ['latin'] });
+const crimsonText = Crimson_Text({ 
+  weight: ['400', '600', '700'], 
+  subsets: ['latin'] 
 });
 
 export const metadata = {
@@ -19,7 +34,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={poppins.className}>
+    <html lang="es" className={raleway.className}>
       <body>
         <CartProvider>
           <Providers>

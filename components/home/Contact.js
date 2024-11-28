@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import { Crimson_Text } from 'next/font/google';
+
+const crimsonText = Crimson_Text({ weight: ['400', '600', '700'], subsets: ['latin'] });
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -91,7 +94,7 @@ export default function Contact() {
             
             <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-amber-500/30">
               <ScrollReveal delay={200}>
-                <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
+                <h2 className={`text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${crimsonText.className}`}>
                   Inscripción
                 </h2>
               </ScrollReveal>

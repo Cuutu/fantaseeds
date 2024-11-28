@@ -1,12 +1,26 @@
 'use client';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import { 
+  Raleway,
+  Playfair_Display,
+  Roboto_Slab,
+  EB_Garamond,
+  Crimson_Text
+} from 'next/font/google';
+
+// Inicializar las fuentes
+const raleway = Raleway({ subsets: ['latin'] });
+const playfair = Playfair_Display({ subsets: ['latin'] });
+const robotoSlab = Roboto_Slab({ subsets: ['latin'] });
+const ebGaramond = EB_Garamond({ subsets: ['latin'] });
+const crimsonText = Crimson_Text({ weight: ['400', '600', '700'], subsets: ['latin'] });
 
 export default function LawInfo() {
   return (
     <section id="law" className="py-20" style={{ backgroundColor: '#2D2D2D' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
+          <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${robotoSlab.className}`}>
             Ley 27.350
           </h2>
         </ScrollReveal>

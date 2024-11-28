@@ -1,12 +1,13 @@
 'use client';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import { ebGaramond } from 'next/font/google';
 
 export default function ReprocannInfo() {
   return (
     <section id="reprocann" className="py-20" style={{ backgroundColor: '#1E1E1E' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
+          <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}>
             REPROCANN
           </h2>
         </ScrollReveal>

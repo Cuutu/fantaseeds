@@ -1,6 +1,9 @@
 'use client';
 import { useState } from 'react';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import { Raleway } from 'next/font/google';
+
+const raleway = Raleway({ subsets: ['latin'] });
 
 function FAQ() {
   const [openStates, setOpenStates] = useState({});
@@ -66,7 +69,7 @@ function FAQ() {
     <section id="faq" className="py-16" style={{ backgroundColor: '#1E1E1E' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <h2 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent">
+          <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${raleway.className}`}>
             Preguntas Frecuentes (FAQ)
           </h2>
         </ScrollReveal>
