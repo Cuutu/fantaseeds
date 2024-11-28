@@ -15,15 +15,15 @@ import Footer from '@/components/layout/Footer';
 import LoadingScreen from '@/components/LoadingScreen';
 
 // Inicializar las fuentes
-const parkinsans = Poppins({ 
+export const parkinsans = Poppins({ 
   weight: ['400', '600', '700'],
   subsets: ['latin'] 
 });
-const raleway = Raleway({ subsets: ['latin'] });
-const playfair = Playfair_Display({ subsets: ['latin'] });
-const robotoSlab = Roboto_Slab({ subsets: ['latin'] });
-const ebGaramond = EB_Garamond({ subsets: ['latin'] });
-const crimsonText = Crimson_Text({ 
+export const raleway = Raleway({ subsets: ['latin'] });
+export const playfair = Playfair_Display({ subsets: ['latin'] });
+export const robotoSlab = Roboto_Slab({ subsets: ['latin'] });
+export const ebGaramond = EB_Garamond({ subsets: ['latin'] });
+export const crimsonText = Crimson_Text({ 
   weight: ['400', '600', '700'], 
   subsets: ['latin'] 
 });
