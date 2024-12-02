@@ -100,20 +100,20 @@ export default function ContactModal({ isOpen, onClose }) {
               stiffness: 300,
               damping: 30
             }}
-            className="relative max-w-2xl w-full"
+            className="relative max-w-lg w-full"
           >
             <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
             <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
             
             <motion.div
-              className="relative bg-black/80 backdrop-blur-md p-8 rounded-lg shadow-xl border border-amber-500/30"
+              className="relative bg-black/80 backdrop-blur-md p-6 sm:p-8 rounded-lg shadow-xl border border-amber-500/30"
             >
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex justify-between items-center mb-4 sm:mb-6">
                 <motion.h2 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
-                  className={`text-5xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}
+                  className={`text-3xl sm:text-5xl font-bold text-center mb-4 sm:mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}
                 >
                   Inscripción
                 </motion.h2>
@@ -132,7 +132,7 @@ export default function ContactModal({ isOpen, onClose }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 onSubmit={handleSubmit} 
-                className="space-y-6"
+                className="space-y-4 sm:space-y-6"
               >
                 <div>
                   <label htmlFor="nombre" className={`block text-sm font-medium text-gray-300 mb-2 ${tajawal.className}`}>

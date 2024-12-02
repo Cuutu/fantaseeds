@@ -66,10 +66,10 @@ function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-16" style={{ backgroundColor: '#1E1E1E' }}>
+    <section id="faq" className="py-12 sm:py-16" style={{ backgroundColor: '#1E1E1E' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${ebGaramond.className}`}>
+          <h2 className={`text-3xl sm:text-5xl font-bold text-center mb-8 sm:mb-16 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${ebGaramond.className}`}>
             PREGUNTAS FRECUENTES (FAQ)
           </h2>
         </ScrollReveal>
@@ -80,18 +80,18 @@ function FAQ() {
               <ScrollReveal key={index} delay={index * 100}>
                 <div className="border-t border-gray-700">
                   <button
-                    className="w-full text-left flex justify-between items-center py-6"
+                    className="w-full text-left flex justify-between items-center py-4 sm:py-6"
                     onClick={() => toggleQuestion(index)}
                   >
-                    <h3 className="text-xl font-medium text-gray-300 uppercase">
+                    <h3 className="text-base sm:text-xl font-medium text-gray-300 uppercase pr-4">
                       {faq.question}
                     </h3>
-                    <span className="ml-4 text-2xl text-gray-400">
+                    <span className="ml-2 sm:ml-4 text-xl sm:text-2xl text-gray-400 flex-shrink-0">
                       {openStates[index] ? '−' : '+'}
                     </span>
                   </button>
                   {openStates[index] && (
-                    <div className={`pb-6 text-gray-400 leading-relaxed ${ebGaramond.className}`}>
+                    <div className={`pb-4 sm:pb-6 text-sm sm:text-base text-gray-400 leading-relaxed ${ebGaramond.className}`}>
                       {faq.answer}
                     </div>
                   )}

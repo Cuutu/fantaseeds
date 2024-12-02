@@ -51,3 +51,57 @@ body {
 .slick-slide, .slick-slide * {
   outline: none !important;
 }
+
+/* Agregar estas clases de utilidad */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Mejorar el manejo de fuentes responsivas */
+html {
+  font-size: 14px;
+}
+
+@screen sm {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Mejorar el espaciado en dispositivos móviles */
+.container {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+/* Ajustar el padding vertical en secciones */
+section {
+  @apply py-12 sm:py-16 lg:py-20;
+}
+
+/* Estilos personalizados para el slider en móvil */
+@media (max-width: 768px) {
+  .slick-dots {
+    bottom: -25px !important;
+  }
+
+  .slick-dots li button:before {
+    font-size: 8px !important;
+  }
+}
+
+/* Mejorar la visibilidad de los dots */
+.slick-dots li button:before {
+  color: #fff !important;
+  opacity: 0.5;
+}
+
+.slick-dots li.slick-active button:before {
+  opacity: 1;
+  color: #22c55e !important; /* verde */
+}

@@ -9,15 +9,16 @@ export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   return (
-    <div className="relative h-screen">
+    <div className="relative min-h-[calc(100vh-64px)] sm:h-screen">
       <div className="absolute inset-0">
         <Image
           src="https://leafly-cms-production.imgix.net/wp-content/uploads/2020/10/13162934/zmoney-Courtesy-Talking-Trees-for-web.jpg"
           alt="Background"
           fill
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 100vw"
           style={{
             objectFit: 'cover',
+            objectPosition: 'center',
           }}
           priority
         />
@@ -31,11 +32,11 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative h-full flex items-center justify-center">
+      <div className="relative h-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <div className="text-center px-4">
+          <div className="text-center">
             <div className="space-y-4">
-              <div className="relative w-full max-w-lg mx-auto">
+              <div className="relative w-full max-w-[280px] sm:max-w-lg mx-auto">
                 <Image
                   src="https://i.imgur.com/YcJ9dfr.png"
                   alt="FANTASEEDS"
@@ -49,7 +50,7 @@ export default function Hero() {
             <ScrollReveal delay={200}>
               <button
                 onClick={() => setIsContactModalOpen(true)}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+                className="mt-8 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
               >
                 ¡INSCRIBITE!
               </button>
