@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { FiX } from 'react-icons/fi';
 import emailjs from '@emailjs/browser';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Crimson_Text } from 'next/font/google';
+import { EB_Garamond } from 'next/font/google';
 import { Tajawal } from 'next/font/google';
 
-const crimsonText = Crimson_Text({ weight: ['400', '600', '700'], subsets: ['latin'] });
+// Inicializar las fuentes
+const ebGaramond = EB_Garamond({ subsets: ['latin'] });
 const tajawal = Tajawal({ 
   weight: ['400', '500', '700'],
   subsets: ['latin']
@@ -113,7 +114,7 @@ export default function ContactModal({ isOpen, onClose }) {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
-                  className={`text-3xl font-bold bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${crimsonText.className}`}
+                  className={`text-5xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}
                 >
                   Inscripción
                 </motion.h2>

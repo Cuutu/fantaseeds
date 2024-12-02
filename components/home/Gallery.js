@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Slider from 'react-slick';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import ScrollReveal from '@/components/animations/ScrollReveal';
-import { Playfair_Display } from 'next/font/google';
+import { EB_Garamond } from 'next/font/google';
 import { Tajawal } from 'next/font/google';
 
 // Importar los estilos de slick
@@ -12,7 +12,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 // Inicializar la fuente
-const playfair = Playfair_Display({ subsets: ['latin'] });
+const ebGaramond = EB_Garamond({ subsets: ['latin'] });
 const tajawal = Tajawal({ 
   weight: ['400', '500', '700'],
   subsets: ['latin']
@@ -67,7 +67,7 @@ export default function Gallery() {
     <section className="py-20" style={{ backgroundColor: '#2D2D2D' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${playfair.className}`}>
+          <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}>
             Nuestras Instalaciones
           </h2>
         </ScrollReveal>

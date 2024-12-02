@@ -1,6 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { EB_Garamond } from 'next/font/google';
+
+const ebGaramond = EB_Garamond({ subsets: ['latin'] });
 
 export default function Genetics() {
   const { data: session } = useSession();
@@ -59,7 +62,7 @@ export default function Genetics() {
   return (
     <section id="genetics" className="py-20 bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center mb-12 text-green-400">
+        <h2 className={`text-4xl font-bold text-center mb-12 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}>
           Nuestras Genéticas
         </h2>
         
