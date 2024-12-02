@@ -62,7 +62,7 @@ export default function Genetics() {
   return (
     <section id="genetics" className="py-20 bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className={`text-4xl font-bold text-center mb-12 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}>
+        <h2 className={`text-4xl font-bold text-center mb-12 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${ebGaramond.className}`}>
           Nuestras Genéticas
         </h2>
         
