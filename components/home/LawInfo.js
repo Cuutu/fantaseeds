@@ -47,19 +47,19 @@ export default function LawInfo() {
                 </h3>
                 <ul className={`space-y-4 text-gray-300 text-lg ${tajawal.className}`}>
                   <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
+                    <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
                     Acceso al tratamiento
                   </li>
                   <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
+                    <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
                     Servicio legal
                   </li>
                   <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
+                    <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
                     Cultivo personalizado
                   </li>
                   <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
+                    <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
                     Asesoramiento médico
                   </li>
                 </ul>
