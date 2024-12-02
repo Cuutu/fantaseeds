@@ -6,7 +6,6 @@ export default function AgeVerificationModal() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // Verificar si ya se confirmó la edad anteriormente
     const ageVerified = localStorage.getItem('ageVerified');
     if (!ageVerified) {
       setShowModal(true);
@@ -26,30 +25,51 @@ export default function AgeVerificationModal() {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black z-50 flex items-center justify-center p-4">
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-gray-800 rounded-xl p-8 max-w-md w-full shadow-2xl border border-gray-700"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.3 }}
+          className="relative bg-black/40 backdrop-blur-md rounded-2xl p-8 max-w-md w-full border border-white/10"
         >
-          <h2 className="text-2xl font-bold text-white text-center mb-6">
-            ¿SOS MAYOR DE 18 AÑOS?
-          </h2>
+          <div className="mb-8 text-center">
+            <motion.img
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2 }}
+              src="https://i.imgur.com/YcJ9dfr.png"
+              alt="FANTASEEDS"
+              className="w-48 mx-auto"
+            />
+          </div>
 
-          <div className="flex gap-4 justify-center">
-            <button
+          <motion.h2 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent"
+          >
+            ¿SOS MAYOR DE 18 AÑOS?
+          </motion.h2>
+
+          <div className="flex gap-6 justify-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleYes}
-              className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors duration-200 min-w-[120px]"
+              className="px-12 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-medium transition-all duration-300 shadow-lg shadow-green-500/"
             >
               SI
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleNo}
-              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors duration-200 min-w-[120px]"
+              className="px-12 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-medium transition-all duration-300 shadow-lg shadow-red-500/"
             >
               NO
-            </button>
+            </motion.button>
           </div>
         </motion.div>
       </div>
