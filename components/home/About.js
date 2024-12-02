@@ -60,34 +60,6 @@ export default function About() {
             </div>
           </ScrollReveal>
         </div>
-
-        <ScrollReveal delay={600}>
-          <div className="relative group mt-6 sm:mt-12">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
-            <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-            <div className="relative bg-black p-4 sm:p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
-              <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-white">Derechos Garantizados</h3>
-              <ul className="space-y-3">
-                <li className="flex items-center text-gray-300">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></div>
-                  Acceso al tratamiento
-                </li>
-                <li className="flex items-center text-gray-300">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></div>
-                  Servicio legal
-                </li>
-                <li className="flex items-center text-gray-300">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></div>
-                  Cultivo personalizado
-                </li>
-                <li className="flex items-center text-gray-300">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></div>
-                  Asesoramiento médico
-                </li>
-              </ul>
-            </div>
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   );
