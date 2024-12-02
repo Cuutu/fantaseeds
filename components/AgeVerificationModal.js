@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 function AgeVerificationModal() {
   const [showModal, setShowModal] = useState(true);

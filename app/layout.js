@@ -13,7 +13,6 @@ import Navbar from '@/components/layout/Navbar';
 import { CartProvider } from '@/context/CartContext';
 import Footer from '@/components/layout/Footer';
 import LoadingScreen from '@/components/LoadingScreen';
-//import AgeVerificationModal from '@/components/AgeVerificationModal';
 
 // Inicializar las fuentes
 export const parkinsans = Poppins({ 
@@ -44,7 +43,6 @@ export default function RootLayout({ children }) {
       <body>
         <CartProvider>
           <Providers>
-            <AgeVerificationModal />
             <Navbar />
             <LoadingScreen />
             <main>
