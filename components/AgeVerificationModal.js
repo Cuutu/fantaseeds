@@ -1,27 +1,14 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AgeVerificationModal() {
-  const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    const ageVerified = localStorage.getItem('ageVerified');
-    if (!ageVerified) {
-      setShowModal(true);
-    }
-  }, []);
-
   const handleYes = () => {
-    localStorage.setItem('ageVerified', 'true');
-    setShowModal(false);
+    window.location.href = '/';
   };
 
   const handleNo = () => {
     window.location.href = 'https://www.google.com';
   };
-
-  if (!showModal) return null;
 
   return (
     <AnimatePresence>
@@ -58,19 +45,33 @@ export default function AgeVerificationModal() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleYes}
-              className="px-12 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-medium transition-all duration-300 shadow-lg shadow-green-500/"
+              className="px-12 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 
+                         text-white rounded-xl font-medium transition-all duration-300 shadow-lg shadow-green-500/20
+                         hover:shadow-green-500/30"
             >
               SI
             </motion.button>
+            
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleNo}
-              className="px-12 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-medium transition-all duration-300 shadow-lg shadow-red-500/"
+              className="px-12 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 
+                         text-white rounded-xl font-medium transition-all duration-300 shadow-lg shadow-red-500/20
+                         hover:shadow-red-500/30"
             >
               NO
             </motion.button>
           </div>
+
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 text-center text-sm text-gray-400"
+          >
+            Este sitio está destinado únicamente para mayores de 18 años.
+          </motion.p>
         </motion.div>
       </div>
     </AnimatePresence>
