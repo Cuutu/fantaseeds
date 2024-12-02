@@ -164,7 +164,6 @@ export default function Contact() {
                     >
                       <option value="consulta">Inscripción al club</option>
                       <option value="asesoramiento">Consulta General</option>
-                      <option value="legal">Consulta Legal</option>
                       <option value="otro">Otro</option>
                     </select>
                   </div>

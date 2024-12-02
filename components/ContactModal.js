@@ -34,7 +34,6 @@ export default function ContactModal({ isOpen, onClose }) {
     const motivos = {
       'consulta': 'Inscripción al club',
       'asesoramiento': 'Consulta General',
-      'legal': 'Consulta Legal',
       'otro': 'Otro'
     };
     return motivos[value] || value;
@@ -193,7 +192,6 @@ export default function ContactModal({ isOpen, onClose }) {
                   >
                     <option value="consulta">Inscripción al club</option>
                     <option value="asesoramiento">Consulta General</option>
-                    <option value="legal">Consulta Legal</option>
                     <option value="otro">Otro</option>
                   </select>
                 </div>
