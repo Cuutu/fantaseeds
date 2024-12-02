@@ -13,7 +13,7 @@ import Navbar from '@/components/layout/Navbar';
 import { CartProvider } from '@/context/CartContext';
 import Footer from '@/components/layout/Footer';
 import LoadingScreen from '@/components/LoadingScreen';
-import AgeVerificationModal from '@/components/AgeVerificationModal';
+//import AgeVerificationModal from '@/components/AgeVerificationModal';
 
 // Inicializar las fuentes
 export const parkinsans = Poppins({ 
