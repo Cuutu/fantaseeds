@@ -20,9 +20,9 @@ export default function ReprocannInfo() {
           </h2>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="flex justify-center">
           <ScrollReveal delay={200}>
-            <div className="relative group">
+            <div className="relative group max-w-2xl">
               <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
               <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
               <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
@@ -32,34 +32,6 @@ export default function ReprocannInfo() {
                   el acceso legal al cultivo controlado de la planta de cannabis con fines 
                   medicinales.
                 </p>
-              </div>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={400}>
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
-              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-              <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
-                <h3 className="text-2xl font-semibold mb-6 text-white">Requisitos para inscribirse</h3>
-                <ul className={`space-y-4 text-gray-300 text-lg ${tajawal.className}`}>
-                  <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
-                    Ser mayor de edad
-                  </li>
-                  <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
-                    Presentar indicación médica
-                  </li>
-                  <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
-                    Contar con diagnóstico de condición tratable con cannabis
-                  </li>
-                  <li className="flex items-center">
-                    <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
-                    Completar el registro en la plataforma oficial
-                  </li>
-                </ul>
               </div>
             </div>
           </ScrollReveal>

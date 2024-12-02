@@ -18,19 +18,19 @@ export default function Gallery() {
   const images = [
     {
       src: "https://i.imgur.com/xJbzgw1.png",
-      alt: "Instalaciones del Club"
+      alt: "INSTALACIONES DEL CLUB"
     },
     {
       src: "https://i.imgur.com/8I9VORo.png",
-      alt: "Cultivo Indoor"
+      alt: "CULTIVO INDOOR"
     },
     {
       src: "https://i.imgur.com/Yx8Qv6q.png",
-      alt: "Área de Procesamiento"
+      alt: "TRICOMAS"
     },
     {
       src: "https://i.imgur.com/Yx8Qv6q.png",
-      alt: "Laboratorio"
+      alt: "CALIDAD"
     }
   ];
 

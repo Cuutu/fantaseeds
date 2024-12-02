@@ -52,11 +52,11 @@ export default function LawInfo() {
                   </li>
                   <li className="flex items-center">
                     <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
-                    Protección legal
+                    Servicio legal
                   </li>
                   <li className="flex items-center">
                     <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
-                    Cultivo personal
+                    Cultivo personalizado
                   </li>
                   <li className="flex items-center">
                     <span className="h-2 w-2 rounded-full bg-green-500 mr-3"></span>
