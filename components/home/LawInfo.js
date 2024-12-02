@@ -22,7 +22,9 @@ export default function LawInfo() {
 
         <div className="grid md:grid-cols-2 gap-12">
           <ScrollReveal delay={200}>
-            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-amber-500/10 transition-all duration-300 border border-amber-500/30">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
+              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
               <h3 className="text-2xl font-semibold mb-6 text-white">
                 Marco Legal
               </h3>
@@ -34,7 +36,9 @@ export default function LawInfo() {
           </ScrollReveal>
 
           <ScrollReveal delay={400}>
-            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-amber-500/10 transition-all duration-300 border border-amber-500/30">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
+              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
               <h3 className="text-2xl font-semibold mb-6 text-white">
                 Derechos Garantizados
               </h3>

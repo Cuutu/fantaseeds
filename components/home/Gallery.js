@@ -77,20 +77,24 @@ export default function Gallery() {
             <Slider {...settings}>
               {images.map((image, index) => (
                 <div key={index} className="outline-none">
-                  <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gray-800/50 backdrop-blur-sm border border-gray-700/50">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1200px) 100vw, 1200px"
-                      priority={index === 0}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 className={`text-white text-2xl font-semibold text-center ${tajawal.className}`}>
-                        {image.alt}
-                      </h3>
+                  <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
+                    <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
+                    <div className="bg-gray-800/50 backdrop-blur-sm border border-amber-500/30">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1200px) 100vw, 1200px"
+                        priority={index === 0}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <h3 className={`text-white text-2xl font-semibold text-center ${tajawal.className}`}>
+                          {image.alt}
+                        </h3>
+                      </div>
                     </div>
                   </div>
                 </div>

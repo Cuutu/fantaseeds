@@ -18,7 +18,9 @@ export default function About() {
         
         <div className="grid md:grid-cols-2 gap-12">
           <ScrollReveal delay={200}>
-            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-amber-500/10 transition-all duration-300 border border-gray-700/50">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
+              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
               <h3 className="text-2xl font-semibold mb-6 text-white">¿Quiénes Somos?</h3>
               <p className={`text-gray-300 text-lg leading-relaxed space-y-4 ${tajawal.className}`}>
                 Somos una ONG DE LA SALUD de cannabis medicinal.
@@ -37,7 +39,9 @@ export default function About() {
           </ScrollReveal>
 
           <ScrollReveal delay={400}>
-            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-green-500/10 transition-all duration-300 border border-gray-700/50">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-amber-500/10 transition-all duration-300 border border-gray-700/50">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
+              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
               <h3 className="text-2xl font-semibold mb-6 text-white">Nuestra Misión</h3>
               <ul className={`space-y-4 text-gray-300 text-lg ${tajawal.className}`}>
                 <li className="flex items-center">
