@@ -70,7 +70,7 @@ function FAQ() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${ebGaramond.className}`}>
-            Preguntas Frecuentes (FAQ)
+            PREGUNTAS FRECUENTES (FAQ)
           </h2>
         </ScrollReveal>
         

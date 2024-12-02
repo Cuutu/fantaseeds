@@ -99,8 +99,8 @@ export default function Contact() {
             
             <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-amber-500/30">
               <ScrollReveal delay={200}>
-                <h2 className={`text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${crimsonText.className}`}>
-                  Inscripción
+                <h2 className={`text-3xl font-bold text-center mb-8 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${crimsonText.className}`}>
+                  INSCRIPCIÓN
                 </h2>
               </ScrollReveal>
               
@@ -186,7 +186,7 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    className="w-full bg-[#556B2F] hover:bg-[#4A5D29] text-white font-medium py-3 px-4 
+                    className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-4 
                              rounded-lg transition-colors duration-300"
                     disabled={status === 'sending'}
                   >
