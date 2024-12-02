@@ -47,3 +47,7 @@ body {
 .slick-dots li button:before {
   display: none;
 }
+
+.slick-slide, .slick-slide * {
+  outline: none !important;
+}

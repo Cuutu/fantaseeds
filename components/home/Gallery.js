@@ -61,7 +61,7 @@ export default function Gallery() {
             <div className="relative bg-transparent rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
               <Slider {...settings}>
                 {images.map((image, index) => (
-                  <div key={index} className="outline-none">
+                  <div key={index} className="outline-none focus:outline-none">
                     <div className="relative aspect-[16/9]">
                       <Image
                         src={image.src}
@@ -70,9 +70,9 @@ export default function Gallery() {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                         style={{ 
                           objectFit: 'cover',
-                          borderRadius: '0.5rem' // 8px rounded corners
+                          borderRadius: '0.5rem'
                         }}
-                        className="!rounded-lg"
+                        className="!rounded-lg focus:outline-none"
                       />
                     </div>
                   </div>
