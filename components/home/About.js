@@ -40,6 +40,25 @@ export default function About() {
               </div>
             </div>
           </ScrollReveal>
+
+          <ScrollReveal delay={400}>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+              <div className="relative bg-black p-4 sm:p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
+                <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-white">Nuestro Compromiso</h3>
+                <p className={`text-gray-300 text-base sm:text-lg leading-relaxed space-y-2 sm:space-y-4 ${tajawal.className}`}>
+                  Nos dedicamos a proporcionar cannabis medicinal de la más alta calidad, cultivado con técnicas avanzadas y cuidados específicos.
+                  <br className="hidden sm:block" />
+                  Nuestro equipo está comprometido con el bienestar de nuestros pacientes, ofreciendo asesoramiento personalizado y seguimiento continuo.
+                  <br className="hidden sm:block" />
+                  Trabajamos en constante actualización con las últimas investigaciones y avances en el campo del cannabis medicinal.
+                  <br className="hidden sm:block" />
+                  Garantizamos la trazabilidad y calidad de nuestros productos, cumpliendo con todas las normativas vigentes.
+                </p>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
