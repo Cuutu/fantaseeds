@@ -1,14 +1,19 @@
 'use client';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AgeVerificationModal() {
+  const [showModal, setShowModal] = useState(true);
+
   const handleYes = () => {
-    window.location.href = '/';
+    setShowModal(false);
   };
 
   const handleNo = () => {
     window.location.href = 'https://www.google.com';
   };
+
+  if (!showModal) return null;
 
   return (
     <AnimatePresence>
