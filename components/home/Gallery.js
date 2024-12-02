@@ -5,18 +5,12 @@ import Slider from 'react-slick';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import ScrollReveal from '@/components/animations/ScrollReveal';
 import { EB_Garamond } from 'next/font/google';
-import { Tajawal } from 'next/font/google';
 
 // Importar los estilos de slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// Inicializar la fuente
 const ebGaramond = EB_Garamond({ subsets: ['latin'] });
-const tajawal = Tajawal({ 
-  weight: ['400', '500', '700'],
-  subsets: ['latin']
-});
 
 export default function Gallery() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,20 +25,12 @@ export default function Gallery() {
       alt: "Cultivo Indoor"
     },
     {
-      src: "https://i.imgur.com/OCngmuA.png",
-      alt: "Terpenos"
+      src: "https://i.imgur.com/Yx8Qv6q.png",
+      alt: "Área de Procesamiento"
     },
     {
-      src: "https://i.imgur.com/UEDUqYQ.png",
-      alt: "Calidad"
-    },
-    {
-      src: "https://i.imgur.com/fNPmV5y.png",
-      alt: "Cultivo"
-    },
-    {
-      src: "https://i.imgur.com/GdDHWBa.png",
-      alt: "Instalaciones del "
+      src: "https://i.imgur.com/Yx8Qv6q.png",
+      alt: "Laboratorio"
     }
   ];
 
@@ -54,52 +40,41 @@ export default function Gallery() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    beforeChange: (_, next) => setCurrentSlide(next),
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    customPaging: (i) => (
-      <div className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-green-500 w-4' : 'bg-gray-500'}`} />
-    ),
-    dotsClass: 'slick-dots !bottom-[-3rem]'
+    beforeChange: (current, next) => setCurrentSlide(next),
   };
 
   return (
-    <section className="py-20" style={{ backgroundColor: '#2D2D2D' }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="gallery" className="py-20" style={{ backgroundColor: '#2D2D2D' }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] bg-clip-text text-transparent ${ebGaramond.className}`}>
             Nuestras Instalaciones
           </h2>
         </ScrollReveal>
 
-        <ScrollReveal>
-          <div className="relative">
-            <Slider {...settings}>
-              {images.map((image, index) => (
-                <div key={index} className="outline-none">
-                  <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
-                    <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
-                    <div className="bg-black/80 backdrop-blur-sm border border-amber-500/30">
+        <ScrollReveal delay={200}>
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
+            <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
+              <Slider {...settings}>
+                {images.map((image, index) => (
+                  <div key={index} className="outline-none">
+                    <div className="relative aspect-[16/9] rounded-lg overflow-hidden">
                       <Image
                         src={image.src}
                         alt={image.alt}
                         fill
-                        className="object-cover"
-                        sizes="(max-width: 1200px) 100vw, 1200px"
-                        priority={index === 0}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                        style={{ objectFit: 'cover' }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
-                        <h3 className={`text-white text-2xl font-semibold text-center ${tajawal.className}`}>
-                          {image.alt}
-                        </h3>
-                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </Slider>
+                ))}
+              </Slider>
+            </div>
           </div>
         </ScrollReveal>
       </div>
@@ -107,7 +82,6 @@ export default function Gallery() {
   );
 }
 
-// Componentes para las flechas personalizadas
 function NextArrow(props) {
   const { onClick } = props;
   return (
