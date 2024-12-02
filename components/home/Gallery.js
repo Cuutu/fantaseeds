@@ -58,17 +58,18 @@ export default function Gallery() {
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
             <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-            <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
+            <div className="relative bg-black rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
               <Slider {...settings}>
                 {images.map((image, index) => (
                   <div key={index} className="outline-none">
-                    <div className="relative aspect-[16/9] rounded-lg overflow-hidden">
+                    <div className="relative aspect-[16/9] rounded-lg">
                       <Image
                         src={image.src}
                         alt={image.alt}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                         style={{ objectFit: 'cover' }}
+                        className="rounded-lg"
                       />
                     </div>
                   </div>
