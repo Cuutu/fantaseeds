@@ -22,10 +22,10 @@ export default function ReprocannInfo() {
 
         <div className="grid md:grid-cols-2 gap-12">
           <ScrollReveal delay={200}>
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
-              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
-              <div className="bg-black/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-amber-500/10 transition-all duration-300 border border-amber-500/30">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-0 group-hover:opacity-25 transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+              <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
                 <h3 className="text-2xl font-semibold mb-6 text-white">¿Qué es el REPROCANN?</h3>
                 <p className={`text-gray-300 text-lg leading-relaxed ${tajawal.className}`}>
                   El Registro del Programa de Cannabis (REPROCANN) es el sistema que permite 
