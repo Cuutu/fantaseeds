@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function AgeVerificationModal() {
+const AgeVerificationModal = () => {
   const [showModal, setShowModal] = useState(true);
 
   const handleYes = () => {
@@ -81,4 +81,6 @@ export default function AgeVerificationModal() {
       </div>
     </AnimatePresence>
   );
-} 
+};
+
+export default AgeVerificationModal; 
