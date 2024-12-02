@@ -11,6 +11,12 @@ export default withAuth(
       }
     }
     
+    if (req.nextUrl.pathname.startsWith('/geneticas')) {
+      if (!token) {
+        return NextResponse.redirect(new URL('/', req.url));
+      }
+    }
+    
     return NextResponse.next();
   },
   {
@@ -21,5 +27,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ['/admin/:path*', '/checkout']
+  matcher: ['/admin/:path*', '/checkout', '/geneticas/:path*']
 }; 
