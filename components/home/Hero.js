@@ -1,18 +1,12 @@
 'use client';
-
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import ContactModal from '../ContactModal';
 
 export default function Hero() {
-  const scrollToContact = (e) => {
-    e.preventDefault();
-    const contactSection = document.getElementById('contact');
-    contactSection?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  };
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   return (
     <div className="relative h-screen">
@@ -53,10 +47,9 @@ export default function Hero() {
               </div>
             </div>
             <ScrollReveal delay={200}>
-              <button 
-                onClick={scrollToContact}
-                className="mt-6 sm:mt-8 bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full 
-                          transition duration-300 ease-in-out transform hover:scale-105 text-sm sm:text-base"
+              <button
+                onClick={() => setIsContactModalOpen(true)}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
               >
                 ¡INSCRIBITE!
               </button>
@@ -78,6 +71,11 @@ export default function Hero() {
           <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         </svg>
       </div>
+
+      <ContactModal 
+        isOpen={isContactModalOpen} 
+        onClose={() => setIsContactModalOpen(false)} 
+      />
     </div>
   );
 } 
