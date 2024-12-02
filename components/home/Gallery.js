@@ -80,7 +80,7 @@ export default function Gallery() {
                   <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
                     <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur opacity-25"></div>
                     <div className="absolute -inset-1 bg-amber-500 rounded-lg opacity-10"></div>
-                    <div className="bg-gray-800/50 backdrop-blur-sm border border-amber-500/30">
+                    <div className="bg-black/80 backdrop-blur-sm border border-amber-500/30">
                       <Image
                         src={image.src}
                         alt={image.alt}
