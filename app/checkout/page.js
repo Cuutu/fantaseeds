@@ -61,27 +61,30 @@ export default function Checkout() {
       }
 
       if (data.success) {
-        // Email para el administrador (EmailJS)
-        await emailjs.send(
-          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-          process.env.NEXT_PUBLIC_EMAILJS_ORDER_TEMPLATE_ID,
-          {
-            from_name: 'Fantaseeds',
-            to_name: session.user.nombreApellido,
-            order_number: data.order._id.slice(-6),
-            customer_name: session.user.nombreApellido,
-            customer_username: session.user.usuario,
-            customer_email: session.user.email,
-            delivery_method: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en sucursal',
-            delivery_address: deliveryMethod === 'envio' ? 
-              `${shippingAddress.direccion}, ${shippingAddress.ciudad} (CP: ${shippingAddress.codigoPostal})` : '',
-            order_total: `$${orderData.total}`,
-            products_list: cart.map(item => 
-              `${item.genetic.nombre} (${item.cantidad} unidades)`
-            ).join('\n'),
-          },
-          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-        );
+        try {
+          await emailjs.send(
+            process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+            process.env.NEXT_PUBLIC_EMAILJS_ORDER_TEMPLATE_ID,
+            {
+              from_name: 'Fantaseeds',
+              to_name: session.user.nombreApellido,
+              order_number: data.order._id.slice(-6),
+              customer_name: session.user.nombreApellido,
+              customer_username: session.user.usuario,
+              customer_email: session.user.email,
+              delivery_method: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en sucursal',
+              delivery_address: deliveryMethod === 'envio' ? 
+                `${shippingAddress.direccion}, ${shippingAddress.ciudad} (CP: ${shippingAddress.codigoPostal})` : '',
+              order_total: `$${orderData.total}`,
+              products_list: cart.map(item => 
+                `${item.genetic.nombre} (${item.cantidad} unidades)`
+              ).join('\n'),
+            },
+            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+          );
+        } catch (emailError) {
+          console.error('Error al enviar el email:', emailError);
+        }
 
         clearCart();
         setShowSuccessModal(true);
@@ -92,7 +95,7 @@ export default function Checkout() {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert(error.message || 'Error al procesar el pedido');
+      alert('Error al procesar el pedido: ' + error.message);
     } finally {
       setIsLoading(false);
     }
