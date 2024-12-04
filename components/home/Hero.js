@@ -8,6 +8,15 @@ import ContactModal from '../ContactModal';
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
+  const handleContactClick = () => {
+    const isSmallScreen = window.innerWidth < 768; // Ajusta el tamaño según el modal
+    if (isSmallScreen) {
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setIsContactModalOpen(true);
+    }
+  };
+
   return (
     <div className="relative min-h-screen">
       <div className="absolute inset-0">
@@ -50,7 +59,7 @@ export default function Hero() {
             
             <ScrollReveal delay={200}>
               <button
-                onClick={() => setIsContactModalOpen(true)}
+                onClick={handleContactClick}
                 className="mt-8 bg-green-500 hover:bg-green-600 text-white font-bold 
                          py-3 px-8 rounded-full transition-all duration-300 
                          transform hover:scale-105 text-base
