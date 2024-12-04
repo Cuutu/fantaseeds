@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import Genetic from '@/models/Genetic';
 
 export async function DELETE(request, { params }) {
   try {
@@ -18,9 +19,11 @@ export async function DELETE(request, { params }) {
     }
 
     const { orderId } = params;
-    const deletedOrder = await Order.findByIdAndDelete(orderId);
-
-    if (!deletedOrder) {
+    
+    // Primero encontramos el pedido
+    const order = await Order.findById(orderId);
+    
+    if (!order) {
       return Response.json({ 
         success: false, 
         error: 'Pedido no encontrado' 
@@ -28,6 +31,17 @@ export async function DELETE(request, { params }) {
         status: 404 
       });
     }
+
+    // Devolvemos el stock antes de eliminar el pedido
+    for (const producto of order.productos) {
+      await Genetic.findByIdAndUpdate(
+        producto.genetic,
+        { $inc: { stock: producto.cantidad } }
+      );
+    }
+
+    // Ahora sí eliminamos el pedido
+    await Order.findByIdAndDelete(orderId);
 
     return Response.json({
       success: true,
