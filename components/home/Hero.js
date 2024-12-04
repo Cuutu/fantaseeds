@@ -47,15 +47,14 @@ export default function Hero() {
                 />
               </div>
             </div>
+            
             <ScrollReveal delay={200}>
               <button
                 onClick={() => setIsContactModalOpen(true)}
                 className="mt-8 bg-green-500 hover:bg-green-600 text-white font-bold 
                          py-3 px-8 rounded-full transition-all duration-300 
                          transform hover:scale-105 text-base
-                         shadow-lg hover:shadow-xl
-                         fixed bottom-8 left-1/2 -translate-x-1/2 
-                         sm:static sm:translate-x-0"
+                         shadow-lg hover:shadow-xl"
               >
                 ¡INSCRIBITE!
               </button>
