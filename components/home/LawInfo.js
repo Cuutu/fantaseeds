@@ -15,7 +15,7 @@ export default function LawInfo() {
     <section id="law" className="py-20" style={{ backgroundColor: '#2D2D2D' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <h2 className={`text-5xl font-bold text-center mb-16 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${ebGaramond.className}`}>
+          <h2 className={`text-5xl font-bold text-center mb-16 text-[#CDA500] ${ebGaramond.className}`}>
             LEY 27.350
           </h2>
         </ScrollReveal>

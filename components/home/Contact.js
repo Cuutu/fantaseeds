@@ -99,7 +99,7 @@ export default function Contact() {
             
             <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-amber-500/30">
               <ScrollReveal delay={200}>
-                <h2 className={`text-3xl font-bold text-center mb-8 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${crimsonText.className}`}>
+                <h2 className={`text-3xl font-bold text-center mb-8 text-[#CDA500] ${crimsonText.className}`}>
                   INSCRIPCIÓN
                 </h2>
               </ScrollReveal>

@@ -113,7 +113,7 @@ export default function ContactModal({ isOpen, onClose }) {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
-                  className={`text-3xl sm:text-5xl font-bold text-center mb-4 sm:mb-8 bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent ${ebGaramond.className}`}
+                  className={`text-3xl sm:text-5xl font-bold text-center mb-4 sm:mb-8 text-[#CDA500] ${ebGaramond.className}`}
                 >
                   Inscripción
                 </motion.h2>
