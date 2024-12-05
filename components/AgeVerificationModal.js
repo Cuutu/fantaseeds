@@ -1,8 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function AgeVerificationModal() {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 5000); // 5 segundos de espera
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleYes = () => {
     setShowModal(false);
