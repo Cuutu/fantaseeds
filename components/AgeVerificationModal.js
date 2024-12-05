@@ -7,7 +7,7 @@ function AgeVerificationModal() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowModal(true);
-    }, 5000); // 5 segundos de espera
+    }, 3000); // 5 segundos de espera
 
     return () => clearTimeout(timer);
   }, []);
