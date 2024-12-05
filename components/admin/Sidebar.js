@@ -7,22 +7,18 @@ export default function Sidebar({ onClose }) {
 
   return (
     <aside className="bg-[#1a1b1e] w-64 min-h-screen relative">
-      <button 
-        onClick={onClose}
-        className="lg:hidden absolute top-6 right-4 p-2 rounded-lg hover:bg-gray-700 text-gray-400"
-        style={{ marginTop: '0.5rem' }}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
+      <div className="lg:hidden flex items-center justify-center p-4 border-b border-gray-800">
+        <Link href="/admin" className="text-green-500 text-xl font-bold">
+          FANTASEEDS
+        </Link>
+      </div>
 
       <div className="p-4 pt-6">
-        <Link href="/admin" className="text-green-500 text-xl font-bold block" style={{ marginBottom: '2rem' }}>
+        <Link href="/admin" className="hidden lg:block text-green-500 text-xl font-bold mb-8">
           FANTASEEDS
         </Link>
         
-        <nav className="space-y-2 mt-6">
+        <nav className="space-y-2">
           <Link 
             href="/admin"
             onClick={onClose}
