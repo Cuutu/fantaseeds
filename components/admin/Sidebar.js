@@ -2,65 +2,94 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-[#1a1b1e] w-64 min-h-screen">
-      <div className="p-4">
-        <Link href="/admin" className="text-green-500 text-xl font-bold mb-8 block">
+    <aside className="bg-[#1a1b1e] w-64 min-h-screen relative">
+      <button 
+        onClick={onClose}
+        className="lg:hidden absolute top-6 right-4 p-2 rounded-lg hover:bg-gray-700 text-gray-400"
+        style={{ marginTop: '0.5rem' }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div className="p-4 pt-6">
+        <Link href="/admin" className="text-green-500 text-xl font-bold block" style={{ marginBottom: '2rem' }}>
           FANTASEEDS
         </Link>
         
-        <nav className="space-y-1">
+        <nav className="space-y-2 mt-6">
           <Link 
             href="/admin"
-            className={`block px-4 py-2 rounded ${
+            onClick={onClose}
+            className={`flex items-center px-4 py-3 rounded transition-colors duration-200 ${
               pathname === '/admin' 
                 ? 'bg-gray-700 text-green-500' 
-                : 'text-gray-400 hover:text-gray-300'
+                : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
             }`}
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
             Dashboard
           </Link>
 
           <Link 
             href="/admin/usuarios"
-            className={`block px-4 py-2 rounded ${
+            onClick={onClose}
+            className={`flex items-center px-4 py-3 rounded transition-colors duration-200 ${
               pathname === '/admin/usuarios' 
                 ? 'bg-gray-700 text-green-500' 
-                : 'text-gray-400 hover:text-gray-300'
+                : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
             }`}
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
             Usuarios
           </Link>
 
           <Link 
             href="/admin/geneticas"
-            className={`block px-4 py-2 rounded ${
+            onClick={onClose}
+            className={`flex items-center px-4 py-3 rounded transition-colors duration-200 ${
               pathname === '/admin/geneticas' 
                 ? 'bg-gray-700 text-green-500' 
-                : 'text-gray-400 hover:text-gray-300'
+                : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
             }`}
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+            </svg>
             Genéticas
           </Link>
 
           <Link 
             href="/admin/pedidos"
-            className={`block px-4 py-2 rounded ${
+            onClick={onClose}
+            className={`flex items-center px-4 py-3 rounded transition-colors duration-200 ${
               pathname === '/admin/pedidos' 
                 ? 'bg-gray-700 text-green-500' 
-                : 'text-gray-400 hover:text-gray-300'
+                : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
             }`}
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
             Pedidos
           </Link>
 
           <button
             onClick={() => signOut()}
-            className="block w-full text-left px-4 py-2 text-gray-400 hover:text-gray-300"
+            className="flex items-center w-full px-4 py-3 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300 rounded transition-colors duration-200"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
             Cerrar Sesión
           </button>
         </nav>
