@@ -24,18 +24,11 @@ export default function About() {
               <div className="relative bg-black p-4 sm:p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
                 <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-white">¿Quiénes Somos?</h3>
                 <p className={`text-gray-300 text-base sm:text-lg leading-relaxed space-y-2 sm:space-y-4 ${tajawal.className}`}>
-                  Somos una ONG DE LA SALUD de cannabis medicinal.
+                  Somos una Organización No Gubernamental (ONG) comprometida con la salud y el bienestar de nuestra comunidad, especializada en el cultivo responsable de cannabis medicinal. Desde nuestros inicios, hemos trabajado bajo un marco legal y profesional, respaldados por la normativa vigente del REPROCANN, para ofrecer soluciones confiables y personalizadas a quienes buscan mejorar su calidad de vida a través de la medicina natural.
                   <br className="hidden sm:block" />
-                  Ofrecemos un servicio seguro, legal y exclusivo, cumpliendo con los más altos estándares de calidad. 
+                  Nuestra misión es ser un puente entre el conocimiento, la experiencia y el acceso seguro al cannabis medicinal. Nos enfocamos en brindar un servicio integral que incluye el cultivo, cuidado, y entrega de productos de alta calidad, asegurando siempre la trazabilidad y transparencia en cada etapa del proceso.
                   <br className="hidden sm:block" />
-                  Somos cultivadores solidarios de nuestros pacientes. 
-                  Utilizamos hidroponía y sustratos orgánicos sin pesticidas, disponiendo así de geneticas altas en THC y CBD.
-                  <br className="hidden sm:block" />
-                  Contamos con distintos tipos de membresía y las cuotas sociales se abonan del 1 al 5 de cada mes.
-                  <br className="hidden sm:block" />
-                  El retiro se realiza por nuestra sede en CABA.
-                  <br className="hidden sm:block" />
-                  Nuestro objetivo principal es brindar una alternativa confiable y profesional para aquellos que buscan mejorar su calidad de vida a través del cannabis medicinal.
+                  En Fantaseeds creemos en el poder transformador de la educación y el acompañamiento. Por ello, no solo cultivamos plantas, sino también confianza y tranquilidad, guiando a nuestros socios en cada paso del camino. Nuestro compromiso con la excelencia y la ética nos posiciona como una referencia en el sector, garantizando un servicio que respalda tanto la salud como los valores que promovemos.
                 </p>
               </div>
             </div>
@@ -48,13 +41,9 @@ export default function About() {
               <div className="relative bg-black p-4 sm:p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
                 <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-white">Nuestro Compromiso</h3>
                 <p className={`text-gray-300 text-base sm:text-lg leading-relaxed space-y-2 sm:space-y-4 ${tajawal.className}`}>
-                  Nos dedicamos a proporcionar cannabis medicinal de la más alta calidad, cultivado con técnicas avanzadas y cuidados específicos.
+                  En Fantaseeds, nos comprometemos a garantizar un servicio de excelencia, cuidando cada etapa del proceso de cultivo para entregar productos seguros y de alta calidad. Trabajamos con ética, transparencia y dedicación, respetando siempre el marco legal del REPROCANN.
                   <br className="hidden sm:block" />
-                  Nuestro equipo está comprometido con el bienestar de nuestros pacientes, ofreciendo asesoramiento personalizado y seguimiento continuo.
-                  <br className="hidden sm:block" />
-                  Trabajamos en constante actualización con las últimas investigaciones y avances en el campo del cannabis medicinal.
-                  <br className="hidden sm:block" />
-                  Garantizamos la trazabilidad y calidad de nuestros productos, cumpliendo con todas las normativas vigentes.
+                  Nuestra prioridad es el bienestar de quienes confían en nosotros, ofreciendo soluciones confiables que marcan la diferencia en su calidad de vida.
                 </p>
               </div>
             </div>

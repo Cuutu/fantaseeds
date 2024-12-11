@@ -48,19 +48,23 @@ export default function LawInfo() {
                 <ul className={`space-y-4 text-gray-300 text-lg ${tajawal.className}`}>
                   <li className="flex items-center">
                     <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
-                    Acceso al tratamiento
+                    Acceso legal y seguro: Brindamos acceso al cannabis medicinal cumpliendo con la Ley 27.350 y las normativas del REPROCANN.
                   </li>
                   <li className="flex items-center">
                     <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
-                    Servicio legal
+                    Privacidad protegida: Garantizamos la confidencialidad de tus datos y el cumplimiento estricto de las normativas vigentes.
                   </li>
                   <li className="flex items-center">
                     <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
-                    Cultivo personalizado
+                    Calidad asegurada: Nos comprometemos a entregar productos de cultivo controlado, trazable y de alta calidad.
                   </li>
                   <li className="flex items-center">
                     <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
-                    Asesoramiento médico
+                    Producción garantizada: Ante cualquier contratiempo en el ciclo de cultivo, aseguramos la entrega de tu producción completa.
+                  </li>
+                  <li className="flex items-center">
+                    <span className="h-2 w-2 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 mr-3"></span>
+                    Acompañamiento integral: Ofrecemos soporte y asesoramiento personalizado en todo el proceso.
                   </li>
                 </ul>
               </div>

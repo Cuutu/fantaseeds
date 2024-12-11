@@ -10,51 +10,32 @@ function FAQ() {
 
   const faqs = [
     {
-      question: "¿CÓMO FUNCIONA EL CLUB?",
-      answer: (
-        <div className="space-y-4">
-          <p>
-            Somos una asociación civil. Al ser un club de cultivo solidario, nuestra misión es sumar a nuestra 
-            asociación a aquellas personas a las cuales se les indique como modalidad terapéutica, medicinal o 
-            paliativa del dolor, el uso de la planta de Cannabis y sus derivados, conforme la normativa vigente.
-          </p>
-          <p>
-            Es por ello que no comercializamos cannabis ni exigimos una cuota mensual. La inscripción al club 
-            es totalmente gratuita, sólo debes contar con el certificado REPROCANN vigente.
-          </p>
-        </div>
-      )
+      question: "¿QUÉ SERVICIOS OFRECE FANTASEEDS?",
+      answer: "Fantaseeds ofrece un servicio integral de cultivo de cannabis medicinal. Nos encargamos de todo el proceso, desde la semilla hasta la entrega, asegurando calidad, legalidad y transparencia."
     },
     {
-      question: "¿QUÉ ES EL REPROCANN?",
-      answer: (
-        <div className="space-y-4">
-          <p>
-            El REPROCANN (Registro del Programa de Cannabis) es una base de datos diseñada para poder registrar 
-            a aquellas personas que cuenten con las condiciones para acceder a un cultivo controlado de la planta 
-            de cannabis, con fines de tratamiento medicinal, terapéutico y/o paliativo del dolor. La inscripción 
-            concluye con la extensión de un certificado de cultivo autorizado por el Ministerio de Salud de la Nación.
-          </p>
-          <p>
-            Los datos suministrados revisten carácter de Declaración Jurada y están protegidos por la normativa 
-            vigente y en ningún caso se revela información relativa a la identidad, salvo por resolución judicial 
-            debidamente fundada.
-          </p>
-          <p>
-            El trámite de inscripción no posee costo alguno por parte del Ministerio de Salud de la Nación. 
-            El tiempo de vigencia de la autorización es de un año. Una vez vencida la autorización debe realizar 
-            nuevamente el trámite. No hay renovación automática.
-          </p>
-        </div>
-      )
+      question: "¿QUIÉNES PUEDEN ACCEDER AL SERVICIO?",
+      answer:" Nuestro servicio está destinado a personas, ONGs o fundaciones registradas en el REPROCANN que buscan una alternativa segura y profesional para obtener cannabis medicinal."
     },
     {
-      question: "¿QUÉ PASA SI NO TENGO EL REPROCANN?",
-      answer: "En caso de que aún no estés inscripto como paciente con indicación médica, te proveeremos el contacto de un especialista de confianza de nuestra fundación que te ayudará con el proceso para que obtengas tu certificado REPROCANN."
+      question: "¿QUÉ GARANTIZA EL SERVICIO DE FANTASEEDS?",
+      answer: "Garantizamos el acceso seguro a flores de cannabis medicinal, cuidando cada etapa del proceso para asegurar calidad, trazabilidad y cumplimiento legal."
     },
     {
-      question: "¿CÓMO ES LA CALIDAD DE PRODUCCIÓN?",
-      answer: "Estamos asesorados desde los mejores cannacultores de California, por lo que nuestra producción está verificada por un laboratorio para que sean de una calidad farmacéutica válida."
+      question: "¿EL CULTIVO ES LEGAL?",
+      answer: "Sí, operamos bajo el marco legal de la Ley 27.350 y el REPROCANN, cumpliendo con todas las normativas del Ministerio de Salud de Argentina."
+    },
+    {
+      question: "¿CÓMO RECIBO MI PRODUCCIÓN",
+      answer: "Recibís tu producción todos los meses, en membresías que van de 10 a 40 gramos por persona. Podés retirarla en nuestra sede social o solicitar un envío a domicilio. Trabajamos en todo el país para garantizar que tu acceso sea seguro y conveniente."
+    },
+    {
+      question: "¿ES NECESARIO ESTAR REGISTRADO EN EL REPROCANN?",
+      answer: "Si no contás con el registro, nosotros gestionamos el trámite del REPROCANN para que puedas afiliarte y acceder a nuestro servicio de forma legal y segura."
+    },
+    {
+      question: "¿QUE SUCEDE SI ALGO AFECTA MI CULTIVO?",
+      answer: "En caso de imprevistos, garantizamos que recibirás la cantidad acordada de tu producción."
     }
   ];
 

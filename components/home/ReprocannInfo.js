@@ -28,9 +28,7 @@ export default function ReprocannInfo() {
               <div className="relative bg-black p-8 rounded-lg shadow-xl backdrop-blur-sm border border-gray-700/50 group-hover:border-amber-500/30 transition-colors duration-300">
                 <h3 className="text-2xl font-semibold mb-6 text-white">¿Qué es el REPROCANN?</h3>
                 <p className={`text-gray-300 text-lg leading-relaxed ${tajawal.className}`}>
-                  El Registro del Programa de Cannabis (REPROCANN) es el sistema que permite 
-                  el acceso legal al cultivo controlado de la planta de cannabis con fines 
-                  medicinales.
+                  El REPROCANN (Registro del Programa de Cannabis) es una herramienta del Ministerio de Salud de Argentina que permite a pacientes, médicos y cultivadores acceder al cannabis medicinal de manera legal y regulada. Este registro garantiza el uso responsable del cannabis para fines terapéuticos, brindando un marco seguro y transparente tanto para el cultivo como para el acceso a los derivados medicinales.
                 </p>
               </div>
             </div>
