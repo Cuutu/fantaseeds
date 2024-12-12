@@ -29,20 +29,20 @@ export default function Gallery() {
   
   const images = [
     {
-      src: "/images/gallery/imagen1.png",
+      src: "/images/imagen4.png",
       alt: "INSTALACIONES DEL CLUB"
     },
     {
-      src: "/images/gallery/imagen2.png",
-      alt: "CULTIVO INDOOR"
-    },
-    {
-      src: "/images/gallery/imagen3.png",
-      alt: "TRICOMAS"
-    },
-    {
-      src: "/images/gallery/imagen4.png",
+      src: "/images/imagen3.png",
       alt: "CALIDAD"
+    },
+    {
+      src: "/images/imagen2.png",
+      alt: "TERPENOS"
+    },
+    {
+      src: "/images/imagen1.png",
+      alt: "CULTIVO INDOOR"
     }
   ];
 
