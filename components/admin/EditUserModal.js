@@ -85,13 +85,16 @@ export default function EditUserModal({ isOpen, onClose, onUserUpdated, user }) 
           <div>
             <label className="block text-sm font-medium text-gray-300">Membresía</label>
             <select
+              name="membresia"
               value={formData.membresia}
               onChange={(e) => setFormData({...formData, membresia: e.target.value})}
-              className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-gray-100"
+              className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-green-500 focus:outline-none"
+              required
             >
               <option value="10G">10G</option>
               <option value="20G">20G</option>
               <option value="30G">30G</option>
+              <option value="40G">40G</option>
             </select>
           </div>
 

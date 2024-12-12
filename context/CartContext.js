@@ -137,6 +137,16 @@ export function CartProvider({ children }) {
     localStorage.removeItem('cart');
   };
 
+  const getMaxAllowedQuantity = (membresia) => {
+    const limits = {
+      '10G': 10,
+      '20G': 20,
+      '30G': 30,
+      '40G': 40
+    };
+    return limits[membresia] || 10;
+  };
+
   return (
     <>
       <CartContext.Provider value={{

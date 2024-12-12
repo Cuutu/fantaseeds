@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: '10G',
-    enum: ['10G', '20G', '30G']
+    enum: ['10G', '20G', '30G', '40G']
   },
   domicilio: {
     calle: String,
