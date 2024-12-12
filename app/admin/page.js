@@ -8,7 +8,8 @@ export default function AdminDashboard() {
     membresias: {
       '10G': 0,
       '20G': 0,
-      '30G': 0
+      '30G': 0,
+      '40G': 0
     },
     ultimosUsuarios: []
   });
@@ -36,7 +37,7 @@ export default function AdminDashboard() {
       <h1 className="text-3xl font-bold text-white mt-8 mb-12">Dashboard</h1>
 
       {/* Estadísticas Generales */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
         {/* Total Usuarios */}
         <div className="bg-gray-800 p-6 rounded-lg">
           <div className="flex items-center justify-between">
@@ -62,6 +63,11 @@ export default function AdminDashboard() {
         <div className="bg-gray-800 p-6 rounded-lg">
           <p className="text-gray-400 text-sm mb-2">Membresía 30G</p>
           <p className="text-2xl font-bold text-white">{stats.membresias['30G']}</p>
+        </div>
+
+        <div className="bg-gray-800 p-6 rounded-lg">
+          <p className="text-gray-400 text-sm mb-2">Membresía 40G</p>
+          <p className="text-2xl font-bold text-white">{stats.membresias['40G']}</p>
         </div>
       </div>
 
