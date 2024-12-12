@@ -29,19 +29,19 @@ export default function Gallery() {
   
   const images = [
     {
-      src: "https://i.imgur.com/xJbzgw1.png",
+      src: "/images/gallery/imagen1.jpg",
       alt: "INSTALACIONES DEL CLUB"
     },
     {
-      src: "https://i.imgur.com/8I9VORo.png",
+      src: "/images/gallery/imagen2.jpg",
       alt: "CULTIVO INDOOR"
     },
     {
-      src: "https://i.imgur.com/Yx8Qv6q.png",
+      src: "/images/gallery/imagen3.jpg",
       alt: "TRICOMAS"
     },
     {
-      src: "https://i.imgur.com/Yx8Qv6q.png",
+      src: "/images/gallery/imagen4.jpg",
       alt: "CALIDAD"
     }
   ];
