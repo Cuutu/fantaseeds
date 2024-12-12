@@ -24,7 +24,8 @@ export async function GET() {
     const membresias = {
       '10G': await User.countDocuments({ membresia: '10G', activo: true }),
       '20G': await User.countDocuments({ membresia: '20G', activo: true }),
-      '30G': await User.countDocuments({ membresia: '30G', activo: true })
+      '30G': await User.countDocuments({ membresia: '30G', activo: true }),
+      '40G': await User.countDocuments({ membresia: '40G', activo: true })
     };
 
     // Obtener últimos 5 usuarios
