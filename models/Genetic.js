@@ -11,7 +11,7 @@ const geneticSchema = new mongoose.Schema({
   },
   thc: {
     type: Number,
-    required: [true, 'El THC es requerido']
+    required: [true, 'El % THC es requerido']
   },
   stock: {
     type: Number,
