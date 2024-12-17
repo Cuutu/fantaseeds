@@ -147,6 +147,36 @@ export default function Checkout() {
     });
   };
 
+  const handleMercadoPago = async () => {
+    try {
+      setIsLoading(true);
+      
+      const response = await fetch('/api/mercadopago', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cart,
+          deliveryMethod
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        window.location.href = data.init_point;
+      } else {
+        throw new Error(data.error || 'Error al procesar el pago');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al procesar el pago: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 p-4 pt-20">
       <h1 className="text-3xl font-bold text-white mb-8">Finalizar Compra</h1>
@@ -314,17 +344,10 @@ export default function Checkout() {
 
       {/* Botón de confirmar pedido */}
       <button
-        onClick={handleConfirmarPedido}
-        disabled={
-          isLoading || 
-          (paymentMethod === 'transferencia' && !comprobante) ||
-          !paymentMethod
-        }
-        className={`w-full py-3 rounded-lg text-white font-bold ${
-          isLoading || (paymentMethod === 'transferencia' && !comprobante) || !paymentMethod
-            ? 'bg-gray-600 cursor-not-allowed'
-            : 'bg-green-600 hover:bg-green-700'
-        }`}
+        onClick={paymentMethod === 'mercadopago' ? handleMercadoPago : handleConfirmarPedido}
+        disabled={isLoading || !paymentMethod}
+        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg 
+                 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? 'Procesando...' : 'Confirmar Pedido'}
       </button>

@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
   },
   metodoPago: {
     type: String,
-    enum: ['efectivo', 'transferencia'],
+    enum: ['efectivo', 'transferencia', 'mercadopago'],
     required: true
   },
   metodoEntrega: {
@@ -48,7 +48,13 @@ const orderSchema = new mongoose.Schema({
   fechaPedido: {
     type: Date,
     default: Date.now
-  }
+  },
+  pagoId: String,
+  estadoPago: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected', 'cancelled'],
+    default: 'pending'
+  },
 }, {
   timestamps: true
 });
