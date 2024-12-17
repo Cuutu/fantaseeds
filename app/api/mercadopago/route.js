@@ -1,9 +1,9 @@
-import mercadopago from 'mercadopago';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/route';
 
-mercadopago.configure({
-  access_token: process.env.MERCADO_PAGO_ACCESS_TOKEN
+const client = new MercadoPagoConfig({ 
+  accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN 
 });
 
 export async function POST(request) {
@@ -21,8 +21,10 @@ export async function POST(request) {
       acc + (item.genetic.precio * item.cantidad), 0) + 
       (deliveryMethod === 'envio' ? 500 : 0);
 
+    const preference = new Preference(client);
+
     // Crear preferencia de pago
-    const preference = {
+    const preferenceData = {
       items: cart.map(item => ({
         title: item.genetic.nombre,
         unit_price: item.genetic.precio,
@@ -36,20 +38,20 @@ export async function POST(request) {
         }
       }),
       back_urls: {
-        success: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success`,
-        failure: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/failure`,
-        pending: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/pending`,
+        success: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success`,
+        failure: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/failure`,
+        pending: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/pending`,
       },
       auto_return: "approved",
       external_reference: session.user.id,
-      notification_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/mercadopago/webhook`,
+      notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/mercadopago/webhook`,
     };
 
-    const response = await mercadopago.preferences.create(preference);
+    const response = await preference.create({ body: preferenceData });
 
     return Response.json({
       success: true,
-      preferenceId: response.body.id
+      preferenceId: response.id
     });
 
   } catch (error) {
