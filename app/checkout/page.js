@@ -9,19 +9,16 @@ initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY);
 
 export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('');
   const [preferenceId, setPreferenceId] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState('retiro');
   const [shippingAddress, setShippingAddress] = useState({});
   const router = useRouter();
   const { cart, clearCart } = useCart();
 
-  const handlePaymentMethodChange = async (method) => {
-    setPaymentMethod(method);
-    if (method === 'mercadopago') {
-      await createPreference();
-    }
-  };
+  useEffect(() => {
+    // Crear preferencia automáticamente al cargar el componente
+    createPreference();
+  }, [deliveryMethod]); // Se actualizará cuando cambie el método de entrega
 
   const createPreference = async () => {
     try {
@@ -87,55 +84,16 @@ export default function Checkout() {
           </div>
         </div>
 
-        {/* Método de pago */}
-        <div className="mt-6 space-y-4">
-          <h3 className="text-white font-semibold mb-4">Método de Pago:</h3>
-          
-          <div className="space-y-3">
-            <button
-              onClick={() => handlePaymentMethodChange('mercadopago')}
-              className={`w-full p-4 rounded-lg border ${
-                paymentMethod === 'mercadopago' 
-                  ? 'border-green-500 bg-green-500/10' 
-                  : 'border-gray-700 hover:border-green-500'
-              } transition-colors`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <img 
-                    src="/mercadopago-logo.png" 
-                    alt="Mercado Pago" 
-                    className="h-6"
-                  />
-                  <span className="text-white">Pagar con Mercado Pago</span>
-                </div>
-                {paymentMethod === 'mercadopago' && (
-                  <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
-            </button>
-
-            {/* Otros métodos de pago existentes */}
+        {/* Dirección de envío si corresponde */}
+        {deliveryMethod === 'envio' && (
+          <div className="mb-8">
+            <h3 className="text-white font-semibold mb-4">Dirección de Envío:</h3>
+            {/* Aquí tus campos de dirección */}
           </div>
-
-          {/* Botón de Mercado Pago */}
-          {paymentMethod === 'mercadopago' && preferenceId && (
-            <div className="mt-4">
-              <Wallet 
-                initialization={{ preferenceId }}
-                customization={{ 
-                  texts: { valueProp: 'smart_option' },
-                  visual: { buttonBackground: 'black', borderRadius: '6px' }
-                }}
-              />
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Resumen del pedido */}
-        <div className="mt-8 bg-gray-800 rounded-lg p-6">
+        <div className="mb-8 bg-gray-800 rounded-lg p-6">
           <h3 className="text-white font-semibold mb-4">Resumen del Pedido</h3>
           {cart.map((item) => (
             <div key={item.genetic._id} className="flex justify-between mb-2">
@@ -161,7 +119,30 @@ export default function Checkout() {
             </span>
           </div>
         </div>
+
+        {/* Botón de Mercado Pago */}
+        {preferenceId && (
+          <div className="mt-4">
+            <Wallet 
+              initialization={{ preferenceId }}
+              customization={{ 
+                texts: { valueProp: 'smart_option' },
+                visual: { 
+                  buttonBackground: 'black',
+                  borderRadius: '6px'
+                }
+              }}
+            />
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="text-center mt-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+            <p className="text-white mt-2">Procesando...</p>
+          </div>
+        )}
       </div>
     </div>
   );
-} 
+}
