@@ -34,20 +34,28 @@ export default function Checkout() {
 
   useEffect(() => {
     if (!cart || cart.length === 0) {
-      router.push('/cart');
+      router.push('/');
       return;
     }
 
-    if (deliveryMethod === 'retiro' || 
-        (deliveryMethod === 'envio' && 
-         shippingAddress.calle && 
-         shippingAddress.numero && 
-         shippingAddress.codigoPostal && 
-         shippingAddress.localidad && 
-         shippingAddress.provincia && 
-         shippingAddress.telefono)) {
-      createPreference();
-    }
+    const createInitialPreference = async () => {
+      if (deliveryMethod === 'retiro' || 
+          (deliveryMethod === 'envio' && 
+           shippingAddress.calle && 
+           shippingAddress.numero && 
+           shippingAddress.codigoPostal && 
+           shippingAddress.localidad && 
+           shippingAddress.provincia && 
+           shippingAddress.telefono)) {
+        try {
+          await createPreference();
+        } catch (error) {
+          console.error('Error al crear preferencia inicial:', error);
+        }
+      }
+    };
+
+    createInitialPreference();
   }, [deliveryMethod, shippingAddress, cart]);
 
   const createPreference = async () => {
@@ -68,7 +76,13 @@ export default function Checkout() {
           deliveryMethod,
           shippingAddress: deliveryMethod === 'envio' ? shippingAddress : null
         }),
+        cache: 'no-cache',
+        credentials: 'same-origin',
       });
+
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
 
       const data = await response.json();
       
@@ -78,9 +92,8 @@ export default function Checkout() {
         throw new Error(data.error || 'Error al crear preferencia de pago');
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('Error al procesar el pago: ' + error.message);
-      router.push('/cart');
+      console.error('Error detallado:', error);
+      alert('Error al procesar el pago. Por favor, intenta nuevamente.');
     } finally {
       setIsLoading(false);
     }
@@ -92,10 +105,10 @@ export default function Checkout() {
         <div className="text-center">
           <p className="text-white mb-4">No hay items en el carrito</p>
           <button
-            onClick={() => router.push('/cart')}
+            onClick={() => router.push('/')}
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           >
-            Volver al carrito
+            Volver al inicio
           </button>
         </div>
       </div>
