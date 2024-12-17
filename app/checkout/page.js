@@ -33,6 +33,11 @@ export default function Checkout() {
   };
 
   useEffect(() => {
+    if (!cart || cart.length === 0) {
+      router.push('/cart');
+      return;
+    }
+
     if (deliveryMethod === 'retiro' || 
         (deliveryMethod === 'envio' && 
          shippingAddress.calle && 
@@ -43,10 +48,14 @@ export default function Checkout() {
          shippingAddress.telefono)) {
       createPreference();
     }
-  }, [deliveryMethod, shippingAddress]);
+  }, [deliveryMethod, shippingAddress, cart]);
 
   const createPreference = async () => {
     try {
+      if (!cart || cart.length === 0) {
+        throw new Error('No hay items en el carrito');
+      }
+
       setIsLoading(true);
       
       const response = await fetch('/api/mercadopago', {
@@ -71,10 +80,27 @@ export default function Checkout() {
     } catch (error) {
       console.error('Error:', error);
       alert('Error al procesar el pago: ' + error.message);
+      router.push('/cart');
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (!cart || cart.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-white mb-4">No hay items en el carrito</p>
+          <button
+            onClick={() => router.push('/cart')}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Volver al carrito
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 py-8">
