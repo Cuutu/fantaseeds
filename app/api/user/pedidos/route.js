@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
+import Genetic from '@/models/Genetic';
 import Order from '@/models/Order';
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +18,11 @@ export async function GET() {
 
     const orders = await Order.find({ usuario: session.user.id })
       .sort({ fechaPedido: -1 })
-      .populate('productos.genetic');
+      .populate({
+        path: 'productos.genetic',
+        model: Genetic,
+        select: 'nombre precio'
+      });
 
     return Response.json({
       success: true,
