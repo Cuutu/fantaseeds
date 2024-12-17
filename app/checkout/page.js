@@ -11,14 +11,39 @@ export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [preferenceId, setPreferenceId] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState('retiro');
-  const [shippingAddress, setShippingAddress] = useState({});
+  const [shippingAddress, setShippingAddress] = useState({
+    calle: '',
+    numero: '',
+    piso: '',
+    depto: '',
+    codigoPostal: '',
+    localidad: '',
+    provincia: '',
+    telefono: ''
+  });
   const router = useRouter();
   const { cart, clearCart } = useCart();
 
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setShippingAddress(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   useEffect(() => {
-    // Crear preferencia automáticamente al cargar el componente
-    createPreference();
-  }, [deliveryMethod]); // Se actualizará cuando cambie el método de entrega
+    if (deliveryMethod === 'retiro' || 
+        (deliveryMethod === 'envio' && 
+         shippingAddress.calle && 
+         shippingAddress.numero && 
+         shippingAddress.codigoPostal && 
+         shippingAddress.localidad && 
+         shippingAddress.provincia && 
+         shippingAddress.telefono)) {
+      createPreference();
+    }
+  }, [deliveryMethod, shippingAddress]);
 
   const createPreference = async () => {
     try {
@@ -88,7 +113,95 @@ export default function Checkout() {
         {deliveryMethod === 'envio' && (
           <div className="mb-8">
             <h3 className="text-white font-semibold mb-4">Dirección de Envío:</h3>
-            {/* Aquí tus campos de dirección */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-300 mb-2">Calle *</label>
+                <input
+                  type="text"
+                  name="calle"
+                  value={shippingAddress.calle}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Número *</label>
+                <input
+                  type="text"
+                  name="numero"
+                  value={shippingAddress.numero}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Piso</label>
+                <input
+                  type="text"
+                  name="piso"
+                  value={shippingAddress.piso}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Departamento</label>
+                <input
+                  type="text"
+                  name="depto"
+                  value={shippingAddress.depto}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Código Postal *</label>
+                <input
+                  type="text"
+                  name="codigoPostal"
+                  value={shippingAddress.codigoPostal}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Localidad *</label>
+                <input
+                  type="text"
+                  name="localidad"
+                  value={shippingAddress.localidad}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Provincia *</label>
+                <input
+                  type="text"
+                  name="provincia"
+                  value={shippingAddress.provincia}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Teléfono *</label>
+                <input
+                  type="tel"
+                  name="telefono"
+                  value={shippingAddress.telefono}
+                  onChange={handleAddressChange}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-green-500 focus:outline-none"
+                  required
+                />
+              </div>
+            </div>
+            <p className="text-gray-400 mt-2 text-sm">* Campos obligatorios</p>
           </div>
         )}
 
@@ -145,4 +258,4 @@ export default function Checkout() {
       </div>
     </div>
   );
-}
+} 
