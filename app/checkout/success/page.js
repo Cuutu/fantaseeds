@@ -1,9 +1,9 @@
 'use client';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 
-export default function Success() {
+function SuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
@@ -44,7 +44,7 @@ export default function Success() {
     };
 
     handleSuccessfulPayment();
-  }, []);
+  }, [searchParams, clearCart, router]);
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
@@ -78,5 +78,17 @@ export default function Success() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function Success() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white">Cargando...</div>
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 } 
