@@ -4,6 +4,10 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import emailjs from '@emailjs/browser';
+import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
+
+// Inicializar MercadoPago con tu public key
+initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY);
 
 export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +26,7 @@ export default function Checkout() {
   const [isUploading, setIsUploading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('');
   const fileInputRef = useRef(null);
+  const [preferenceId, setPreferenceId] = useState(null);
 
   const handleConfirmarPedido = async () => {
     try {
@@ -147,7 +152,7 @@ export default function Checkout() {
     });
   };
 
-  const handleMercadoPago = async () => {
+  const createPreference = async () => {
     try {
       setIsLoading(true);
       
@@ -158,16 +163,17 @@ export default function Checkout() {
         },
         body: JSON.stringify({
           cart,
-          deliveryMethod
+          deliveryMethod,
+          shippingAddress: deliveryMethod === 'envio' ? shippingAddress : null
         }),
       });
 
       const data = await response.json();
       
       if (data.success) {
-        window.location.href = data.init_point;
+        setPreferenceId(data.preferenceId);
       } else {
-        throw new Error(data.error || 'Error al procesar el pago');
+        throw new Error(data.error || 'Error al crear preferencia de pago');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -273,70 +279,52 @@ export default function Checkout() {
       {/* Método de Pago */}
       <div className="bg-gray-800 rounded-lg p-6 mb-6">
         <h2 className="text-xl font-bold text-white mb-4">Método de Pago</h2>
-        <div className="space-y-4">
-          <div className="flex items-center space-x-4">
+        <div className="mt-6 space-y-4">
+          <h3 className="text-white font-semibold mb-4">Método de Pago:</h3>
+          
+          <div className="space-y-3">
             <button
-              onClick={() => setPaymentMethod('efectivo')}
-              className={`px-4 py-2 rounded-lg ${
-                paymentMethod === 'efectivo'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-gray-700 text-gray-300'
-              }`}
+              onClick={() => {
+                setPaymentMethod('mercadopago');
+                createPreference();
+              }}
+              className={`w-full p-4 rounded-lg border ${
+                paymentMethod === 'mercadopago' 
+                  ? 'border-green-500 bg-green-500/10' 
+                  : 'border-gray-700 hover:border-green-500'
+              } transition-colors`}
             >
-              Pagar en Sucursal
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <img 
+                    src="/mercadopago-logo.png" 
+                    alt="Mercado Pago" 
+                    className="h-6"
+                  />
+                  <span className="text-white">Pagar con Mercado Pago</span>
+                </div>
+                {paymentMethod === 'mercadopago' && (
+                  <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
             </button>
-            <button
-              onClick={() => setPaymentMethod('transferencia')}
-              className={`px-4 py-2 rounded-lg ${
-                paymentMethod === 'transferencia'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-gray-700 text-gray-300'
-              }`}
-            >
-              Transferencia Bancaria
-            </button>
+
+            {/* Otros métodos de pago */}
+            {/* ... */}
           </div>
 
-          {/* Mostrar datos bancarios si selecciona transferencia */}
-          {paymentMethod === 'transferencia' && (
-            <div className="mt-4 p-4 bg-gray-700 rounded-lg">
-              <h3 className="text-white font-semibold mb-2">Datos para la transferencia:</h3>
-              <div className="text-gray-300 space-y-2">
-                <p>Banco: Santander</p>
-                <p>CBU: XXXX XXXX XXXX</p>
-                <p>Alias: FANTASEEDS.CLUB</p>
-                <p>Titular: FANTASEEDS SRL</p>
-              </div>
-
-              {/* Sección de subir comprobante */}
-              <div className="mt-4">
-                <h3 className="text-white font-semibold mb-2">Subir Comprobante:</h3>
-                <div className="border-2 border-dashed border-gray-600 rounded-lg p-4">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    onChange={handleFileChange}
-                    accept=".jpg,.jpeg,.png,.pdf,.heic"
-                    className="hidden"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleFileSelect}
-                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors text-lg"
-                  >
-                    {comprobante ? 'Cambiar comprobante' : 'Seleccionar comprobante'}
-                  </button>
-                  
-                  {comprobante && (
-                    <div className="mt-4 text-green-400 flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>{comprobante.nombreArchivo}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+          {/* Botón de Mercado Pago */}
+          {paymentMethod === 'mercadopago' && preferenceId && (
+            <div className="mt-4">
+              <Wallet 
+                initialization={{ preferenceId }}
+                customization={{ 
+                  texts: { valueProp: 'smart_option' },
+                  visual: { buttonBackground: 'black', borderRadius: '6px' }
+                }}
+              />
             </div>
           )}
         </div>

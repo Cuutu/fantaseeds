@@ -49,7 +49,7 @@ export async function POST(request) {
 
     return Response.json({
       success: true,
-      init_point: response.body.init_point
+      preferenceId: response.body.id
     });
 
   } catch (error) {
