@@ -1,6 +1,8 @@
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/route';
+import dbConnect from '@/lib/db/mongodb';
+import Order from '@/models/Order';
 
 const client = new MercadoPagoConfig({ 
   accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN 
@@ -14,12 +16,26 @@ export async function POST(request) {
     }
 
     const data = await request.json();
-    const { cart, deliveryMethod } = data;
+    const { cart, deliveryMethod, shippingAddress } = data;
 
-    // Calcular el total incluyendo envío si corresponde
-    const total = cart.reduce((acc, item) => 
-      acc + (item.genetic.precio * item.cantidad), 0) + 
-      (deliveryMethod === 'envio' ? 500 : 0);
+    await dbConnect();
+
+    // Crear el pedido primero
+    const order = await Order.create({
+      usuario: session.user.id,
+      productos: cart.map(item => ({
+        genetic: item.genetic._id,
+        cantidad: item.cantidad,
+        precio: item.genetic.precio
+      })),
+      total: cart.reduce((acc, item) => 
+        acc + (item.genetic.precio * item.cantidad), 0) + 
+        (deliveryMethod === 'envio' ? 500 : 0),
+      estado: 'pendiente',
+      metodoPago: 'mercadopago',
+      metodoEntrega: deliveryMethod,
+      direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null
+    });
 
     const preference = new Preference(client);
 
@@ -43,7 +59,7 @@ export async function POST(request) {
         pending: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/pending`,
       },
       auto_return: "approved",
-      external_reference: session.user.id,
+      external_reference: order._id.toString(), // Usar el ID del pedido creado
       notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/mercadopago/webhook`,
     };
 
@@ -51,7 +67,8 @@ export async function POST(request) {
 
     return Response.json({
       success: true,
-      preferenceId: response.id
+      preferenceId: response.id,
+      orderId: order._id
     });
 
   } catch (error) {

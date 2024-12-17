@@ -55,6 +55,10 @@ const orderSchema = new mongoose.Schema({
     enum: ['pending', 'approved', 'rejected', 'cancelled'],
     default: 'pending'
   },
+  fechaActualizacion: {
+    type: Date,
+    default: Date.now
+  }
 }, {
   timestamps: true
 });
