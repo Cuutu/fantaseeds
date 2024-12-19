@@ -104,7 +104,29 @@ export default function AdminPedidosPage() {
         console.log('Datos recibidos:', data);
         
         if (data.success) {
-          setPedidos(data.orders);
+          // Asegurarnos de que todos los campos necesarios existan
+          const pedidosFormateados = data.orders.map(pedido => ({
+            _id: pedido._id || '',
+            fechaPedido: pedido.fechaPedido || new Date().toISOString(),
+            estado: pedido.estado || 'pendiente',
+            usuario: {
+              nombreApellido: pedido.usuario?.nombreApellido || 'Usuario no disponible',
+              email: pedido.usuario?.email || 'Email no disponible',
+              usuario: pedido.usuario?.usuario || 'Usuario no disponible'
+            },
+            productos: Array.isArray(pedido.productos) ? pedido.productos.map(prod => ({
+              genetic: {
+                nombre: prod.genetic?.nombre || 'Producto no disponible',
+                precio: prod.genetic?.precio || 0
+              },
+              cantidad: prod.cantidad || 0,
+              precio: prod.precio || 0
+            })) : [],
+            total: pedido.total || 0,
+            metodoPago: pedido.metodoPago || 'mercadopago',
+            metodoEntrega: pedido.metodoEntrega || 'retiro'
+          }));
+          setPedidos(pedidosFormateados);
         } else {
           throw new Error(data.error || 'Error desconocido al cargar pedidos');
         }
@@ -150,7 +172,7 @@ export default function AdminPedidosPage() {
                   <div className="p-4 bg-gray-700 flex justify-between items-center">
                     <div>
                       <h3 className="text-xl font-bold text-white">
-                        Pedido #{pedido._id.slice(-6)}
+                        Pedido #{typeof pedido._id === 'string' ? pedido._id.slice(-6) : 'ID no disponible'}
                       </h3>
                       <p className="text-gray-300">
                         {new Date(pedido.fechaPedido).toLocaleDateString()}
@@ -181,22 +203,22 @@ export default function AdminPedidosPage() {
                   {/* Información del cliente */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
-                    <p className="text-gray-300">Nombre: {pedido.usuario?.nombreApellido || 'Usuario no disponible'}</p>
-                    <p className="text-gray-300">Usuario: {pedido.usuario?.usuario || 'Usuario no disponible'}</p>
-                    <p className="text-gray-300">Email: {pedido.usuario?.email || 'Email no disponible'}</p>
+                    <p className="text-gray-300">Nombre: {pedido.usuario?.nombreApellido}</p>
+                    <p className="text-gray-300">Usuario: {pedido.usuario?.usuario}</p>
+                    <p className="text-gray-300">Email: {pedido.usuario?.email}</p>
                   </div>
 
                   {/* Productos */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Productos</h4>
-                    {pedido.productos?.map((producto, index) => (
+                    {Array.isArray(pedido.productos) && pedido.productos.map((producto, index) => (
                       <div key={index} className="flex justify-between text-gray-300">
-                        <span>{producto.genetic?.nombre || 'Producto no disponible'} x{producto.cantidad}</span>
-                        <span>${producto.precio || 0}</span>
+                        <span>{producto.genetic?.nombre} x{producto.cantidad}</span>
+                        <span>${producto.precio}</span>
                       </div>
                     ))}
                     <div className="text-right font-bold text-white mt-2">
-                      Total: ${pedido.total || 0}
+                      Total: ${pedido.total}
                     </div>
                   </div>
 
