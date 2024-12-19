@@ -207,9 +207,9 @@ export default function AdminPedidosPage() {
                     </p>
                     <div className="mt-2">
                       <span className={`inline-block px-3 py-1 rounded-full text-sm ${
-                        pedido.estado === 'pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
-                        pedido.estado === 'aprobado' ? 'bg-green-500/20 text-green-500' :
-                        pedido.estado === 'rechazado' ? 'bg-red-500/20 text-red-500' :
+                        pedido.estado === 'Pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
+                        pedido.estado === 'Aprobado' ? 'bg-green-500/20 text-green-500' :
+                        pedido.estado === 'Rechazado' ? 'bg-red-500/20 text-red-500' :
                         'bg-gray-500/20 text-gray-500'
                       }`}>
                         {pedido.estado}
