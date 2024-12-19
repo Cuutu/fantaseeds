@@ -6,7 +6,7 @@ import { FaTrash } from 'react-icons/fa';
 export default function AdminPedidosPage() {
   const [pedidos, setPedidos] = useState([]);
   const { data: session, status } = useSession();
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pedidoToDelete, setPedidoToDelete] = useState(null);
@@ -88,60 +88,47 @@ export default function AdminPedidosPage() {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        console.log('Iniciando fetch de pedidos...');
-        setLoading(true);
-        setError(null);
-
-        const response = await fetch('/api/admin/orders', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include'
-        });
-        
+        const response = await fetch('/api/admin/orders');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        console.log('Datos recibidos:', data);
         
         if (data.success) {
-          // Asegurarnos de que todos los campos necesarios existan
-          const pedidosFormateados = data.orders.map(pedido => ({
-            _id: pedido._id || '',
-            fechaPedido: pedido.fechaPedido || new Date().toISOString(),
-            estado: pedido.estado || 'pendiente',
-            usuario: {
-              nombreApellido: pedido.usuario?.nombreApellido || 'Usuario no disponible',
-              email: pedido.usuario?.email || 'Email no disponible',
-              usuario: pedido.usuario?.usuario || 'Usuario no disponible'
-            },
-            productos: Array.isArray(pedido.productos) ? pedido.productos.map(prod => ({
-              genetic: {
-                nombre: prod.genetic?.nombre || 'Producto no disponible',
-                precio: prod.genetic?.precio || 0
-              },
-              cantidad: prod.cantidad || 0,
-              precio: prod.precio || 0
-            })) : [],
-            total: pedido.total || 0,
-            metodoPago: pedido.metodoPago || 'mercadopago',
-            metodoEntrega: pedido.metodoEntrega || 'retiro'
-          }));
-          setPedidos(pedidosFormateados);
+          setPedidos(data.orders);
         } else {
-          throw new Error(data.error || 'Error desconocido al cargar pedidos');
+          throw new Error(data.error || 'Error al cargar los pedidos');
         }
       } catch (error) {
         console.error('Error al cargar los pedidos:', error);
         setError(error.message);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    if (status === 'authenticated' && session?.user?.rol === 'administrador') {
-      fetchPedidos();
-    }
-  }, [session, status]);
+    fetchPedidos();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-900 p-8 flex items-center justify-center">
+        <p className="text-white">Cargando pedidos...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-900 p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-red-500/10 border border-red-500 rounded-lg p-4">
+            <p className="text-red-500">Error: {error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-800">
@@ -155,14 +142,7 @@ export default function AdminPedidosPage() {
       {/* Contenido principal */}
       <div className="p-6">
         <div className="max-w-5xl mx-auto">
-          {loading ? (
-            <div className="text-center p-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
-              <p className="mt-2 text-white">Cargando pedidos...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center p-4 text-red-500">Error: {error}</div>
-          ) : pedidos.length === 0 ? (
+          {pedidos.length === 0 ? (
             <div className="text-center p-4 text-white">No hay pedidos disponibles</div>
           ) : (
             <div className="grid gap-6">
@@ -172,7 +152,7 @@ export default function AdminPedidosPage() {
                   <div className="p-4 bg-gray-700 flex justify-between items-center">
                     <div>
                       <h3 className="text-xl font-bold text-white">
-                        Pedido #{typeof pedido._id === 'string' ? pedido._id.slice(-6) : 'ID no disponible'}
+                        Pedido #{pedido._id.slice(-6)}
                       </h3>
                       <p className="text-gray-300">
                         {new Date(pedido.fechaPedido).toLocaleDateString()}
@@ -203,22 +183,22 @@ export default function AdminPedidosPage() {
                   {/* Información del cliente */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
-                    <p className="text-gray-300">Nombre: {pedido.usuario?.nombreApellido}</p>
-                    <p className="text-gray-300">Usuario: {pedido.usuario?.usuario}</p>
-                    <p className="text-gray-300">Email: {pedido.usuario?.email}</p>
+                    <p className="text-gray-300">{pedido.usuario?.nombre || 'Usuario no disponible'}</p>
+                    <p className="text-gray-300">{pedido.usuario?.usuario || 'Usuario no disponible'}</p>
+                    <p className="text-gray-300">{pedido.usuario?.email || 'Email no disponible'}</p>
                   </div>
 
                   {/* Productos */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Productos</h4>
-                    {Array.isArray(pedido.productos) && pedido.productos.map((producto, index) => (
+                    {pedido.productos?.map((producto, index) => (
                       <div key={index} className="flex justify-between text-gray-300">
-                        <span>{producto.genetic?.nombre} x{producto.cantidad}</span>
-                        <span>${producto.precio}</span>
+                        <span>{producto.genetic?.nombre || 'Producto no disponible'} x{producto.cantidad}</span>
+                        <span>${producto.precio || 0}</span>
                       </div>
                     ))}
                     <div className="text-right font-bold text-white mt-2">
-                      Total: ${pedido.total}
+                      Total: ${pedido.total || 0}
                     </div>
                   </div>
 
