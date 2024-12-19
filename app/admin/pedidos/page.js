@@ -203,16 +203,18 @@ export default function AdminPedidosPage() {
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
                     <p className="text-gray-300">
-                      {pedido.metodoPago === 'efectivo' ? 'Pago en Sucursal' : 'Transferencia Bancaria'}
+                      MercadoPago
                     </p>
-                    {pedido.metodoPago === 'transferencia' && (
-                      <button
-                        onClick={() => handleVerComprobante(pedido._id)}
-                        className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
-                      >
-                        Ver Comprobante
-                      </button>
-                    )}
+                    <div className="mt-2">
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm ${
+                        pedido.estado === 'pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
+                        pedido.estado === 'aprobado' ? 'bg-green-500/20 text-green-500' :
+                        pedido.estado === 'rechazado' ? 'bg-red-500/20 text-red-500' :
+                        'bg-gray-500/20 text-gray-500'
+                      }`}>
+                        {pedido.estado}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
