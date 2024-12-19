@@ -34,7 +34,7 @@ export async function GET() {
       .populate({
         path: 'usuario',
         model: User,
-        select: 'nombreApellido email'
+        select: 'nombreApellido email usuario'
       })
       .populate({
         path: 'productos.genetic',
@@ -43,11 +43,21 @@ export async function GET() {
       })
       .sort({ fechaPedido: -1 });
 
-    console.log('Pedidos encontrados:', orders.length);
+    // Transformar los datos antes de enviarlos
+    const transformedOrders = orders.map(order => ({
+      ...order.toObject(),
+      usuario: {
+        nombre: order.usuario?.nombreApellido || 'Usuario no disponible',
+        email: order.usuario?.email || 'Email no disponible',
+        usuario: order.usuario?.usuario || 'Usuario no disponible'
+      }
+    }));
+
+    console.log('Pedidos encontrados:', transformedOrders.length);
 
     return Response.json({
       success: true,
-      orders
+      orders: transformedOrders
     });
 
   } catch (error) {
