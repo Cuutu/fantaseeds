@@ -11,17 +11,8 @@ import Order from '@/models/Order';
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    console.log('Session antes de DB:', session);
 
-    await dbConnect();
-    console.log('DB conectada');
-
-    // Verificar que los modelos estén registrados
-    const models = mongoose.modelNames();
-    console.log('Modelos registrados:', models);
-    
     if (!session?.user || session.user.rol !== 'administrador') {
-      console.log('No autorizado - rol:', session?.user?.rol);
       return Response.json({ 
         success: false, 
         error: 'No autorizado' 
@@ -29,6 +20,8 @@ export async function GET() {
         status: 401 
       });
     }
+
+    await dbConnect();
 
     const orders = await Order.find({})
       .populate({
@@ -41,19 +34,28 @@ export async function GET() {
         model: Genetic,
         select: 'nombre precio'
       })
+      .lean() // Convertimos a objeto plano
       .sort({ fechaPedido: -1 });
 
-    // Transformar los datos antes de enviarlos
-    const transformedOrders = orders.map(order => ({
-      ...order.toObject(),
-      usuario: {
-        nombre: order.usuario?.nombreApellido || 'Usuario no disponible',
-        email: order.usuario?.email || 'Email no disponible',
-        usuario: order.usuario?.usuario || 'Usuario no disponible'
-      }
-    }));
-
-    console.log('Pedidos encontrados:', transformedOrders.length);
+    // Transformamos los datos asegurándonos de que los campos del usuario existan
+    const transformedOrders = orders.map(order => {
+      const userInfo = order.usuario || {};
+      return {
+        ...order,
+        usuario: {
+          nombre: userInfo.nombreApellido || 'Usuario no disponible',
+          email: userInfo.email || 'Email no disponible',
+          usuario: userInfo.usuario || 'Usuario no disponible'
+        },
+        productos: order.productos.map(producto => ({
+          ...producto,
+          genetic: producto.genetic || { nombre: 'Producto no disponible', precio: 0 }
+        })),
+        metodoPago: 'mercadopago', // Forzamos MercadoPago como método de pago
+        total: order.total || 0,
+        estado: order.estado || 'pendiente'
+      };
+    });
 
     return Response.json({
       success: true,
