@@ -21,8 +21,6 @@ export async function GET() {
       });
     }
 
-    await dbConnect();
-
     const orders = await Order.find({})
       .populate({
         path: 'usuario',
@@ -34,7 +32,6 @@ export async function GET() {
         model: Genetic,
         select: 'nombre precio'
       })
-      .lean() // Convertimos a objeto plano
       .sort({ fechaPedido: -1 });
 
     // Transformamos los datos asegurándonos de que los campos del usuario existan
@@ -51,11 +48,13 @@ export async function GET() {
           ...producto,
           genetic: producto.genetic || { nombre: 'Producto no disponible', precio: 0 }
         })),
-        metodoPago: 'mercadopago', // Forzamos MercadoPago como método de pago
+        metodoPago: 'mercadopago',
         total: order.total || 0,
         estado: order.estado || 'pendiente'
       };
     });
+
+    console.log('Pedidos encontrados:', transformedOrders.length);
 
     return Response.json({
       success: true,

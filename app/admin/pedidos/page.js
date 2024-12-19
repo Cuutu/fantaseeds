@@ -181,9 +181,9 @@ export default function AdminPedidosPage() {
                   {/* Información del cliente */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
-                    <p className="text-gray-300">{pedido.usuario?.nombre || 'Usuario no disponible'}</p>
-                    <p className="text-gray-300">{pedido.usuario?.usuario || 'Usuario no disponible'}</p>
-                    <p className="text-gray-300">{pedido.usuario?.email || 'Email no disponible'}</p>
+                    <p className="text-gray-300">Nombre: {pedido.usuario?.nombreApellido || 'Usuario no disponible'}</p>
+                    <p className="text-gray-300">Usuario: {pedido.usuario?.usuario || 'Usuario no disponible'}</p>
+                    <p className="text-gray-300">Email: {pedido.usuario?.email || 'Email no disponible'}</p>
                   </div>
 
                   {/* Productos */}
