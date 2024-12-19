@@ -181,21 +181,21 @@ export default function AdminPedidosPage() {
                   {/* Información del cliente */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
-                    <p className="text-gray-300">{pedido.usuario.nombre}</p>
-                    <p className="text-gray-300">{pedido.usuario.email}</p>
+                    <p className="text-gray-300">{pedido.usuario?.nombre || 'Usuario no disponible'}</p>
+                    <p className="text-gray-300">{pedido.usuario?.email || 'Email no disponible'}</p>
                   </div>
 
                   {/* Productos */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Productos</h4>
-                    {pedido.productos.map((producto, index) => (
+                    {pedido.productos?.map((producto, index) => (
                       <div key={index} className="flex justify-between text-gray-300">
-                        <span>{producto.genetic.nombre} x{producto.cantidad}</span>
-                        <span>${producto.precio}</span>
+                        <span>{producto.genetic?.nombre || 'Producto no disponible'} x{producto.cantidad}</span>
+                        <span>${producto.precio || 0}</span>
                       </div>
                     ))}
                     <div className="text-right font-bold text-white mt-2">
-                      Total: ${pedido.total}
+                      Total: ${pedido.total || 0}
                     </div>
                   </div>
 
