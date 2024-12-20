@@ -12,6 +12,7 @@ export default function AdminPedidosPage() {
   const [pedidoToDelete, setPedidoToDelete] = useState(null);
   const [selectedComprobante, setSelectedComprobante] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const estadosPedido = [
     { value: 'pendiente', label: 'Pendiente', color: 'bg-yellow-500' },
@@ -121,6 +122,18 @@ export default function AdminPedidosPage() {
     }
   }, [session, status]);
 
+  // Función para filtrar pedidos
+  const filteredPedidos = pedidos.filter(pedido => 
+    // Buscar por ID (últimos 6 caracteres)
+    pedido._id.slice(-6).toLowerCase().includes(searchTerm.toLowerCase()) ||
+    // Buscar por nombre del comprador
+    (pedido.compradorInfo?.nombre + ' ' + pedido.compradorInfo?.apellido)
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase()) ||
+    // Buscar por email
+    pedido.compradorInfo?.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-gray-800">
       {/* Header con título - aumentamos el padding-top */}
@@ -133,6 +146,31 @@ export default function AdminPedidosPage() {
       {/* Contenido principal */}
       <div className="p-6">
         <div className="max-w-5xl mx-auto">
+          {/* Buscador */}
+          <div className="mb-6">
+            <div className="relative max-w-md">
+              <input
+                type="text"
+                placeholder="Buscar por Nº de pedido, nombre o email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full p-3 pl-10 bg-gray-700 text-white rounded-lg 
+                         focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+
           {loading ? (
             <div className="text-center p-4">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
@@ -144,7 +182,7 @@ export default function AdminPedidosPage() {
             <div className="text-center p-4 text-white">No hay pedidos disponibles</div>
           ) : (
             <div className="grid gap-6">
-              {pedidos.map((pedido) => (
+              {filteredPedidos.map((pedido) => (
                 <div key={pedido._id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
                   {/* Cabecera del pedido */}
                   <div className="p-4 bg-gray-700 flex justify-between items-center">
