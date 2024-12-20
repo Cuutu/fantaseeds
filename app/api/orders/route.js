@@ -83,7 +83,8 @@ export async function GET(request) {
   try {
     await dbConnect();
     
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
+    
     if (!session) {
       return Response.json({ 
         success: false, 
@@ -93,9 +94,12 @@ export async function GET(request) {
       });
     }
 
-    const orders = await Order.find({ usuario: session.user.id })
-      .populate('productos.genetic')
-      .sort({ createdAt: -1 });
+    // Obtener todos los pedidos y poblar la información necesaria
+    const orders = await Order.find({})
+      .populate('usuario', 'nombreApellido email')
+      .sort({ fechaPedido: -1 }); // Ordenar por fecha, más recientes primero
+
+    console.log('Pedidos encontrados:', orders.length); // Debug
 
     return Response.json({
       success: true,
@@ -103,9 +107,10 @@ export async function GET(request) {
     });
 
   } catch (error) {
+    console.error('Error en GET /api/orders:', error);
     return Response.json({ 
       success: false, 
-      error: error.message 
+      error: 'Error al obtener pedidos: ' + error.message 
     }, { 
       status: 500 
     });
