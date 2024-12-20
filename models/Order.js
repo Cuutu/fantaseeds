@@ -6,6 +6,11 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  compradorInfo: {
+    nombre: String,
+    apellido: String,
+    email: String
+  },
   productos: [{
     genetic: {
       type: mongoose.Schema.Types.ObjectId,

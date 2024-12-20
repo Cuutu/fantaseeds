@@ -11,15 +11,20 @@ export async function POST(request) {
     }
 
     await dbConnect();
-    const { paymentId, status, externalReference } = await request.json();
+    const { paymentId, status, externalReference, payer } = await request.json();
 
-    // Actualizar el estado del pedido
+    // Actualizar el estado del pedido con la información del comprador
     const order = await Order.findByIdAndUpdate(
       externalReference,
       {
         $set: {
           estado: status === 'approved' ? 'confirmado' : status,
-          pagoId: paymentId
+          pagoId: paymentId,
+          compradorInfo: {
+            nombre: payer?.first_name || '',
+            apellido: payer?.last_name || '',
+            email: payer?.email || ''
+          }
         }
       },
       { new: true }

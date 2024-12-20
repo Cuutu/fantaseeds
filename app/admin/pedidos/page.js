@@ -88,26 +88,29 @@ export default function AdminPedidosPage() {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await fetch('/api/admin/orders');
-        
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({
-            message: `Error HTTP: ${response.status}`
-          }));
-          throw new Error(errorData.message || 'Error al cargar los pedidos');
-        }
+        console.log('Iniciando fetch de pedidos...');
+        setLoading(true);
+        setError(null);
 
+        const response = await fetch('/api/admin/orders', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+        
         const data = await response.json();
+        console.log('Datos recibidos:', data);
         
-        if (!data.success) {
-          throw new Error(data.message || 'Error al cargar los pedidos');
+        if (data.success) {
+          setPedidos(data.orders);
+        } else {
+          throw new Error(data.error || 'Error desconocido al cargar pedidos');
         }
-
-        setPedidos(data.orders || []);
-        
       } catch (error) {
         console.error('Error al cargar los pedidos:', error);
-        setError(error.message || 'Error al cargar los pedidos');
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -178,9 +181,21 @@ export default function AdminPedidosPage() {
                   {/* Información del cliente */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
-                    <p className="text-gray-300">{pedido.usuario?.nombre || 'Usuario no disponible'}</p>
-                    <p className="text-gray-300">{pedido.usuario?.usuario || 'Usuario no disponible'}</p>
-                    <p className="text-gray-300">{pedido.usuario?.email || 'Email no disponible'}</p>
+                    {pedido.compradorInfo ? (
+                      <>
+                        <p className="text-gray-300">
+                          Nombre: {`${pedido.compradorInfo.nombre} ${pedido.compradorInfo.apellido}`.trim() || 'No disponible'}
+                        </p>
+                        <p className="text-gray-300">
+                          Email: {pedido.compradorInfo.email || 'No disponible'}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-gray-300">Nombre: {pedido.usuario?.nombreApellido || 'Usuario no disponible'}</p>
+                        <p className="text-gray-300">Email: {pedido.usuario?.email || 'Email no disponible'}</p>
+                      </>
+                    )}
                   </div>
 
                   {/* Productos */}
