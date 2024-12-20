@@ -10,78 +10,65 @@ import Order from '@/models/Order';
 
 export async function GET() {
   try {
+    // Verificar la sesión
     const session = await getServerSession(authOptions);
-
+    
     if (!session?.user || session.user.rol !== 'administrador') {
       return Response.json({ 
         success: false, 
-        error: 'No autorizado' 
+        message: 'No autorizado' 
       }, { 
         status: 401 
       });
     }
 
+    // Conectar a la base de datos
+    await dbConnect();
+
+    // Obtener los pedidos
     const orders = await Order.find({})
-      .populate({
-        path: 'usuario',
-        model: User,
-        select: 'nombreApellido email usuario'
-      })
-      .populate({
-        path: 'productos.genetic',
-        model: Genetic,
-        select: 'nombre precio'
-      })
+      .populate('usuario', 'nombreApellido email usuario')
+      .populate('productos.genetic', 'nombre precio')
+      .lean()
       .sort({ fechaPedido: -1 });
 
-    // Transformar los datos antes de enviarlos
+    // Transformar y validar los datos
     const transformedOrders = orders.map(order => ({
-      ...order.toObject(),
+      _id: order._id?.toString() || '',
+      fechaPedido: order.fechaPedido || new Date(),
+      estado: order.estado || 'pendiente',
+      metodoPago: 'mercadopago',
+      metodoEntrega: order.metodoEntrega || 'retiro',
+      total: order.total || 0,
       usuario: {
         nombreApellido: order.usuario?.nombreApellido || 'Usuario no disponible',
         email: order.usuario?.email || 'Email no disponible',
         usuario: order.usuario?.usuario || 'Usuario no disponible'
-      }
+      },
+      productos: (order.productos || []).map(producto => ({
+        genetic: {
+          nombre: producto.genetic?.nombre || 'Producto no disponible',
+          precio: producto.genetic?.precio || 0
+        },
+        cantidad: producto.cantidad || 0,
+        precio: producto.precio || 0
+      }))
     }));
 
-    console.log('Pedidos encontrados:', transformedOrders.length);
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        orders: transformedOrders.map(order => {
-          const userInfo = order.usuario || {};
-          return {
-            ...order,
-            usuario: {
-              nombreApellido: userInfo.nombreApellido || 'Usuario no disponible',
-              email: userInfo.email || 'Email no disponible',
-              usuario: userInfo.usuario || 'Usuario no disponible'
-            },
-            productos: (order.productos || []).map(producto => ({
-              genetic: {
-                nombre: producto.genetic?.nombre || 'Producto no disponible',
-                precio: producto.genetic?.precio || 0
-              },
-              cantidad: producto.cantidad || 0,
-              precio: producto.precio || 0
-            }))
-          };
-        })
-      }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    // Devolver respuesta exitosa
+    return Response.json({
+      success: true,
+      orders: transformedOrders
+    });
 
   } catch (error) {
-    console.error('Error completo:', error);
+    console.error('Error en GET /api/admin/orders:', error);
+    
+    // Asegurarse de que el error siempre sea un objeto JSON válido
     return Response.json({ 
       success: false, 
-      error: error.message 
+      message: 'Error interno del servidor',
+      error: error.message || 'Error desconocido'
     }, { 
       status: 500 
     });
