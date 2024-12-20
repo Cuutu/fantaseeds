@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import Genetic from '@/models/Genetic';
 
 const client = new MercadoPagoConfig({ 
   accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN 
@@ -20,7 +21,27 @@ export async function POST(request) {
 
     await dbConnect();
 
-    // Crear el pedido primero
+    // Validar stock antes de crear el pedido
+    for (const item of cart) {
+      const genetic = await Genetic.findById(item.genetic._id);
+      
+      if (!genetic) {
+        return Response.json({
+          success: false,
+          error: `Producto no encontrado: ${item.genetic.nombre}`
+        }, { status: 400 });
+      }
+
+      if (genetic.stockDisponible < item.cantidad) {
+        return Response.json({
+          success: false,
+          error: `Stock insuficiente para ${genetic.nombre}. Disponible: ${genetic.stockDisponible}`
+        }, { status: 400 });
+      }
+    }
+
+    // Si llegamos aquí, hay stock suficiente
+    // Crear el pedido
     const order = await Order.create({
       usuario: session.user.id,
       productos: cart.map(item => ({
