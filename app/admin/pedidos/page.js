@@ -6,7 +6,7 @@ import { FaTrash } from 'react-icons/fa';
 export default function AdminPedidosPage() {
   const [pedidos, setPedidos] = useState([]);
   const { data: session, status } = useSession();
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pedidoToDelete, setPedidoToDelete] = useState(null);
@@ -88,47 +88,38 @@ export default function AdminPedidosPage() {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await fetch('/api/admin/orders');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        console.log('Iniciando fetch de pedidos...');
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch('/api/admin/orders', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+        
         const data = await response.json();
+        console.log('Datos recibidos:', data);
         
         if (data.success) {
           setPedidos(data.orders);
         } else {
-          throw new Error(data.error || 'Error al cargar los pedidos');
+          throw new Error(data.error || 'Error desconocido al cargar pedidos');
         }
       } catch (error) {
         console.error('Error al cargar los pedidos:', error);
         setError(error.message);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    fetchPedidos();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-900 p-8 flex items-center justify-center">
-        <p className="text-white">Cargando pedidos...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-900 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-red-500/10 border border-red-500 rounded-lg p-4">
-            <p className="text-red-500">Error: {error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+    if (status === 'authenticated' && session?.user?.rol === 'administrador') {
+      fetchPedidos();
+    }
+  }, [session, status]);
 
   return (
     <div className="min-h-screen bg-gray-800">
@@ -142,7 +133,14 @@ export default function AdminPedidosPage() {
       {/* Contenido principal */}
       <div className="p-6">
         <div className="max-w-5xl mx-auto">
-          {pedidos.length === 0 ? (
+          {loading ? (
+            <div className="text-center p-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+              <p className="mt-2 text-white">Cargando pedidos...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center p-4 text-red-500">Error: {error}</div>
+          ) : pedidos.length === 0 ? (
             <div className="text-center p-4 text-white">No hay pedidos disponibles</div>
           ) : (
             <div className="grid gap-6">
@@ -183,7 +181,7 @@ export default function AdminPedidosPage() {
                   {/* Información del cliente */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
-                    <p className="text-gray-300">{pedido.usuario?.nombre || 'Usuario no disponible'}</p>
+                    <p className="text-gray-300">{pedido.usuario?.nombreApellido || 'Usuario no disponible'}</p>
                     <p className="text-gray-300">{pedido.usuario?.usuario || 'Usuario no disponible'}</p>
                     <p className="text-gray-300">{pedido.usuario?.email || 'Email no disponible'}</p>
                   </div>
