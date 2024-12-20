@@ -272,8 +272,10 @@ export default function AdminPedidosPage() {
                     <h4 className="text-white font-semibold mb-2">Productos</h4>
                     {pedido.productos?.map((producto, index) => (
                       <div key={index} className="flex justify-between text-gray-300">
-                        <span>{producto.genetic?.nombre || 'Producto no disponible'} x{producto.cantidad}</span>
-                        <span>${producto.precio || 0}</span>
+                        <span>
+                          {producto.genetic?.nombre || 'Producto eliminado'} x{producto.cantidad}
+                        </span>
+                        <span>${producto.precio * producto.cantidad}</span>
                       </div>
                     ))}
                     <div className="text-right font-bold text-white mt-2">

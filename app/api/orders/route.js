@@ -94,12 +94,11 @@ export async function GET(request) {
       });
     }
 
-    // Obtener todos los pedidos y poblar la información necesaria
+    // Modificamos la consulta para poblar la información de los productos
     const orders = await Order.find({})
       .populate('usuario', 'nombreApellido email')
-      .sort({ fechaPedido: -1 }); // Ordenar por fecha, más recientes primero
-
-    console.log('Pedidos encontrados:', orders.length); // Debug
+      .populate('productos.genetic', 'nombre precio')
+      .sort({ fechaPedido: -1 });
 
     return Response.json({
       success: true,
