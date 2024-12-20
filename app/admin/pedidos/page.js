@@ -13,14 +13,14 @@ export default function AdminPedidosPage() {
   const [selectedComprobante, setSelectedComprobante] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('todos');
 
   const estadosPedido = [
-    { value: 'pendiente', label: 'Pendiente', color: 'bg-yellow-500' },
-    { value: 'en_curso', label: 'En curso', color: 'bg-purple-500' },
-    { value: 'pendiente_envio', label: 'Pendiente de envío', color: 'bg-blue-500' },
-    { value: 'pendiente_retiro', label: 'Pendiente de retiro', color: 'bg-orange-500' },
-    { value: 'completada', label: 'Completada', color: 'bg-green-500' },
-    { value: 'cancelada', label: 'Cancelada', color: 'bg-red-500' }
+    { value: 'todos', label: 'Todos los estados' },
+    { value: 'pendiente', label: 'Pendiente' },
+    { value: 'confirmado', label: 'Confirmado' },
+    { value: 'completado', label: 'Completado' },
+    { value: 'cancelado', label: 'Cancelado' }
   ];
 
   const actualizarEstado = async (orderId, nuevoEstado) => {
@@ -124,21 +124,19 @@ export default function AdminPedidosPage() {
   const filteredPedidos = pedidos.filter(pedido => {
     const searchLower = searchTerm.toLowerCase();
     
-    // Buscar por ID
-    const matchesId = pedido._id.slice(-6).toLowerCase().includes(searchLower);
-    
-    // Buscar por información del comprador
-    const matchesComprador = 
+    // Filtro por búsqueda
+    const matchesSearch = 
+      pedido._id.slice(-6).toLowerCase().includes(searchLower) ||
       pedido.compradorInfo?.nombre?.toLowerCase().includes(searchLower) ||
       pedido.compradorInfo?.apellido?.toLowerCase().includes(searchLower) ||
-      pedido.compradorInfo?.email?.toLowerCase().includes(searchLower);
-    
-    // Buscar por información del usuario
-    const matchesUsuario = 
+      pedido.compradorInfo?.email?.toLowerCase().includes(searchLower) ||
       pedido.usuario?.nombreApellido?.toLowerCase().includes(searchLower) ||
       pedido.usuario?.email?.toLowerCase().includes(searchLower);
 
-    return matchesId || matchesComprador || matchesUsuario;
+    // Filtro por estado
+    const matchesStatus = statusFilter === 'todos' || pedido.estado === statusFilter;
+
+    return matchesSearch && matchesStatus;
   });
 
   return (
@@ -153,9 +151,10 @@ export default function AdminPedidosPage() {
       {/* Contenido principal */}
       <div className="p-6">
         <div className="max-w-5xl mx-auto">
-          {/* Buscador */}
-          <div className="mb-6">
-            <div className="relative max-w-md">
+          {/* Filtros */}
+          <div className="mb-6 space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
+            {/* Buscador */}
+            <div className="relative flex-1 max-w-md">
               <input
                 type="text"
                 placeholder="Buscar por Nº de pedido, nombre o email..."
@@ -176,7 +175,32 @@ export default function AdminPedidosPage() {
                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
+
+            {/* Selector de estado */}
+            <div className="flex-shrink-0">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full sm:w-auto p-3 bg-gray-700 text-white rounded-lg 
+                         border border-gray-600 focus:outline-none focus:ring-2 
+                         focus:ring-green-500 cursor-pointer"
+              >
+                {estadosPedido.map((estado) => (
+                  <option key={estado.value} value={estado.value}>
+                    {estado.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+
+          {/* Contador de resultados */}
+          {(searchTerm || statusFilter !== 'todos') && (
+            <p className="text-sm text-gray-400 mb-4">
+              {filteredPedidos.length} 
+              {filteredPedidos.length === 1 ? ' resultado encontrado' : ' resultados encontrados'}
+            </p>
+          )}
 
           {loading ? (
             <div className="text-center p-4">
