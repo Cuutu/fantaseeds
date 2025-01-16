@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 const geneticSchema = new mongoose.Schema({
   nombre: {
     type: String,
-    required: [true, 'El nombre es requerido']
+    required: true
   },
   precio: {
     type: Number,
-    required: [true, 'El precio es requerido']
+    required: true
   },
   thc: {
     type: Number,
@@ -15,7 +15,13 @@ const geneticSchema = new mongoose.Schema({
   },
   stock: {
     type: Number,
-    required: [true, 'El stock es requerido']
+    required: true,
+    min: 0
+  },
+  stockDisponible: {
+    type: Number,
+    required: true,
+    min: 0
   },
   descripcion: String,
   imagen: {
@@ -28,6 +34,14 @@ const geneticSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
+});
+
+// Middleware para sincronizar stock y stockDisponible si es necesario
+geneticSchema.pre('save', function(next) {
+  if (this.isNew && !this.stockDisponible) {
+    this.stockDisponible = this.stock;
+  }
+  next();
 });
 
 export default mongoose.models.Genetic || mongoose.model('Genetic', geneticSchema); 

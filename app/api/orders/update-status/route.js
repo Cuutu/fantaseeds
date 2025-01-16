@@ -14,29 +14,43 @@ export async function POST(request) {
     await dbConnect();
     const { paymentId, status, externalReference, payer } = await request.json();
 
-    // Buscar el pedido primero
+    // Buscar el pedido
     const order = await Order.findById(externalReference);
     
     if (!order) {
       return Response.json({ error: 'Pedido no encontrado' }, { status: 404 });
     }
 
-    // Si el pago fue aprobado y el estado anterior no era 'confirmado',
-    // actualizamos el stock
+    // Actualizar stock solo si el pago fue aprobado y el pedido no estaba ya confirmado
     if (status === 'approved' && order.estado !== 'confirmado') {
-      // Actualizamos el stock de cada producto
+      // Actualizar el stock de cada producto
       for (const producto of order.productos) {
-        await Genetic.findByIdAndUpdate(
-          producto.genetic,
-          {
-            $inc: { stockDisponible: -producto.cantidad }
-          },
-          { new: true }
-        );
+        const genetic = await Genetic.findById(producto.genetic);
+        
+        if (genetic) {
+          // Verificar que hay stock suficiente
+          if (genetic.stockDisponible < producto.cantidad) {
+            return Response.json({
+              error: `Stock insuficiente para ${genetic.nombre}`
+            }, { status: 400 });
+          }
+
+          // Actualizar el stock
+          await Genetic.findByIdAndUpdate(
+            producto.genetic,
+            { 
+              $inc: { 
+                stockDisponible: -producto.cantidad,
+                stock: -producto.cantidad 
+              } 
+            },
+            { new: true }
+          );
+        }
       }
     }
 
-    // Actualizamos el pedido con la información del comprador y el nuevo estado
+    // Actualizar el estado del pedido
     const updatedOrder = await Order.findByIdAndUpdate(
       externalReference,
       {
@@ -59,7 +73,7 @@ export async function POST(request) {
     });
 
   } catch (error) {
-    console.error('Error al actualizar el estado del pedido:', error);
+    console.error('Error al actualizar estado:', error);
     return Response.json({ 
       success: false, 
       error: error.message 
