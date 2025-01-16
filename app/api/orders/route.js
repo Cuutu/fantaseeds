@@ -31,7 +31,18 @@ export async function POST(request) {
       });
     }
 
-    // Crear el pedido
+    // Validar stock disponible antes de crear el pedido
+    for (const producto of data.productos) {
+      const genetic = await Genetic.findById(producto.genetic._id);
+      if (!genetic || genetic.stockDisponible < producto.cantidad) {
+        return Response.json({
+          success: false,
+          error: `Stock insuficiente para ${genetic?.nombre || 'producto'}`
+        }, { status: 400 });
+      }
+    }
+
+    // Crear el pedido sin modificar el stock
     const order = await Order.create({
       usuario: session.user.id,
       productos: data.productos,
@@ -52,14 +63,6 @@ export async function POST(request) {
         tipoArchivo: data.comprobante.tipoArchivo,
         tamano: Buffer.from(data.comprobante.archivo, 'base64').length
       });
-    }
-
-    // Actualizar stock
-    for (const producto of data.productos) {
-      await Genetic.findByIdAndUpdate(
-        producto.genetic,
-        { $inc: { stock: -producto.cantidad } }
-      );
     }
 
     return Response.json({

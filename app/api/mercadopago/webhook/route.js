@@ -1,6 +1,7 @@
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import Genetic from '@/models/Genetic';
 
 const client = new MercadoPagoConfig({ 
   accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN 
@@ -16,7 +17,37 @@ export async function POST(request) {
       
       await dbConnect();
       
-      // Actualizar el estado del pedido según el pago
+      const order = await Order.findById(paymentInfo.external_reference);
+      
+      if (!order) {
+        throw new Error('Pedido no encontrado');
+      }
+
+      // Solo actualizar stock si el pago fue aprobado y el pedido no estaba ya confirmado
+      if (paymentInfo.status === 'approved' && order.estado !== 'confirmado') {
+        for (const producto of order.productos) {
+          const genetic = await Genetic.findById(producto.genetic);
+          
+          if (genetic) {
+            if (genetic.stockDisponible < producto.cantidad) {
+              throw new Error(`Stock insuficiente para ${genetic.nombre}`);
+            }
+
+            await Genetic.findByIdAndUpdate(
+              producto.genetic,
+              { 
+                $inc: { 
+                  stockDisponible: -producto.cantidad,
+                  stock: -producto.cantidad 
+                } 
+              },
+              { new: true }
+            );
+          }
+        }
+      }
+      
+      // Actualizar el estado del pedido
       await Order.findByIdAndUpdate(
         paymentInfo.external_reference,
         {
