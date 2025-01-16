@@ -63,6 +63,20 @@ const orderSchema = new mongoose.Schema({
   fechaActualizacion: {
     type: Date,
     default: Date.now
+  },
+  informacionCliente: {
+    nombre: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true
+    },
+    telefono: {
+      type: String,
+      required: false
+    }
   }
 }, {
   timestamps: true

@@ -4,6 +4,7 @@ import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
 import Comprobante from '@/models/Comprobante';
 import Genetic from '@/models/Genetic';
+import User from '@/models/User';
 
 export async function POST(request) {
   try {
@@ -42,7 +43,18 @@ export async function POST(request) {
       }
     }
 
-    // Crear el pedido sin modificar el stock
+    // Obtener la información completa del usuario
+    const usuario = await User.findById(session.user.id);
+    if (!usuario) {
+      return Response.json({ 
+        success: false, 
+        error: 'Usuario no encontrado' 
+      }, { 
+        status: 404 
+      });
+    }
+
+    // Crear el pedido con la información del usuario
     const order = await Order.create({
       usuario: session.user.id,
       productos: data.productos,
@@ -50,7 +62,13 @@ export async function POST(request) {
       estado: 'pendiente',
       metodoPago: data.metodoPago,
       metodoEntrega: data.metodoEntrega,
-      direccionEnvio: data.direccionEnvio
+      direccionEnvio: data.direccionEnvio,
+      // Agregar información del cliente
+      informacionCliente: {
+        nombre: usuario.nombre || usuario.name,
+        email: usuario.email,
+        telefono: usuario.telefono
+      }
     });
 
     // Si es transferencia, crear el comprobante
