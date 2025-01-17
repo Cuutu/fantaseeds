@@ -21,7 +21,11 @@ const geneticSchema = new mongoose.Schema({
   stockDisponible: {
     type: Number,
     required: true,
-    min: 0
+    min: [0, 'El stock no puede ser negativo'],
+    validate: {
+      validator: Number.isInteger,
+      message: 'El stock debe ser un número entero'
+    }
   },
   descripcion: String,
   imagen: {

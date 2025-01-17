@@ -32,11 +32,17 @@ export async function POST(request) {
         }, { status: 400 });
       }
 
-      // Convertir a números para asegurar una comparación correcta
-      const stockDisponible = Number(genetic.stockDisponible);
-      const cantidadSolicitada = Number(item.cantidad);
+      // Asegurar que los valores sean enteros positivos
+      const stockDisponible = Math.max(0, Number(genetic.stockDisponible));
+      const cantidadSolicitada = Math.max(0, Number(item.cantidad));
 
-      if (isNaN(stockDisponible) || isNaN(cantidadSolicitada) || stockDisponible < cantidadSolicitada) {
+      console.log(`Validando stock para ${genetic.nombre}:`, {
+        stockDisponible,
+        cantidadSolicitada,
+        stockActual: genetic.stockDisponible
+      });
+
+      if (stockDisponible < cantidadSolicitada) {
         return Response.json({
           success: false,
           error: `Stock insuficiente para ${genetic.nombre}. Disponible: ${stockDisponible}`
