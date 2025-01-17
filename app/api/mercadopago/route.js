@@ -23,7 +23,8 @@ export async function POST(request) {
 
     // Validar stock antes de crear el pedido
     for (const item of cart) {
-      const genetic = await Genetic.findById(item.genetic._id);
+      // Obtener el producto directamente de la base de datos usando lean() para mejor rendimiento
+      const genetic = await Genetic.findById(item.genetic._id).lean();
       
       if (!genetic) {
         return Response.json({
@@ -32,14 +33,15 @@ export async function POST(request) {
         }, { status: 400 });
       }
 
-      // Asegurar que los valores sean enteros positivos
-      const stockDisponible = Math.max(0, Number(genetic.stockDisponible));
-      const cantidadSolicitada = Math.max(0, Number(item.cantidad));
+      // Usar directamente el valor de la base de datos sin transformaciones
+      const stockDisponible = genetic.stockDisponible;
+      const cantidadSolicitada = item.cantidad;
 
-      console.log(`Validando stock para ${genetic.nombre}:`, {
+      console.log('Debug stock:', {
+        producto: genetic.nombre,
+        stockDB: genetic.stockDisponible,
         stockDisponible,
-        cantidadSolicitada,
-        stockActual: genetic.stockDisponible
+        cantidadSolicitada
       });
 
       if (stockDisponible < cantidadSolicitada) {

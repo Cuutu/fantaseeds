@@ -21,11 +21,9 @@ const geneticSchema = new mongoose.Schema({
   stockDisponible: {
     type: Number,
     required: true,
-    min: [0, 'El stock no puede ser negativo'],
-    validate: {
-      validator: Number.isInteger,
-      message: 'El stock debe ser un número entero'
-    }
+    default: 0,
+    get: v => Math.round(v),
+    set: v => Math.round(v)
   },
   descripcion: String,
   imagen: {
@@ -37,7 +35,9 @@ const geneticSchema = new mongoose.Schema({
     default: true
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { getters: true },
+  toObject: { getters: true }
 });
 
 // Middleware para sincronizar stock y stockDisponible si es necesario
