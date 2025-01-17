@@ -4,6 +4,7 @@ import { authOptions } from '../auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
 import Genetic from '@/models/Genetic';
+import User from '@/models/User';
 
 const client = new MercadoPagoConfig({ 
   accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN 
@@ -50,6 +51,17 @@ export async function POST(request) {
       }
     }
 
+    // Obtener la información completa del usuario antes de crear el pedido
+    const usuario = await User.findById(session.user.id);
+    if (!usuario) {
+      return Response.json({ 
+        success: false, 
+        error: 'Usuario no encontrado' 
+      }, { 
+        status: 404 
+      });
+    }
+
     // Si llegamos aquí, hay stock suficiente
     // Crear el pedido
     const order = await Order.create({
@@ -65,7 +77,13 @@ export async function POST(request) {
       estado: 'pendiente',
       metodoPago: 'mercadopago',
       metodoEntrega: deliveryMethod,
-      direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null
+      direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
+      // Agregar información del cliente
+      informacionCliente: {
+        nombre: usuario.nombre || usuario.name,
+        email: usuario.email,
+        telefono: usuario.telefono
+      }
     });
 
     const preference = new Preference(client);
