@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import GeneticList from '@/components/GeneticList';
@@ -84,25 +84,40 @@ export default function Genetics() {
         <div className="flex justify-end mb-4">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-500"
+            className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
           >
-            {showFilters ? 'Ocultar filtros' : 'Mostrar filtros'}
+            Filtros
+            <svg
+              className={`w-4 h-4 transition-transform duration-200 ${
+                showFilters ? 'rotate-180' : ''
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Panel de filtros */}
+        {/* Panel de filtros y lista */}
+        <div className="relative">
           {showFilters && (
-            <div className="lg:w-1/4">
+            <div className="absolute top-0 right-0 z-10 w-72">
               <GeneticFilter 
                 onFilter={handleFilter} 
                 maxPrice={Math.max(...genetics.map(g => g.precio), 10000)}
               />
             </div>
           )}
-
+          
           {/* Lista de genéticas */}
-          <div className={`${showFilters ? 'lg:w-3/4' : 'w-full'}`}>
+          <div className="w-full">
             <GeneticList geneticas={filteredGenetics} />
           </div>
         </div>
