@@ -28,7 +28,7 @@ export default function Genetics() {
       if (data.success) {
         setGenetics(data.genetics);
       } else {
-        throw new Error(data.error || 'Error desconocido');
+        throw new Error(data.error || 'Error desconocido.');
       }
     } catch (error) {
       console.error('Error fetching genetics:', error);
