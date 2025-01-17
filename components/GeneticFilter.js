@@ -55,87 +55,110 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose }) {
   };
 
   return (
-    <div className="bg-[#1E2023] p-4 rounded-lg border border-gray-700 shadow-lg w-72">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-white text-lg font-bold">Filtrar</h2>
+    <div className="h-full bg-yellow-400 p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-black text-xl font-bold">Filter</h2>
         <button 
           onClick={onClose}
-          className="text-gray-400 hover:text-white transition-colors"
+          className="text-black hover:text-gray-700 text-2xl"
         >
           ×
         </button>
       </div>
 
-      {/* Disponibilidad */}
-      <div className="mb-6">
-        <h3 className="text-white font-semibold mb-2">Disponibilidad</h3>
-        <div className="space-y-2">
-          <label className="flex items-center space-x-2">
+      {/* Availability */}
+      <div className="mb-8">
+        <h3 className="text-black font-semibold mb-4 flex items-center justify-between">
+          Availability
+          <svg 
+            className="w-4 h-4" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </h3>
+        <div className="space-y-3">
+          <label className="flex items-center space-x-3">
             <input
               type="checkbox"
               checked={availability.inStock}
               onChange={() => handleAvailabilityChange('inStock')}
-              className="form-checkbox bg-gray-700 border-gray-600 text-green-500"
+              className="form-checkbox text-black border-black"
             />
-            <span className="text-gray-300">En stock</span>
+            <span className="text-black">In stock</span>
           </label>
-          <label className="flex items-center space-x-2">
+          <label className="flex items-center space-x-3">
             <input
               type="checkbox"
               checked={availability.outOfStock}
               onChange={() => handleAvailabilityChange('outOfStock')}
-              className="form-checkbox bg-gray-700 border-gray-600 text-green-500"
+              className="form-checkbox text-black border-black"
             />
-            <span className="text-gray-300">Sin stock</span>
+            <span className="text-black">Out of stock</span>
           </label>
         </div>
       </div>
 
-      {/* Precio */}
-      <div className="mb-6">
-        <h3 className="text-white font-semibold mb-4">Precio</h3>
-        <div className="flex justify-between items-center space-x-4">
-          <div className="flex items-center">
-            <span className="text-gray-300 mr-2">$</span>
-            <input
-              type="number"
-              min="0"
-              max={priceRange[1]}
-              value={priceRange[0]}
-              onChange={(e) => handlePriceChange(0, e.target.value)}
-              className="w-24 p-2 rounded bg-gray-700 border border-gray-600 text-white"
-            />
-          </div>
-          <span className="text-gray-300">-</span>
-          <div className="flex items-center">
-            <span className="text-gray-300 mr-2">$</span>
-            <input
-              type="number"
-              min={priceRange[0]}
-              max={maxPrice}
-              value={priceRange[1]}
-              onChange={(e) => handlePriceChange(1, e.target.value)}
-              className="w-24 p-2 rounded bg-gray-700 border border-gray-600 text-white"
-            />
+      {/* Price */}
+      <div className="mb-8">
+        <h3 className="text-black font-semibold mb-4 flex items-center justify-between">
+          Price
+          <svg 
+            className="w-4 h-4" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </h3>
+        <div className="space-y-4">
+          <div className="flex items-center space-x-4">
+            <div className="flex-1">
+              <input
+                type="number"
+                value={priceRange[0]}
+                onChange={(e) => handlePriceChange(0, e.target.value)}
+                className="w-full p-2 bg-white rounded border border-gray-300"
+                placeholder="0"
+              />
+            </div>
+            <span className="text-black">-</span>
+            <div className="flex-1">
+              <input
+                type="number"
+                value={priceRange[1]}
+                onChange={(e) => handlePriceChange(1, e.target.value)}
+                className="w-full p-2 bg-white rounded border border-gray-300"
+                placeholder="330"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Botones */}
-      <div className="space-y-2">
-        <button
-          onClick={() => applyFilters(availability, priceRange)}
-          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
-        >
-          Aplicar
-        </button>
-        <button
-          onClick={clearFilters}
-          className="w-full bg-gray-700 text-gray-300 py-2 rounded-lg hover:bg-gray-600"
-        >
-          Limpiar todo
-        </button>
-      </div>
+      {/* Apply button */}
+      <button
+        onClick={() => {
+          applyFilters(availability, priceRange);
+          onClose();
+        }}
+        className="w-full bg-black text-white py-3 rounded-full mb-3"
+      >
+        Apply · {genetics.length} products
+      </button>
+
+      <button
+        onClick={() => {
+          clearFilters();
+          onClose();
+        }}
+        className="w-full text-black py-3"
+      >
+        Clear all
+      </button>
     </div>
   );
 }

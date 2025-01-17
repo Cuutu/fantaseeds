@@ -105,21 +105,30 @@ export default function Genetics() {
           </button>
         </div>
 
-        {/* Panel de filtros y lista */}
-        <div className="flex justify-end">
-          <div className="w-full relative">
-            <GeneticList geneticas={filteredGenetics} />
-          </div>
-          {showFilters && (
-            <div className="ml-6">
+        {/* Lista de genéticas */}
+        <div className="w-full">
+          <GeneticList geneticas={filteredGenetics} />
+        </div>
+
+        {/* Overlay y Panel de filtros */}
+        {showFilters && (
+          <>
+            {/* Overlay difuminado */}
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+              onClick={() => setShowFilters(false)}
+            />
+            
+            {/* Panel lateral */}
+            <div className="fixed right-0 top-0 h-full w-80 bg-yellow-400 z-50 transform transition-transform duration-300 ease-in-out">
               <GeneticFilter 
                 onFilter={handleFilter} 
                 maxPrice={Math.max(...genetics.map(g => g.precio), 10000)}
                 onClose={() => setShowFilters(false)}
               />
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
       <Cart />
     </div>
