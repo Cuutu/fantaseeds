@@ -7,6 +7,7 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
     outOfStock: false
   });
   const [priceRange, setPriceRange] = useState([0, maxPrice]);
+  const [thcRange, setThcRange] = useState([0, 30]); // Rango de THC de 0% a 30%
 
   const handleAvailabilityChange = (type) => {
     const newAvailability = {
@@ -14,14 +15,13 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
       [type]: !availability[type]
     };
     setAvailability(newAvailability);
-    applyFilters(newAvailability, priceRange);
+    applyFilters(newAvailability, priceRange, thcRange);
   };
 
   const handlePriceChange = (index, value) => {
     const newRange = [...priceRange];
     newRange[index] = parseInt(value) || 0;
     
-    // Asegurar que el mínimo no sea mayor que el máximo y viceversa
     if (index === 0 && value > priceRange[1]) {
       newRange[1] = value;
     } else if (index === 1 && value < priceRange[0]) {
@@ -29,13 +29,28 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
     }
     
     setPriceRange(newRange);
-    applyFilters(availability, newRange);
+    applyFilters(availability, newRange, thcRange);
   };
 
-  const applyFilters = (availabilityState, price) => {
+  const handleThcChange = (index, value) => {
+    const newRange = [...thcRange];
+    newRange[index] = parseInt(value) || 0;
+    
+    if (index === 0 && value > thcRange[1]) {
+      newRange[1] = value;
+    } else if (index === 1 && value < thcRange[0]) {
+      newRange[0] = value;
+    }
+    
+    setThcRange(newRange);
+    applyFilters(availability, priceRange, newRange);
+  };
+
+  const applyFilters = (availabilityState, price, thc) => {
     onFilter({
       availability: availabilityState,
-      priceRange: price
+      priceRange: price,
+      thcRange: thc
     });
   };
 
@@ -45,12 +60,14 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
       outOfStock: false
     });
     setPriceRange([0, maxPrice]);
+    setThcRange([0, 30]);
     onFilter({
       availability: {
         inStock: false,
         outOfStock: false
       },
-      priceRange: [0, maxPrice]
+      priceRange: [0, maxPrice],
+      thcRange: [0, 30]
     });
   };
 
@@ -101,6 +118,48 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
         </div>
       </div>
 
+      {/* THC */}
+      <div className="mb-8">
+        <h3 className="text-white font-semibold mb-4 flex items-center justify-between">
+          THC %
+          <svg 
+            className="w-4 h-4" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </h3>
+        <div className="space-y-4">
+          <div className="flex items-center space-x-4">
+            <div className="flex-1">
+              <input
+                type="number"
+                value={thcRange[0]}
+                onChange={(e) => handleThcChange(0, e.target.value)}
+                className="w-full p-2 bg-gray-700 text-white rounded border border-gray-600"
+                placeholder="0"
+                min="0"
+                max="30"
+              />
+            </div>
+            <span className="text-gray-300">-</span>
+            <div className="flex-1">
+              <input
+                type="number"
+                value={thcRange[1]}
+                onChange={(e) => handleThcChange(1, e.target.value)}
+                className="w-full p-2 bg-gray-700 text-white rounded border border-gray-600"
+                placeholder="30"
+                min="0"
+                max="30"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Precio */}
       <div className="mb-8">
         <h3 className="text-white font-semibold mb-4 flex items-center justify-between">
@@ -142,7 +201,7 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
       {/* Botones */}
       <button
         onClick={() => {
-          applyFilters(availability, priceRange);
+          applyFilters(availability, priceRange, thcRange);
           onClose();
         }}
         className="w-full bg-green-600 text-white py-3 rounded-lg mb-3 hover:bg-green-700"

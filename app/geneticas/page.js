@@ -52,6 +52,12 @@ export default function Genetics() {
       });
     }
 
+    // Filtrar por THC
+    filtered = filtered.filter(genetic => 
+      genetic.thc >= filters.thcRange[0] && 
+      genetic.thc <= filters.thcRange[1]
+    );
+
     // Filtrar por precio
     filtered = filtered.filter(genetic => 
       genetic.precio >= filters.priceRange[0] && 
