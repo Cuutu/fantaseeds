@@ -29,15 +29,16 @@ export async function POST(request) {
           const genetic = await Genetic.findById(producto.genetic);
           
           if (genetic) {
-            if (genetic.stockDisponible < producto.cantidad) {
+            // Verificar stock usando el campo stock
+            if (genetic.stock < producto.cantidad) {
               throw new Error(`Stock insuficiente para ${genetic.nombre}`);
             }
 
+            // Actualizar solo el campo stock
             await Genetic.findByIdAndUpdate(
               producto.genetic,
               { 
                 $inc: { 
-                  stockDisponible: -producto.cantidad,
                   stock: -producto.cantidad 
                 } 
               },

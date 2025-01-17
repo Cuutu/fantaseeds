@@ -16,7 +16,8 @@ const geneticSchema = new mongoose.Schema({
   stock: {
     type: Number,
     required: true,
-    min: 0
+    default: 0,
+    min: [0, 'El stock no puede ser negativo']
   },
   stockDisponible: {
     type: Number,

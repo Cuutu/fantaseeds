@@ -29,7 +29,7 @@ export async function POST(request) {
         
         if (genetic) {
           // Verificar que hay stock suficiente
-          if (genetic.stockDisponible < producto.cantidad) {
+          if (genetic.stock < producto.cantidad) {
             return Response.json({
               error: `Stock insuficiente para ${genetic.nombre}`
             }, { status: 400 });
@@ -40,7 +40,6 @@ export async function POST(request) {
             producto.genetic,
             { 
               $inc: { 
-                stockDisponible: -producto.cantidad,
                 stock: -producto.cantidad 
               } 
             },

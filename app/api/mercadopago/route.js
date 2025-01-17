@@ -23,7 +23,6 @@ export async function POST(request) {
 
     // Validar stock antes de crear el pedido
     for (const item of cart) {
-      // Obtener el producto directamente de la base de datos usando lean() para mejor rendimiento
       const genetic = await Genetic.findById(item.genetic._id).lean();
       
       if (!genetic) {
@@ -33,21 +32,20 @@ export async function POST(request) {
         }, { status: 400 });
       }
 
-      // Usar directamente el valor de la base de datos sin transformaciones
-      const stockDisponible = genetic.stockDisponible;
+      // Usar el campo stock en lugar de stockDisponible
+      const stockActual = genetic.stock;
       const cantidadSolicitada = item.cantidad;
 
       console.log('Debug stock:', {
         producto: genetic.nombre,
-        stockDB: genetic.stockDisponible,
-        stockDisponible,
+        stockDB: genetic.stock,
         cantidadSolicitada
       });
 
-      if (stockDisponible < cantidadSolicitada) {
+      if (stockActual < cantidadSolicitada) {
         return Response.json({
           success: false,
-          error: `Stock insuficiente para ${genetic.nombre}. Disponible: ${stockDisponible}`
+          error: `Stock insuficiente para ${genetic.nombre}. Disponible: ${stockActual}`
         }, { status: 400 });
       }
     }
