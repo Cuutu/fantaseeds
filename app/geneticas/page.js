@@ -106,20 +106,19 @@ export default function Genetics() {
         </div>
 
         {/* Panel de filtros y lista */}
-        <div className="relative">
+        <div className="flex justify-end">
+          <div className="w-full relative">
+            <GeneticList geneticas={filteredGenetics} />
+          </div>
           {showFilters && (
-            <div className="absolute top-0 right-0 z-10 w-72">
+            <div className="ml-6">
               <GeneticFilter 
                 onFilter={handleFilter} 
                 maxPrice={Math.max(...genetics.map(g => g.precio), 10000)}
+                onClose={() => setShowFilters(false)}
               />
             </div>
           )}
-          
-          {/* Lista de genéticas */}
-          <div className="w-full">
-            <GeneticList geneticas={filteredGenetics} />
-          </div>
         </div>
       </div>
       <Cart />

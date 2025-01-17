@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react';
 
-export default function GeneticFilter({ onFilter, maxPrice = 10000 }) {
+export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose }) {
   const [availability, setAvailability] = useState({
     inStock: false,
     outOfStock: false
@@ -55,11 +55,14 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000 }) {
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+    <div className="bg-[#1E2023] p-4 rounded-lg border border-gray-700 shadow-lg w-72">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-white text-lg font-bold">Filtrar</h2>
-        <button onClick={() => clearFilters()} className="text-gray-400 hover:text-white">
-          ✕
+        <button 
+          onClick={onClose}
+          className="text-gray-400 hover:text-white transition-colors"
+        >
+          ×
         </button>
       </div>
 
@@ -100,7 +103,7 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000 }) {
               max={priceRange[1]}
               value={priceRange[0]}
               onChange={(e) => handlePriceChange(0, e.target.value)}
-              className="w-24 p-2 rounded bg-gray-700 border border-gray-600 text-white focus:ring-green-500 focus:border-green-500"
+              className="w-24 p-2 rounded bg-gray-700 border border-gray-600 text-white"
             />
           </div>
           <span className="text-gray-300">-</span>
@@ -112,7 +115,7 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000 }) {
               max={maxPrice}
               value={priceRange[1]}
               onChange={(e) => handlePriceChange(1, e.target.value)}
-              className="w-24 p-2 rounded bg-gray-700 border border-gray-600 text-white focus:ring-green-500 focus:border-green-500"
+              className="w-24 p-2 rounded bg-gray-700 border border-gray-600 text-white"
             />
           </div>
         </div>
@@ -122,13 +125,13 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000 }) {
       <div className="space-y-2">
         <button
           onClick={() => applyFilters(availability, priceRange)}
-          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
+          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
         >
           Aplicar
         </button>
         <button
           onClick={clearFilters}
-          className="w-full bg-gray-700 text-gray-300 py-2 rounded-lg hover:bg-gray-600 border border-gray-600 transition-colors"
+          className="w-full bg-gray-700 text-gray-300 py-2 rounded-lg hover:bg-gray-600"
         >
           Limpiar todo
         </button>
