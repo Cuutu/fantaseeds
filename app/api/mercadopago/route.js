@@ -70,7 +70,7 @@ export async function POST(request) {
       // Agregar costo de envío si corresponde
       ...(deliveryMethod === 'envio' && {
         shipments: {
-          cost: 500,
+          cost: 1,
           mode: "not_specified",
         }
       }),
