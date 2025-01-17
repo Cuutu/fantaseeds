@@ -52,7 +52,7 @@ export async function POST(request) {
     }
 
     // Obtener la información completa del usuario antes de crear el pedido
-    const usuario = await User.findById(session.user.id);
+    const usuario = await User.findById(session.user.id).select('email nombreApellido').lean();
     if (!usuario) {
       return Response.json({ 
         success: false, 
@@ -62,7 +62,6 @@ export async function POST(request) {
       });
     }
 
-    // Si llegamos aquí, hay stock suficiente
     // Crear el pedido
     const order = await Order.create({
       usuario: session.user.id,
@@ -78,11 +77,10 @@ export async function POST(request) {
       metodoPago: 'mercadopago',
       metodoEntrega: deliveryMethod,
       direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
-      // Agregar información del cliente
       informacionCliente: {
-        nombre: usuario.nombre || usuario.name,
+        nombre: usuario.nombreApellido || 'Usuario',
         email: usuario.email,
-        telefono: usuario.telefono
+        telefono: ''
       }
     });
 
