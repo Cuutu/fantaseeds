@@ -32,10 +32,14 @@ export async function POST(request) {
         }, { status: 400 });
       }
 
-      if (genetic.stockDisponible < item.cantidad) {
+      // Convertir a números para asegurar una comparación correcta
+      const stockDisponible = Number(genetic.stockDisponible);
+      const cantidadSolicitada = Number(item.cantidad);
+
+      if (isNaN(stockDisponible) || isNaN(cantidadSolicitada) || stockDisponible < cantidadSolicitada) {
         return Response.json({
           success: false,
-          error: `Stock insuficiente para ${genetic.nombre}. Disponible: ${genetic.stockDisponible}`
+          error: `Stock insuficiente para ${genetic.nombre}. Disponible: ${stockDisponible}`
         }, { status: 400 });
       }
     }
