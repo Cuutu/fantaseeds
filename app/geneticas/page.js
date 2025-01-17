@@ -125,6 +125,7 @@ export default function Genetics() {
                 onFilter={handleFilter} 
                 maxPrice={Math.max(...genetics.map(g => g.precio), 10000)}
                 onClose={() => setShowFilters(false)}
+                totalProducts={filteredGenetics.length}
               />
             </div>
           </>

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react';
 
-export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose }) {
+export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, totalProducts = 0 }) {
   const [availability, setAvailability] = useState({
     inStock: false,
     outOfStock: false
@@ -147,7 +147,7 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose }) {
         }}
         className="w-full bg-black text-white py-3 rounded-full mb-3"
       >
-        Apply · {genetics.length} products
+        Apply · {totalProducts} products
       </button>
 
       <button
