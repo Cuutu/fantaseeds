@@ -113,4 +113,25 @@ export async function PUT(request, { params }) {
       status: 500 
     });
   }
+}
+
+export async function PATCH(request, { params }) {
+  try {
+    const { id } = params;
+    const body = await request.json();
+    
+    const updatedGenetic = await Genetic.findByIdAndUpdate(
+      id,
+      { $set: body },
+      { new: true }
+    );
+
+    if (!updatedGenetic) {
+      return Response.json({ success: false, error: 'Genética no encontrada' });
+    }
+
+    return Response.json({ success: true, genetic: updatedGenetic });
+  } catch (error) {
+    return Response.json({ success: false, error: error.message });
+  }
 } 

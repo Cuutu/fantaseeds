@@ -54,6 +54,30 @@ export default function AdminGenetics() {
     router.push(`/admin/genetics/${id}/edit`);
   };
 
+  const handleDestacadoChange = async (geneticId, isDestacado) => {
+    try {
+      const response = await fetch(`/api/genetics/${geneticId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ destacado: isDestacado }),
+      });
+
+      if (!response.ok) throw new Error('Error al actualizar');
+      
+      // Actualizar la lista local
+      setGenetics(genetics.map(genetic => 
+        genetic._id === geneticId 
+          ? { ...genetic, destacado: isDestacado }
+          : genetic
+      ));
+    } catch (error) {
+      console.error('Error:', error);
+      // Aquí podrías mostrar un mensaje de error al usuario
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-7xl mx-auto">
@@ -76,6 +100,7 @@ export default function AdminGenetics() {
                 <th className="px-6 py-3 text-left text-white">THC</th>
                 <th className="px-6 py-3 text-left text-white">PRECIO</th>
                 <th className="px-6 py-3 text-left text-white">STOCK</th>
+                <th className="px-6 py-3 text-left text-white">DESTACADO</th>
                 <th className="px-6 py-3 text-left text-white">ACCIONES</th>
               </tr>
             </thead>
@@ -93,6 +118,14 @@ export default function AdminGenetics() {
                   <td className="px-6 py-4 text-white">{genetic.thc}</td>
                   <td className="px-6 py-4 text-white">${genetic.precio}</td>
                   <td className="px-6 py-4 text-white">{genetic.stock}</td>
+                  <td className="px-6 py-4">
+                    <input
+                      type="checkbox"
+                      checked={genetic.destacado || false}
+                      onChange={(e) => handleDestacadoChange(genetic._id, e.target.checked)}
+                      className="form-checkbox bg-gray-700 border-gray-600 text-green-500 rounded"
+                    />
+                  </td>
                   <td className="px-6 py-4">
                     <button
                       onClick={() => handleEdit(genetic._id)}
