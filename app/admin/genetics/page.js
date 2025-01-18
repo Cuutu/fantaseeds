@@ -92,50 +92,50 @@ export default function AdminGenetics() {
         </div>
 
         <div className="bg-gray-800 rounded-lg overflow-hidden">
-          <table className="w-full">
+          <table className="min-w-full bg-gray-900 text-white">
             <thead>
-              <tr className="bg-gray-700">
-                <th className="px-6 py-3 text-left text-white">IMAGEN</th>
-                <th className="px-6 py-3 text-left text-white">NOMBRE</th>
-                <th className="px-6 py-3 text-left text-white">THC</th>
-                <th className="px-6 py-3 text-left text-white">PRECIO</th>
-                <th className="px-6 py-3 text-left text-white">STOCK</th>
-                <th className="px-6 py-3 text-left text-white">DESTACADO</th>
-                <th className="px-6 py-3 text-left text-white">ACCIONES</th>
+              <tr className="border-b border-gray-800">
+                <th className="px-6 py-3 text-left">IMAGEN</th>
+                <th className="px-6 py-3 text-left">NOMBRE</th>
+                <th className="px-6 py-3 text-left">THC</th>
+                <th className="px-6 py-3 text-left">PRECIO</th>
+                <th className="px-6 py-3 text-left">STOCK</th>
+                <th className="px-6 py-3 text-center">DESTACADO</th>
+                <th className="px-6 py-3 text-left">ACCIONES</th>
               </tr>
             </thead>
             <tbody>
               {genetics.map((genetic) => (
-                <tr key={genetic._id} className="border-t border-gray-700">
+                <tr key={genetic._id} className="border-b border-gray-800">
                   <td className="px-6 py-4">
                     <img 
-                      src={genetic.imagen || '/placeholder.jpg'} 
-                      alt={genetic.nombre}
-                      className="w-12 h-12 rounded-full object-cover"
+                      src={genetic.imagen} 
+                      alt={genetic.nombre} 
+                      className="w-12 h-12 object-cover rounded"
                     />
                   </td>
-                  <td className="px-6 py-4 text-white">{genetic.nombre}</td>
-                  <td className="px-6 py-4 text-white">{genetic.thc}</td>
-                  <td className="px-6 py-4 text-white">${genetic.precio}</td>
-                  <td className="px-6 py-4 text-white">{genetic.stock}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4">{genetic.nombre}</td>
+                  <td className="px-6 py-4">{genetic.thc}</td>
+                  <td className="px-6 py-4">${genetic.precio}</td>
+                  <td className="px-6 py-4">{genetic.stock}</td>
+                  <td className="px-6 py-4 text-center">
                     <input
                       type="checkbox"
                       checked={genetic.destacado || false}
                       onChange={(e) => handleDestacadoChange(genetic._id, e.target.checked)}
-                      className="form-checkbox bg-gray-700 border-gray-600 text-green-500 rounded"
+                      className="form-checkbox h-5 w-5 bg-gray-700 border-gray-600 text-green-500 rounded cursor-pointer"
                     />
                   </td>
                   <td className="px-6 py-4">
                     <button
-                      onClick={() => handleEdit(genetic._id)}
-                      className="text-blue-400 hover:text-blue-300 mr-4"
+                      onClick={() => handleEdit(genetic)}
+                      className="text-blue-500 hover:text-blue-400 mr-4"
                     >
                       Editar
                     </button>
                     <button
                       onClick={() => handleDelete(genetic._id)}
-                      className="text-red-400 hover:text-red-300"
+                      className="text-red-500 hover:text-red-400"
                     >
                       Eliminar
                     </button>
