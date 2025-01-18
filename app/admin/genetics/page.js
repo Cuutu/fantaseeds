@@ -99,7 +99,7 @@ export default function AdminGenetics() {
                 <th className="px-6 py-3 text-left">THC</th>
                 <th className="px-6 py-3 text-left">PRECIO</th>
                 <th className="px-6 py-3 text-left">STOCK</th>
-                <th className="px-6 py-3 text-center">DESTACADO</th>
+                <th className="px-6 py-3 text-left">DESTACADO</th>
                 <th className="px-6 py-3 text-left">ACCIONES</th>
               </tr>
             </thead>
