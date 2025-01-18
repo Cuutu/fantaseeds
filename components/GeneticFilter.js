@@ -74,7 +74,7 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
   return (
     <div className="h-full bg-gray-800 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-white text-xl font-bold">Filtrar</h2>
+        <h2 className="text-white text-xl font-bold">Filtro</h2>
         <button 
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl"
@@ -121,7 +121,7 @@ export default function GeneticFilter({ onFilter, maxPrice = 10000, onClose, tot
       {/* THC */}
       <div className="mb-8">
         <h3 className="text-white font-semibold mb-4 flex items-center justify-between">
-          THC %
+          % THC 
           <svg 
             className="w-4 h-4" 
             fill="none" 
