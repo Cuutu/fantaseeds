@@ -74,7 +74,6 @@ export default function AdminGenetics() {
       ));
     } catch (error) {
       console.error('Error:', error);
-      // Aquí podrías mostrar un mensaje de error al usuario
     }
   };
 
