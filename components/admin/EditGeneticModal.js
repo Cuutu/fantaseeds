@@ -9,7 +9,8 @@ export default function EditGeneticModal({ isOpen, onClose, onGeneticUpdated, ge
     stock: '',
     precio: '',
     descripcion: '',
-    imagen: ''
+    imagen: '',
+    destacado: false
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,8 @@ export default function EditGeneticModal({ isOpen, onClose, onGeneticUpdated, ge
         stock: genetic.stock,
         precio: genetic.precio,
         descripcion: genetic.descripcion,
-        imagen: genetic.imagen
+        imagen: genetic.imagen,
+        destacado: genetic.destacado
       });
       setImagePreview(genetic.imagen);
     }
@@ -186,6 +188,18 @@ export default function EditGeneticModal({ isOpen, onClose, onGeneticUpdated, ge
               value={formData.descripcion}
               onChange={(e) => setFormData({...formData, descripcion: e.target.value})}
             />
+          </div>
+
+          <div className="mb-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={formData.destacado}
+                onChange={(e) => setFormData({...formData, destacado: e.target.checked})}
+                className="form-checkbox bg-gray-700 border-gray-600 text-green-500"
+              />
+              <span className="text-gray-300">Marcar como destacado</span>
+            </label>
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">

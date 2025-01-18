@@ -34,6 +34,10 @@ const geneticSchema = new mongoose.Schema({
   activo: {
     type: Boolean,
     default: true
+  },
+  destacado: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true,

@@ -87,10 +87,18 @@ export default function Genetics() {
         sorted.sort((a, b) => b.nombre.localeCompare(a.nombre));
         break;
       case 'best-selling':
-        // Aquí podrías implementar la lógica de más vendidos si tienes esos datos
+        // Ordenar por menor stock (más vendidos)
+        sorted.sort((a, b) => a.stock - b.stock);
+        break;
+      case 'featured':
+        // Mostrar primero las destacadas
+        sorted.sort((a, b) => {
+          if (a.destacado && !b.destacado) return -1;
+          if (!a.destacado && b.destacado) return 1;
+          return 0;
+        });
         break;
       default:
-        // featured - mantener orden original
         sorted = [...genetics];
     }
     
