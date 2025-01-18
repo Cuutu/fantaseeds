@@ -175,12 +175,20 @@ export default function GeneticList({ genetics, onGeneticDeleted }) {
                   <td className="px-6 py-4 whitespace-nowrap text-gray-200">${genetic.precio}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-200">{genetic.stock}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <input
-                      type="checkbox"
-                      checked={genetic.destacado || false}
-                      onChange={(e) => handleDestacadoChange(genetic._id, e.target.checked)}
-                      className="form-checkbox h-5 w-5 bg-gray-700 border-gray-600 text-green-500 rounded cursor-pointer"
-                    />
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={genetic.destacado || false}
+                        onChange={(e) => handleDestacadoChange(genetic._id, e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer 
+                                      peer-checked:after:translate-x-full peer-checked:after:border-white 
+                                      after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                      after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                      after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500">
+                      </div>
+                    </label>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
