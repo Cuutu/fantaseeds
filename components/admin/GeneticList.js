@@ -48,6 +48,26 @@ export default function GeneticList({ genetics, onGeneticDeleted }) {
     }
   };
 
+  const handleDestacadoChange = async (geneticId, isDestacado) => {
+    try {
+      const response = await fetch(`/api/genetics/${geneticId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ destacado: isDestacado }),
+      });
+
+      if (!response.ok) throw new Error('Error al actualizar');
+      
+      // Actualizar la lista local llamando a la función de actualización del padre
+      onGeneticDeleted(); // Esta función debería actualizar la lista completa
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al actualizar el estado destacado');
+    }
+  };
+
   const GeneticCard = ({ genetic }) => (
     <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
       <div className="flex items-center space-x-4 mb-4">
@@ -132,6 +152,9 @@ export default function GeneticList({ genetics, onGeneticDeleted }) {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Stock
                 </th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Destacado
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -151,6 +174,14 @@ export default function GeneticList({ genetics, onGeneticDeleted }) {
                   <td className="px-6 py-4 whitespace-nowrap text-gray-200">{genetic.thc}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-200">${genetic.precio}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-200">{genetic.stock}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <input
+                      type="checkbox"
+                      checked={genetic.destacado || false}
+                      onChange={(e) => handleDestacadoChange(genetic._id, e.target.checked)}
+                      className="form-checkbox h-5 w-5 bg-gray-700 border-gray-600 text-green-500 rounded cursor-pointer"
+                    />
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
                       onClick={() => handleEditClick(genetic)}
