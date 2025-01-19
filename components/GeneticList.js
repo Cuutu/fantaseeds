@@ -64,8 +64,21 @@ export default function GeneticList({ geneticas }) {
               style={{ objectFit: 'cover' }}
               priority
             />
-            <div className="absolute top-2 right-2 bg-green-500 text-white px-3 py-1 rounded-full">
-              ${genetic.precio}
+            <div className="absolute top-2 right-2 flex flex-col items-end">
+              {genetic.oferta ? (
+                <>
+                  <span className="text-gray-400 line-through bg-gray-800/80 px-3 py-1 rounded-full mb-1">
+                    ${genetic.precio}
+                  </span>
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full">
+                    ${(genetic.precio * 0.9).toFixed(2)}
+                  </span>
+                </>
+              ) : (
+                <div className="bg-green-500 text-white px-3 py-1 rounded-full">
+                  ${genetic.precio}
+                </div>
+              )}
             </div>
           </div>
 

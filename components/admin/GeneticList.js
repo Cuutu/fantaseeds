@@ -68,6 +68,25 @@ export default function GeneticList({ genetics, onGeneticDeleted }) {
     }
   };
 
+  const handleOfertaChange = async (geneticId, isOferta) => {
+    try {
+      const response = await fetch(`/api/genetics/${geneticId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ oferta: isOferta }),
+      });
+
+      if (!response.ok) throw new Error('Error al actualizar');
+      
+      onGeneticDeleted(); // Actualizar la lista
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al actualizar el estado de oferta');
+    }
+  };
+
   const GeneticCard = ({ genetic }) => (
     <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
       <div className="flex items-center space-x-4 mb-4">
@@ -155,6 +174,9 @@ export default function GeneticList({ genetics, onGeneticDeleted }) {
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Destacado
                 </th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Oferta
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -183,10 +205,26 @@ export default function GeneticList({ genetics, onGeneticDeleted }) {
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer 
-                                      peer-checked:after:translate-x-full peer-checked:after:border-white 
-                                      after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                      after:bg-white after:border-gray-300 after:border after:rounded-full 
-                                      after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500">
+                                    peer-checked:after:translate-x-full peer-checked:after:border-white 
+                                    after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                    after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500">
+                      </div>
+                    </label>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={genetic.oferta || false}
+                        onChange={(e) => handleOfertaChange(genetic._id, e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer 
+                                    peer-checked:after:translate-x-full peer-checked:after:border-white 
+                                    after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                    after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500">
                       </div>
                     </label>
                   </td>
