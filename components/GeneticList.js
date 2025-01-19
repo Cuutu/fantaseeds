@@ -64,6 +64,16 @@ export default function GeneticList({ geneticas }) {
               style={{ objectFit: 'cover' }}
               priority
             />
+            {genetic.destacado && (
+              <div className="absolute top-2 left-2">
+                <svg 
+                  className="w-6 h-6 text-yellow-400 fill-current" 
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+              </div>
+            )}
             <div className="absolute top-2 right-2 flex flex-col items-end">
               {genetic.oferta ? (
                 <>
