@@ -20,7 +20,7 @@ export default function Perfil() {
   }
 
   return (
-    <div className="container mx-auto p-4 mt-24">
+    <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-6">
