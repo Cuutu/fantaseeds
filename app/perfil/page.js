@@ -22,20 +22,36 @@ export default function Perfil() {
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-gray-800 p-6 rounded-lg">
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-white">Información Personal</h2>
-            <div className="space-x-2">
+            <h2 className="text-xl font-bold text-white">Información Personal</h2>
+            <div className="flex gap-2">
               <button
                 onClick={() => setShowPasswordModal(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm transition-colors duration-200 flex items-center"
               >
+                <svg 
+                  className="w-4 h-4 mr-2" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
                 Cambiar Contraseña
               </button>
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
+                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md text-sm transition-colors duration-200 flex items-center"
               >
+                <svg 
+                  className="w-4 h-4 mr-2" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
                 Editar Perfil
               </button>
             </div>
@@ -118,49 +134,65 @@ export default function Perfil() {
       {/* Modal de Cambio de Contraseña */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-xl font-bold text-white mb-4">Cambiar Contraseña</h3>
-            <form onSubmit={handlePasswordChange} className="space-y-4">
+          <div className="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 shadow-xl border border-gray-700">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-white">Cambiar Contraseña</h3>
+              <button 
+                onClick={() => setShowPasswordModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handlePasswordChange} className="space-y-6">
               <div>
-                <label className="block text-gray-300 mb-2">Contraseña Actual</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Contraseña Actual
+                </label>
                 <input
                   type="password"
                   name="currentPassword"
-                  className="w-full bg-gray-700 text-white rounded p-2"
+                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
               <div>
-                <label className="block text-gray-300 mb-2">Nueva Contraseña</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Nueva Contraseña
+                </label>
                 <input
                   type="password"
                   name="newPassword"
-                  className="w-full bg-gray-700 text-white rounded p-2"
+                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
               <div>
-                <label className="block text-gray-300 mb-2">Confirmar Nueva Contraseña</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Confirmar Nueva Contraseña
+                </label>
                 <input
                   type="password"
                   name="confirmPassword"
-                  className="w-full bg-gray-700 text-white rounded p-2"
+                  className="w-full bg-gray-700 border border-gray-600 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
-              <div className="flex justify-end gap-4 mt-6">
+              <div className="flex justify-end gap-4 mt-8">
                 <button
                   type="button"
                   onClick={() => setShowPasswordModal(false)}
-                  className="px-4 py-2 rounded bg-gray-600 text-white hover:bg-gray-700 transition-colors"
+                  className="px-4 py-2 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors duration-200"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition-colors"
+                  className="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200"
                 >
-                  Guardar Cambios
+                  Actualizar Contraseña
                 </button>
               </div>
             </form>
