@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 import User from '@/models/User';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request, { params }) {
   try {
@@ -36,9 +39,48 @@ export async function POST(request, { params }) {
       });
     }
 
+    // Enviar email con la nueva contraseña
+    await resend.emails.send({
+      from: 'Fantaseeds <onboarding@resend.dev>',
+      to: updatedUser.email,
+      subject: 'Tu contraseña ha sido reseteada',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #333; text-align: center;">Reseteo de Contraseña</h2>
+          
+          <p style="color: #666; line-height: 1.6;">
+            Hola ${updatedUser.nombreApellido},
+          </p>
+          
+          <p style="color: #666; line-height: 1.6;">
+            Tu contraseña ha sido reseteada por un administrador. 
+            A continuación encontrarás tu nueva contraseña:
+          </p>
+          
+          <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center;">
+            <code style="font-size: 20px; color: #333;">${newPassword}</code>
+          </div>
+          
+          <p style="color: #666; line-height: 1.6;">
+            Por seguridad, te recomendamos cambiar esta contraseña una vez que ingreses a tu cuenta.
+          </p>
+          
+          <p style="color: #666; line-height: 1.6;">
+            Si no solicitaste este cambio, por favor contacta con soporte inmediatamente.
+          </p>
+          
+          <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+          
+          <p style="color: #999; font-size: 12px; text-align: center;">
+            Este es un email automático, por favor no respondas a este mensaje.
+          </p>
+        </div>
+      `
+    });
+
     return NextResponse.json({ 
       success: true, 
-      message: 'Contraseña reseteada correctamente',
+      message: 'Contraseña reseteada y email enviado correctamente',
       newPassword: newPassword
     });
 

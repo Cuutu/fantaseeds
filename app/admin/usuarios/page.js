@@ -379,6 +379,9 @@ export default function UsersPage() {
               <div className="bg-gray-700 p-4 rounded-lg mb-6">
                 <p className="text-gray-300 text-center mb-2">Nueva contraseña:</p>
                 <p className="text-green-500 text-xl text-center font-mono">{newPassword}</p>
+                <p className="text-gray-300 text-center mt-2 text-sm">
+                  Se ha enviado un email al usuario con la nueva contraseña
+                </p>
               </div>
             )}
             <div className="flex justify-center">
