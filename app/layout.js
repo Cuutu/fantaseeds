@@ -39,13 +39,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={raleway.className}>
-      <body>
+    <html lang="es" className="h-full">
+      <body className="flex flex-col min-h-screen bg-[#1a1f2e]">
         <CartProvider>
           <Providers>
             <Navbar />
             <LoadingScreen />
-            <main>
+            <main className="flex-grow">
               {children}
             </main>
             <Footer />
