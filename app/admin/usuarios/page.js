@@ -17,6 +17,12 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalType, setModalType] = useState('');
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -92,26 +98,37 @@ export default function UsersPage() {
   };
 
   const handleResetPassword = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres resetear la contraseña de este usuario?')) {
-      try {
-        const response = await fetch(`/api/users/${userId}/reset-password`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+    setSelectedUserId(userId);
+    setShowConfirmModal(true);
+  };
 
-        const data = await response.json();
-        
-        if (data.success) {
-          alert(`Contraseña reseteada. Nueva contraseña: ${data.newPassword}`);
-        } else {
-          throw new Error(data.error || 'Error al resetear la contraseña');
+  const confirmResetPassword = async () => {
+    try {
+      const response = await fetch(`/api/users/${selectedUserId}/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Error al resetear la contraseña');
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setNewPassword(data.newPassword);
+        setModalMessage('Contraseña reseteada exitosamente');
+        setModalType('success');
+      } else {
+        setModalMessage(data.error || 'Error al resetear la contraseña');
+        setModalType('error');
       }
+      
+      setShowConfirmModal(false);
+      setShowResultModal(true);
+    } catch (error) {
+      setModalMessage('Error al resetear la contraseña');
+      setModalType('error');
+      setShowConfirmModal(false);
+      setShowResultModal(true);
     }
   };
 
@@ -315,6 +332,65 @@ export default function UsersPage() {
             loading={loading}
           />
         </>
+      )}
+
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-white mb-4">Confirmar Reseteo de Contraseña</h3>
+            <p className="text-gray-300 mb-6">
+              ¿Estás seguro de que quieres resetear la contraseña de este usuario?
+              Esta acción generará una nueva contraseña aleatoria.
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="px-4 py-2 rounded bg-gray-600 text-white hover:bg-gray-700 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmResetPassword}
+                className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition-colors"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showResultModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-center mb-4">
+              {modalType === 'success' ? (
+                <svg className="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              )}
+            </div>
+            <h3 className="text-xl font-bold text-white text-center mb-4">{modalMessage}</h3>
+            {modalType === 'success' && (
+              <div className="bg-gray-700 p-4 rounded-lg mb-6">
+                <p className="text-gray-300 text-center mb-2">Nueva contraseña:</p>
+                <p className="text-green-500 text-xl text-center font-mono">{newPassword}</p>
+              </div>
+            )}
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowResultModal(false)}
+                className="px-6 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+              >
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
