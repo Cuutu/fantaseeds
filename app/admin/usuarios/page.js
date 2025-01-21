@@ -256,6 +256,12 @@ export default function UsersPage() {
                           Editar
                         </button>
                         <button
+                          onClick={() => handleResetPassword(user._id)}
+                          className="text-yellow-400 hover:text-yellow-300 mr-4"
+                        >
+                          Resetear Contraseña
+                        </button>
+                        <button
                           onClick={() => {
                             setSelectedUser(user);
                             setIsDeleteModalOpen(true);
