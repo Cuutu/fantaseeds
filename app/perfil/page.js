@@ -20,8 +20,8 @@ export default function Perfil() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="container mx-auto p-4 mt-24">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-white">Información Personal</h2>
@@ -82,8 +82,8 @@ export default function Perfil() {
           </div>
         </div>
 
-        <div className="bg-gray-800/50 rounded-xl p-6">
-          <h2 className="text-xl font-semibold text-white mb-6">Domicilio</h2>
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-bold text-white mb-6">Domicilio</h2>
           <div className="space-y-6">
             <div>
               <p className="text-gray-400 text-sm mb-1">Calle</p>
