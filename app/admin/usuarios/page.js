@@ -91,6 +91,30 @@ export default function UsersPage() {
     }
   };
 
+  const handleResetPassword = async (userId) => {
+    if (window.confirm('¿Estás seguro de que quieres resetear la contraseña de este usuario?')) {
+      try {
+        const response = await fetch(`/api/users/${userId}/reset-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          alert(`Contraseña reseteada. Nueva contraseña: ${data.newPassword}`);
+        } else {
+          throw new Error(data.error || 'Error al resetear la contraseña');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al resetear la contraseña');
+      }
+    }
+  };
+
   const UserCard = ({ user }) => (
     <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
       <div className="space-y-3">
@@ -221,17 +245,17 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.nombreApellido}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.membresia}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <button
                           onClick={() => {
                             setSelectedUser(user);
                             setIsEditModalOpen(true);
                           }}
-                          className="text-blue-400 hover:text-blue-300 mr-2"
+                          className="text-blue-400 hover:text-blue-300 mr-4"
                         >
                           Editar
                         </button>
-                        <button 
+                        <button
                           onClick={() => {
                             setSelectedUser(user);
                             setIsDeleteModalOpen(true);
