@@ -88,18 +88,31 @@ export default function AdminPedidosPage() {
   };
 
   const exportToExcel = () => {
-    // Preparar los datos para Excel
-    const dataToExport = pedidos.map(pedido => ({
+    // Verificar que tengamos datos
+    if (!filteredPedidos || filteredPedidos.length === 0) {
+      alert('No hay pedidos para exportar');
+      return;
+    }
+
+    console.log('Exportando pedidos:', filteredPedidos); // Debug
+
+    // Preparar los datos para Excel usando los pedidos filtrados
+    const dataToExport = filteredPedidos.map(pedido => ({
       'ID': pedido._id,
-      'Usuario': pedido.usuario,
-      'Nombre y Apellido': pedido.nombreApellido || 'No especificado',
-      'Fecha': new Date(pedido.fecha).toLocaleDateString(),
+      'Usuario': pedido.usuario?.email || 'N/A',
+      'Nombre y Apellido': pedido.compradorInfo ? 
+        `${pedido.compradorInfo.nombre} ${pedido.compradorInfo.apellido}` : 
+        pedido.usuario?.nombreApellido || 'N/A',
+      'Fecha': new Date(pedido.fechaPedido).toLocaleDateString(),
       'Estado': pedido.estado,
       'Total': `$${pedido.total}`,
-      'Método de Pago': pedido.metodoPago,
+      'Método de Pago': pedido.metodoPago || 'MercadoPago',
       'Tipo de Entrega': pedido.retiro ? 'Retiro en local' : 'Envío a domicilio',
-      'Dirección de Envío': pedido.retiro ? 'N/A' : `${pedido.direccion || ''} ${pedido.localidad || ''} ${pedido.provincia || ''}`,
-      'Productos': pedido.productos.map(p => `${p.nombre} (${p.cantidad})`).join(', ')
+      'Dirección de Envío': pedido.retiro ? 'N/A' : 
+        `${pedido.direccion || ''} ${pedido.localidad || ''} ${pedido.provincia || ''}`,
+      'Productos': pedido.productos?.map(p => 
+        `${p.genetic?.nombre || 'Producto'} (${p.cantidad})`
+      ).join(', ') || 'N/A'
     }));
 
     // Crear el libro de trabajo
@@ -107,26 +120,9 @@ export default function AdminPedidosPage() {
     const wb = XLSXUtils.book_new();
     XLSXUtils.book_append_sheet(wb, ws, "Pedidos");
 
-    // Ajustar el ancho de las columnas
-    const wscols = [
-      {wch: 24}, // ID
-      {wch: 15}, // Usuario
-      {wch: 25}, // Nombre y Apellido
-      {wch: 12}, // Fecha
-      {wch: 12}, // Estado
-      {wch: 10}, // Total
-      {wch: 15}, // Método de Pago
-      {wch: 18}, // Tipo de Entrega
-      {wch: 40}, // Dirección de Envío
-      {wch: 50}  // Productos
-    ];
-    ws['!cols'] = wscols;
-
-    // Generar el archivo
+    // Generar y descargar el archivo
     const excelBuffer = XLSXWrite(wb, { bookType: 'xlsx', type: 'array' });
     const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    
-    // Descargar el archivo
     const fileName = `pedidos_${new Date().toISOString().split('T')[0]}.xlsx`;
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(data);
