@@ -30,7 +30,7 @@ export async function POST(request) {
       });
     }
 
-    // Hashear y guardar nueva contraseña
+    // Hashear y guardar la nueva contraseña proporcionada por el usuario
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
