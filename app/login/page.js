@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -7,6 +7,18 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('rememberedUser');
+    if (savedUser) {
+      const userInput = document.querySelector('input[name="usuario"]');
+      if (userInput) {
+        userInput.value = savedUser;
+        setRememberMe(true);
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +31,12 @@ export default function LoginPage() {
       const password = formData.get('password');
 
       console.log('Intentando login con:', { email }); // Debug
+
+      if (rememberMe) {
+        localStorage.setItem('rememberedUser', email);
+      } else {
+        localStorage.removeItem('rememberedUser');
+      }
 
       const result = await signIn('credentials', {
         email,
@@ -70,6 +88,20 @@ export default function LoginPage() {
               className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-green-500 focus:outline-none"
               required
             />
+          </div>
+
+          <div className="flex items-center mb-4">
+            <input
+              id="remember-me"
+              name="remember-me"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
+              Recordar usuario
+            </label>
           </div>
 
           {error && (
