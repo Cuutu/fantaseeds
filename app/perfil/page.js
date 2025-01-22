@@ -224,16 +224,23 @@ const handlePasswordChange = async (e) => {
       }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error al actualizar la contraseña');
+    }
+
     const data = await response.json();
 
     if (data.success) {
       alert('Contraseña actualizada correctamente');
       setShowPasswordModal(false);
+      // Limpiar el formulario
+      e.target.reset();
     } else {
       alert(data.error || 'Error al actualizar la contraseña');
     }
   } catch (error) {
     console.error('Error:', error);
-    alert('Error al actualizar la contraseña');
+    alert(error.message || 'Error al actualizar la contraseña');
   }
 }; 
