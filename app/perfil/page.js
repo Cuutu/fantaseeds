@@ -19,6 +19,42 @@ export default function Perfil() {
     </div>;
   }
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+    if (formData.get('newPassword') !== formData.get('confirmPassword')) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/users/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentPassword: formData.get('currentPassword'),
+          newPassword: formData.get('newPassword'),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert('Contraseña actualizada correctamente');
+        setShowPasswordModal(false);
+        e.target.reset();
+      } else {
+        alert(data.error || 'Error al actualizar la contraseña');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al actualizar la contraseña');
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 pt-28 pb-24">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -201,46 +237,4 @@ export default function Perfil() {
       )}
     </div>
   );
-}
-
-const handlePasswordChange = async (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  
-  if (formData.get('newPassword') !== formData.get('confirmPassword')) {
-    alert('Las contraseñas no coinciden');
-    return;
-  }
-
-  try {
-    const response = await fetch('/api/users/change-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        currentPassword: formData.get('currentPassword'),
-        newPassword: formData.get('newPassword'),
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Error al actualizar la contraseña');
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      alert('Contraseña actualizada correctamente');
-      setShowPasswordModal(false);
-      // Limpiar el formulario
-      e.target.reset();
-    } else {
-      alert(data.error || 'Error al actualizar la contraseña');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert(error.message || 'Error al actualizar la contraseña');
-  }
-}; 
+} 

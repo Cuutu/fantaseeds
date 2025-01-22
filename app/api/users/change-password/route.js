@@ -14,6 +14,13 @@ export async function POST(request) {
     const { currentPassword, newPassword } = await request.json();
     const user = await User.findById(session.user.id);
 
+    if (!user) {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Usuario no encontrado' 
+      });
+    }
+
     // Verificar contraseña actual
     const isValid = await bcrypt.compare(currentPassword, user.password);
     if (!isValid) {
