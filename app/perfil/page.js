@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import AlertModal from '@/components/ui/AlertModal';
 
 export default function Perfil() {
@@ -49,10 +49,15 @@ export default function Perfil() {
       const data = await response.json();
 
       if (data.success) {
-        setAlertMessage('Contraseña actualizada correctamente');
+        setAlertMessage('Contraseña actualizada correctamente. Se cerrará su sesión para aplicar los cambios.');
         setAlertType('success');
         setShowPasswordModal(false);
         e.target.reset();
+        
+        // Esperar un momento para mostrar el mensaje antes de cerrar sesión
+        setTimeout(async () => {
+          await signOut({ callbackUrl: '/login' });
+        }, 2000);
       } else {
         setAlertMessage(data.error || 'Error al actualizar la contraseña');
         setAlertType('error');
