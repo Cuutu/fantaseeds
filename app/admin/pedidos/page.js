@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { FaTrash } from 'react-icons/fa';
 import { utils as XLSXUtils, write as XLSXWrite } from 'xlsx';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { es } from 'date-fns/locale';
 
 export default function AdminPedidosPage() {
   const [pedidos, setPedidos] = useState([]);
@@ -15,6 +18,8 @@ export default function AdminPedidosPage() {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('todos');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const estadosPedido = [
     { value: 'todos', label: 'Todos los estados' },
@@ -166,21 +171,18 @@ export default function AdminPedidosPage() {
 
   // Función para filtrar pedidos
   const filteredPedidos = pedidos.filter(pedido => {
-    const searchLower = searchTerm.toLowerCase();
-    
-    // Filtro por búsqueda
-    const matchesSearch = 
-      pedido._id.slice(-6).toLowerCase().includes(searchLower) ||
-      pedido.compradorInfo?.nombre?.toLowerCase().includes(searchLower) ||
-      pedido.compradorInfo?.apellido?.toLowerCase().includes(searchLower) ||
-      pedido.compradorInfo?.email?.toLowerCase().includes(searchLower) ||
-      pedido.usuario?.nombreApellido?.toLowerCase().includes(searchLower) ||
-      pedido.usuario?.email?.toLowerCase().includes(searchLower);
+    const matchesSearch = searchTerm === '' || 
+      pedido._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pedido.usuario?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pedido.usuario?.nombreApellido?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // Filtro por estado
     const matchesStatus = statusFilter === 'todos' || pedido.estado === statusFilter;
 
-    return matchesSearch && matchesStatus;
+    const pedidoDate = new Date(pedido.fechaPedido);
+    const matchesDate = (!startDate || pedidoDate >= startDate) && 
+                       (!endDate || pedidoDate <= endDate);
+
+    return matchesSearch && matchesStatus && matchesDate;
   });
 
   return (
@@ -235,6 +237,47 @@ export default function AdminPedidosPage() {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="flex space-x-4">
+              <div className="flex items-center space-x-2">
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  placeholderText="Fecha inicial"
+                  className="bg-gray-700 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  locale={es}
+                  dateFormat="dd/MM/yyyy"
+                />
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  placeholderText="Fecha final"
+                  className="bg-gray-700 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  locale={es}
+                  dateFormat="dd/MM/yyyy"
+                />
+                {(startDate || endDate) && (
+                  <button
+                    onClick={() => {
+                      setStartDate(null);
+                      setEndDate(null);
+                    }}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
 
             <button

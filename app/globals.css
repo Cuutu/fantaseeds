@@ -105,3 +105,42 @@ section {
   opacity: 1;
   color: #22c55e !important; /* verde */
 }
+
+/* Estilos para el DatePicker */
+.react-datepicker {
+  @apply bg-gray-800 text-white border-gray-700;
+}
+
+.react-datepicker__header {
+  @apply bg-gray-900 border-gray-700;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  @apply text-white;
+}
+
+.react-datepicker__day {
+  @apply text-white hover:bg-blue-500;
+}
+
+.react-datepicker__day--selected {
+  @apply bg-blue-500;
+}
+
+.react-datepicker__day--keyboard-selected {
+  @apply bg-blue-500;
+}
+
+.react-datepicker__day--outside-month {
+  @apply text-gray-500;
+}
+
+.react-datepicker__navigation-icon::before {
+  @apply border-gray-400;
+}
+
+.react-datepicker__triangle::before,
+.react-datepicker__triangle::after {
+  @apply border-gray-700;
+}
