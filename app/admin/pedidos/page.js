@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { FaTrash } from 'react-icons/fa';
+import { utils as XLSXUtils, write as XLSXWrite } from 'xlsx';
 
 export default function AdminPedidosPage() {
   const [pedidos, setPedidos] = useState([]);
@@ -84,6 +85,53 @@ export default function AdminPedidosPage() {
       console.error('Error:', error);
       alert('Error al cargar el comprobante');
     }
+  };
+
+  const exportToExcel = () => {
+    // Preparar los datos para Excel
+    const dataToExport = pedidos.map(pedido => ({
+      'ID': pedido._id,
+      'Usuario': pedido.usuario,
+      'Nombre y Apellido': pedido.nombreApellido || 'No especificado',
+      'Fecha': new Date(pedido.fecha).toLocaleDateString(),
+      'Estado': pedido.estado,
+      'Total': `$${pedido.total}`,
+      'Método de Pago': pedido.metodoPago,
+      'Tipo de Entrega': pedido.retiro ? 'Retiro en local' : 'Envío a domicilio',
+      'Dirección de Envío': pedido.retiro ? 'N/A' : `${pedido.direccion || ''} ${pedido.localidad || ''} ${pedido.provincia || ''}`,
+      'Productos': pedido.productos.map(p => `${p.nombre} (${p.cantidad})`).join(', ')
+    }));
+
+    // Crear el libro de trabajo
+    const ws = XLSXUtils.json_to_sheet(dataToExport);
+    const wb = XLSXUtils.book_new();
+    XLSXUtils.book_append_sheet(wb, ws, "Pedidos");
+
+    // Ajustar el ancho de las columnas
+    const wscols = [
+      {wch: 24}, // ID
+      {wch: 15}, // Usuario
+      {wch: 25}, // Nombre y Apellido
+      {wch: 12}, // Fecha
+      {wch: 12}, // Estado
+      {wch: 10}, // Total
+      {wch: 15}, // Método de Pago
+      {wch: 18}, // Tipo de Entrega
+      {wch: 40}, // Dirección de Envío
+      {wch: 50}  // Productos
+    ];
+    ws['!cols'] = wscols;
+
+    // Generar el archivo
+    const excelBuffer = XLSXWrite(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    
+    // Descargar el archivo
+    const fileName = `pedidos_${new Date().toISOString().split('T')[0]}.xlsx`;
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(data);
+    link.download = fileName;
+    link.click();
   };
 
   useEffect(() => {
@@ -192,6 +240,26 @@ export default function AdminPedidosPage() {
                 ))}
               </select>
             </div>
+
+            <button
+              onClick={exportToExcel}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
+            >
+              <svg 
+                className="w-5 h-5 mr-2" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2" 
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
+                />
+              </svg>
+              Exportar a Excel
+            </button>
           </div>
 
           {/* Contador de resultados */}
