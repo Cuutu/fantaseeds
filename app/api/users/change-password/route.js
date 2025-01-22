@@ -27,6 +27,8 @@ export async function POST(request) {
       return NextResponse.json({ 
         success: false, 
         error: 'La contraseña actual es incorrecta' 
+      }, { 
+        status: 400 
       });
     }
 

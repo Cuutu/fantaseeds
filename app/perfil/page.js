@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { useSession } from 'next-auth/react';
+import AlertModal from '@/components/ui/AlertModal';
 
 export default function Perfil() {
   const { data: session } = useSession();
@@ -12,6 +13,9 @@ export default function Perfil() {
     codigoPostal: session?.user?.domicilio?.codigoPostal || ''
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState('success');
 
   if (!session) {
     return <div className="min-h-screen bg-gray-900 p-8 flex items-center justify-center">
@@ -24,7 +28,9 @@ export default function Perfil() {
     const formData = new FormData(e.target);
     
     if (formData.get('newPassword') !== formData.get('confirmPassword')) {
-      alert('Las contraseñas no coinciden');
+      setAlertMessage('Las contraseñas no coinciden');
+      setAlertType('error');
+      setShowAlert(true);
       return;
     }
 
@@ -43,15 +49,20 @@ export default function Perfil() {
       const data = await response.json();
 
       if (data.success) {
-        alert('Contraseña actualizada correctamente');
+        setAlertMessage('Contraseña actualizada correctamente');
+        setAlertType('success');
         setShowPasswordModal(false);
         e.target.reset();
       } else {
-        alert(data.error || 'Error al actualizar la contraseña');
+        setAlertMessage(data.error || 'Error al actualizar la contraseña');
+        setAlertType('error');
       }
+      setShowAlert(true);
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al actualizar la contraseña');
+      setAlertMessage('Error al actualizar la contraseña');
+      setAlertType('error');
+      setShowAlert(true);
     }
   };
 
@@ -235,6 +246,13 @@ export default function Perfil() {
           </div>
         </div>
       )}
+
+      <AlertModal 
+        isOpen={showAlert}
+        message={alertMessage}
+        type={alertType}
+        onClose={() => setShowAlert(false)}
+      />
     </div>
   );
 } 
