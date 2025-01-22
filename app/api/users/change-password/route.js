@@ -33,19 +33,13 @@ export async function POST(request) {
       });
     }
 
-    // Hashear y guardar la nueva contraseña
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-    
-    // Actualizar la contraseña
-    user.password = hashedPassword;
+    // Actualizar la contraseña - el middleware pre-save se encargará del hash
+    user.password = newPassword;
     await user.save();
 
-    // Forzar un nuevo inicio de sesión
     return NextResponse.json({ 
       success: true, 
-      message: 'Contraseña actualizada correctamente. Por favor, inicie sesión nuevamente.',
-      requireRelogin: true
+      message: 'Contraseña actualizada correctamente' 
     });
 
   } catch (error) {
