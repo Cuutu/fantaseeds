@@ -8,9 +8,10 @@ export default function Perfil() {
   const { data: session } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    calle: session?.user?.domicilio?.calle || '',
-    numero: session?.user?.domicilio?.numero || '',
-    codigoPostal: session?.user?.domicilio?.codigoPostal || ''
+    calle: session?.user?.calle || '',
+    numero: session?.user?.numero || '',
+    codigoPostal: session?.user?.codigoPostal || '',
+    localidad: session?.user?.localidad || ''
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -66,6 +67,40 @@ export default function Perfil() {
     } catch (error) {
       console.error('Error:', error);
       setAlertMessage('Error al actualizar la contraseña');
+      setAlertType('error');
+      setShowAlert(true);
+    }
+  };
+
+  const handleSaveAddress = async () => {
+    try {
+      const response = await fetch('/api/users/update-address', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          calle: formData.calle,
+          numero: formData.numero,
+          codigoPostal: formData.codigoPostal,
+          localidad: formData.localidad
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setAlertMessage('Domicilio actualizado correctamente');
+        setAlertType('success');
+        setIsEditing(false);
+      } else {
+        setAlertMessage(data.error || 'Error al actualizar el domicilio');
+        setAlertType('error');
+      }
+      setShowAlert(true);
+    } catch (error) {
+      console.error('Error:', error);
+      setAlertMessage('Error al actualizar el domicilio');
       setAlertType('error');
       setShowAlert(true);
     }
@@ -166,6 +201,20 @@ export default function Perfil() {
               )}
             </div>
             <div>
+              <p className="text-gray-400 text-sm mb-1">Localidad</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.localidad}
+                  onChange={(e) => setFormData({...formData, localidad: e.target.value})}
+                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  placeholder="Ingresa tu localidad"
+                />
+              ) : (
+                <p className="text-white text-lg">{formData.localidad || 'No especificado'}</p>
+              )}
+            </div>
+            <div>
               <p className="text-gray-400 text-sm mb-1">Código Postal</p>
               {isEditing ? (
                 <input
@@ -179,6 +228,31 @@ export default function Perfil() {
                 <p className="text-white text-lg">{formData.codigoPostal || 'No especificado'}</p>
               )}
             </div>
+          </div>
+          <div className="mt-6 flex justify-end">
+            {isEditing ? (
+              <>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="mr-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSaveAddress}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Guardar
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                Editar
+              </button>
+            )}
           </div>
         </div>
       </div>
