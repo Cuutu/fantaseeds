@@ -488,7 +488,7 @@ export default function UsersPage() {
                 <p className="text-white">{selectedAddress.numero}</p>
               </div>
               <div>
-                <p className="text-gray-400 text-sm">Ciudad</p>
+                <p className="text-gray-400 text-sm">Localidad</p>
                 <p className="text-white">{selectedAddress.ciudad || 'No especificada'}</p>
               </div>
               <div>
