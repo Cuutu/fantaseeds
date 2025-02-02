@@ -7,7 +7,7 @@ import AlertModal from '@/components/ui/AlertModal';
 export default function Perfil() {
   const { data: session, update } = useSession();
   const [isEditing, setIsEditing] = useState(false);
-  const [showAddress, setShowAddress] = useState(false);
+  const [showAddressModal, setShowAddressModal] = useState(false);
   const [formData, setFormData] = useState({
     nombreApellido: '',
     email: '',
@@ -215,12 +215,12 @@ export default function Perfil() {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-white">Domicilio</h2>
             <div className="flex gap-2">
-              {!isEditing && (
+              {!isEditing && session?.user?.domicilio?.calle && (
                 <button
-                  onClick={() => setShowAddress(!showAddress)}
+                  onClick={() => setShowAddressModal(true)}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                 >
-                  {showAddress ? 'Ocultar Dirección' : 'Ver Dirección'}
+                  Ver Dirección
                 </button>
               )}
               <button
@@ -232,73 +232,95 @@ export default function Perfil() {
             </div>
           </div>
 
-          {showAddress && !isEditing ? (
-            <div className="bg-gray-700 p-4 rounded-lg mb-6">
-              <p className="text-white">{getFullAddress()}</p>
+          {!isEditing && (
+            <div>
+              <p className="text-gray-400 text-sm mb-1">Dirección</p>
+              <p className="text-white text-lg">
+                {session?.user?.domicilio?.calle ? 'Dirección registrada' : 'No especificada'}
+              </p>
             </div>
-          ) : !isEditing && (
-            <div className="space-y-6">
-              <div>
-                <p className="text-gray-400 text-sm mb-1">Calle</p>
-                <p className="text-white text-lg">{session?.user?.domicilio?.calle || 'No especificado'}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm mb-1">Número</p>
-                <p className="text-white text-lg">{session?.user?.domicilio?.numero || 'No especificado'}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm mb-1">Localidad</p>
-                <p className="text-white text-lg">{session?.user?.domicilio?.ciudad || 'No especificado'}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm mb-1">Código Postal</p>
-                <p className="text-white text-lg">{session?.user?.domicilio?.codigoPostal || 'No especificado'}</p>
+          )}
+
+          {showAddressModal && session?.user?.domicilio && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-bold text-white">Dirección Completa</h3>
+                  <button
+                    onClick={() => setShowAddressModal(false)}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-gray-400 text-sm">Calle</p>
+                    <p className="text-white">{session.user.domicilio.calle}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Número</p>
+                    <p className="text-white">{session.user.domicilio.numero}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Ciudad</p>
+                    <p className="text-white">{session.user.domicilio.ciudad || 'No especificada'}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-sm">Código Postal</p>
+                    <p className="text-white">{session.user.domicilio.codigoPostal || 'No especificado'}</p>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
-          <div className={`space-y-6 ${isEditing ? 'block' : 'hidden'}`}>
-            <div>
-              <p className="text-gray-400 text-sm mb-1">Calle</p>
-              <input
-                type="text"
-                value={formData.calle}
-                onChange={(e) => setFormData({...formData, calle: e.target.value})}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                placeholder="Ingresa tu calle"
-              />
+          {isEditing && (
+            <div className="space-y-6">
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Calle</p>
+                <input
+                  type="text"
+                  value={formData.calle}
+                  onChange={(e) => setFormData({...formData, calle: e.target.value})}
+                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  placeholder="Ingresa tu calle"
+                />
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Número</p>
+                <input
+                  type="text"
+                  value={formData.numero}
+                  onChange={(e) => setFormData({...formData, numero: e.target.value})}
+                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  placeholder="Ingresa el número"
+                />
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Localidad</p>
+                <input
+                  type="text"
+                  value={formData.localidad}
+                  onChange={(e) => setFormData({...formData, localidad: e.target.value})}
+                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  placeholder="Ingresa tu localidad"
+                />
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Código Postal</p>
+                <input
+                  type="text"
+                  value={formData.codigoPostal}
+                  onChange={(e) => setFormData({...formData, codigoPostal: e.target.value})}
+                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  placeholder="Ingresa el código postal"
+                />
+              </div>
             </div>
-            <div>
-              <p className="text-gray-400 text-sm mb-1">Número</p>
-              <input
-                type="text"
-                value={formData.numero}
-                onChange={(e) => setFormData({...formData, numero: e.target.value})}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                placeholder="Ingresa el número"
-              />
-            </div>
-            <div>
-              <p className="text-gray-400 text-sm mb-1">Localidad</p>
-              <input
-                type="text"
-                value={formData.localidad}
-                onChange={(e) => setFormData({...formData, localidad: e.target.value})}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                placeholder="Ingresa tu localidad"
-              />
-            </div>
-            <div>
-              <p className="text-gray-400 text-sm mb-1">Código Postal</p>
-              <input
-                type="text"
-                value={formData.codigoPostal}
-                onChange={(e) => setFormData({...formData, codigoPostal: e.target.value})}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                placeholder="Ingresa el código postal"
-              />
-            </div>
-          </div>
+          )}
 
           {isEditing && (
             <div className="mt-6 flex justify-end">
