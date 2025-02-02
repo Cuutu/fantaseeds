@@ -1,28 +1,37 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { useSession, signOut } from 'next-auth/react';
 import AlertModal from '@/components/ui/AlertModal';
 
 export default function Perfil() {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    calle: session?.user?.calle || '',
-    numero: session?.user?.numero || '',
-    codigoPostal: session?.user?.codigoPostal || '',
-    localidad: session?.user?.localidad || ''
+    nombreApellido: '',
+    email: '',
+    calle: '',
+    numero: '',
+    localidad: '',
+    codigoPostal: ''
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('success');
 
-  if (!session) {
-    return <div className="min-h-screen bg-gray-900 p-8 flex items-center justify-center">
-      <p className="text-white">Cargando...</p>
-    </div>;
-  }
+  useEffect(() => {
+    if (session?.user) {
+      setFormData({
+        nombreApellido: session.user.nombreApellido || '',
+        email: session.user.email || '',
+        calle: session.user.calle || '',
+        numero: session.user.numero || '',
+        localidad: session.user.localidad || '',
+        codigoPostal: session.user.codigoPostal || ''
+      });
+    }
+  }, [session]);
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -55,7 +64,6 @@ export default function Perfil() {
         setShowPasswordModal(false);
         e.target.reset();
         
-        // Esperar un momento para mostrar el mensaje antes de cerrar sesión
         setTimeout(async () => {
           await signOut({ callbackUrl: '/login' });
         }, 2000);
@@ -82,29 +90,44 @@ export default function Perfil() {
         body: JSON.stringify({
           calle: formData.calle,
           numero: formData.numero,
-          codigoPostal: formData.codigoPostal,
-          localidad: formData.localidad
+          localidad: formData.localidad,
+          codigoPostal: formData.codigoPostal
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
+        await update({
+          ...session,
+          user: {
+            ...session.user,
+            calle: formData.calle,
+            numero: formData.numero,
+            localidad: formData.localidad,
+            codigoPostal: formData.codigoPostal
+          }
+        });
+        
         setAlertMessage('Domicilio actualizado correctamente');
         setAlertType('success');
         setIsEditing(false);
       } else {
-        setAlertMessage(data.error || 'Error al actualizar el domicilio');
-        setAlertType('error');
+        throw new Error(data.error || 'Error al actualizar el domicilio');
       }
-      setShowAlert(true);
     } catch (error) {
       console.error('Error:', error);
       setAlertMessage('Error al actualizar el domicilio');
       setAlertType('error');
-      setShowAlert(true);
     }
+    setShowAlert(true);
   };
+
+  if (!session) {
+    return <div className="min-h-screen bg-gray-900 p-8 flex items-center justify-center">
+      <p className="text-white">Cargando...</p>
+    </div>;
+  }
 
   return (
     <div className="container mx-auto px-4 pt-28 pb-24">
@@ -257,7 +280,6 @@ export default function Perfil() {
         </div>
       </div>
 
-      {/* Modal de Cambio de Contraseña */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 shadow-xl border border-gray-700">
