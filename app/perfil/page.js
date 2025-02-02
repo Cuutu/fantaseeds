@@ -233,20 +233,25 @@ export default function Perfil() {
 
           {!isEditing && (
             <div>
-              <p className="text-gray-400 text-sm mb-1">Dirección</p>
-              {userData?.domicilio?.calle ? (
-                <button
-                  onClick={() => {
-                    setSelectedAddress(userData.domicilio);
-                    setShowAddressModal(true);
-                  }}
-                  className="text-blue-400 hover:text-blue-300 text-sm"
-                >
-                  Ver dirección registrada
-                </button>
-              ) : (
-                <p className="text-white text-lg">No especificada</p>
-              )}
+              <h2 className="text-xl font-bold text-white mb-6">Domicilio</h2>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-gray-400 text-sm">Calle</p>
+                  <p className="text-white">{userData?.domicilio?.calle || 'No especificada'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">Número</p>
+                  <p className="text-white">{userData?.domicilio?.numero || 'No especificado'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">Localidad</p>
+                  <p className="text-white">{userData?.domicilio?.ciudad || 'No especificada'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">Código Postal</p>
+                  <p className="text-white">{userData?.domicilio?.codigoPostal || 'No especificado'}</p>
+                </div>
+              </div>
             </div>
           )}
 
