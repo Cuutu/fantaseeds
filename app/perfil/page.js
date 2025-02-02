@@ -8,6 +8,7 @@ export default function Perfil() {
   const { data: session, update } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [formData, setFormData] = useState({
     nombreApellido: '',
     email: '',
@@ -29,13 +30,6 @@ export default function Perfil() {
         const data = await response.json();
         if (data.success) {
           setUserData(data.user);
-          setFormData({
-            ...formData,
-            calle: data.user.domicilio?.calle || '',
-            numero: data.user.domicilio?.numero || '',
-            localidad: data.user.domicilio?.ciudad || '',
-            codigoPostal: data.user.domicilio?.codigoPostal || ''
-          });
         }
       } catch (error) {
         console.error('Error al obtener datos del usuario:', error);
@@ -241,15 +235,10 @@ export default function Perfil() {
             <div>
               <p className="text-gray-400 text-sm mb-1">Dirección</p>
               <p className="text-white text-lg">
-                {userData?.domicilio?.calle ? (
-                  <>
-                    {userData.domicilio.calle} {userData.domicilio.numero}
-                    {userData.domicilio.ciudad && `, ${userData.domicilio.ciudad}`}
-                    {userData.domicilio.codigoPostal && ` (${userData.domicilio.codigoPostal})`}
-                  </>
-                ) : (
-                  'No especificada'
-                )}
+                {session?.user?.domicilio?.calle ? 
+                  `${session.user.domicilio.calle} ${session.user.domicilio.numero}, ${session.user.domicilio.ciudad} (${session.user.domicilio.codigoPostal})` 
+                  : 'No especificada'
+                }
               </p>
             </div>
           )}
