@@ -151,22 +151,19 @@ export default function UsersPage() {
         </div>
         <div>
           <p className="text-xs text-gray-400">Dirección</p>
-          <div className="flex items-center gap-2">
-            <p className="text-gray-300">
-              {user.domicilio?.calle ? 'Dirección registrada' : 'No especificada'}
-            </p>
-            {user.domicilio?.calle && (
-              <button
-                onClick={() => {
-                  setSelectedAddress(user.domicilio);
-                  setShowAddressModal(true);
-                }}
-                className="text-blue-400 hover:text-blue-300 text-sm"
-              >
-                Ver dirección
-              </button>
-            )}
-          </div>
+          {user.domicilio?.calle ? (
+            <button
+              onClick={() => {
+                setSelectedAddress(user.domicilio);
+                setShowAddressModal(true);
+              }}
+              className="text-blue-400 hover:text-blue-300 text-sm"
+            >
+              Ver dirección
+            </button>
+          ) : (
+            <p className="text-gray-300">No especificada</p>
+          )}
         </div>
         <div>
           <p className="text-xs text-gray-400">Membresía</p>
@@ -318,7 +315,19 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.nombreApellido}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                        {user.domicilio?.calle ? 'Dirección registrada' : 'No especificada'}
+                        {user.domicilio?.calle ? (
+                          <button
+                            onClick={() => {
+                              setSelectedAddress(user.domicilio);
+                              setShowAddressModal(true);
+                            }}
+                            className="text-blue-400 hover:text-blue-300 text-sm"
+                          >
+                            Ver dirección registrada
+                          </button>
+                        ) : (
+                          <p className="text-gray-300">No especificada</p>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.membresia}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
