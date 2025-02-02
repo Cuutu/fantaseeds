@@ -228,7 +228,10 @@ export default function Perfil() {
             <div>
               <p className="text-gray-400 text-sm mb-1">Dirección</p>
               <p className="text-white text-lg">
-                {session?.user?.domicilio?.calle ? 'Dirección registrada' : 'No especificada'}
+                {session?.user?.domicilio?.calle && session?.user?.domicilio?.numero ? 
+                  `${session.user.domicilio.calle} ${session.user.domicilio.numero}, ${session.user.domicilio.ciudad || ''} ${session.user.domicilio.codigoPostal || ''}` 
+                  : 'No especificada'
+                }
               </p>
             </div>
           )}
