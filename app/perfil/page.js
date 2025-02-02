@@ -233,25 +233,20 @@ export default function Perfil() {
 
           {!isEditing && (
             <div>
-              <h2 className="text-xl font-bold text-white mb-6">Domicilio</h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-gray-400 text-sm">Calle</p>
-                  <p className="text-white">{userData?.domicilio?.calle || 'No especificada'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Número</p>
-                  <p className="text-white">{userData?.domicilio?.numero || 'No especificado'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Localidad</p>
-                  <p className="text-white">{userData?.domicilio?.ciudad || 'No especificada'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Código Postal</p>
-                  <p className="text-white">{userData?.domicilio?.codigoPostal || 'No especificado'}</p>
-                </div>
-              </div>
+              <p className="text-gray-400 text-sm mb-1">Dirección</p>
+              {userData?.domicilio?.calle ? (
+                <button
+                  onClick={() => {
+                    setSelectedAddress(userData.domicilio);
+                    setShowAddressModal(true);
+                  }}
+                  className="text-blue-400 hover:text-blue-300 text-sm"
+                >
+                  Ver dirección registrada
+                </button>
+              ) : (
+                <p className="text-white text-lg">No especificada</p>
+              )}
             </div>
           )}
 
@@ -377,6 +372,42 @@ export default function Perfil() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showAddressModal && selectedAddress && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-white">Dirección Completa</h3>
+              <button
+                onClick={() => setShowAddressModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <p className="text-gray-400 text-sm">Calle</p>
+                <p className="text-white">{selectedAddress.calle}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Número</p>
+                <p className="text-white">{selectedAddress.numero}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Localidad</p>
+                <p className="text-white">{selectedAddress.ciudad || 'No especificada'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Código Postal</p>
+                <p className="text-white">{selectedAddress.codigoPostal || 'No especificado'}</p>
+              </div>
+            </div>
           </div>
         </div>
       )}
