@@ -2,62 +2,25 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true
-  },
-  usuario: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  nombreApellido: String,
-  rol: {
-    type: String,
-    default: 'usuario',
-    enum: ['usuario', 'administrador']
-  },
-  membresia: {
-    type: String,
-    required: true,
-    default: '10G',
-    enum: ['10G', '20G', '30G', '40G']
-  },
-  domicilio: {
-    calle: String,
-    numero: String,
-    codigoPostal: String,
-    ciudad: String,
-    provincia: String
-  },
-  activo: {
-    type: Boolean,
-    default: true
-  },
-  fechaAlta: {
-    type: Date,
-    default: Date.now
-  }
-}, {
-  timestamps: true
+  usuario: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  nombreApellido: { type: String },
+  email: { type: String, required: true, unique: true },
+  rol: { type: String, default: 'usuario' },
+  membresia: { type: String, default: '10G' },
+  fechaAlta: { type: Date, default: Date.now },
+  // Agregamos los campos de dirección directamente en el esquema
+  calle: { type: String },
+  numero: { type: String },
+  localidad: { type: String },
+  codigoPostal: { type: String }
 });
 
-// Middleware pre-save
+// Mantener el middleware de hash de contraseña
 userSchema.pre('save', async function(next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
   }
-  
-  if (!this.membresia) {
-    this.membresia = '10G';
-  }
-  
   next();
 });
 
