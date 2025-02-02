@@ -23,6 +23,8 @@ export default function UsersPage() {
   const [newPassword, setNewPassword] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [modalType, setModalType] = useState('');
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -149,7 +151,22 @@ export default function UsersPage() {
         </div>
         <div>
           <p className="text-xs text-gray-400">Dirección</p>
-          <p className="text-gray-300">{user.calle && user.numero ? `${user.calle} ${user.numero}, ${user.localidad || ''}` : 'No especificada'}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-gray-300">
+              {user.domicilio?.calle ? 'Dirección registrada' : 'No especificada'}
+            </p>
+            {user.domicilio?.calle && (
+              <button
+                onClick={() => {
+                  setSelectedAddress(user.domicilio);
+                  setShowAddressModal(true);
+                }}
+                className="text-blue-400 hover:text-blue-300 text-sm"
+              >
+                Ver dirección
+              </button>
+            )}
+          </div>
         </div>
         <div>
           <p className="text-xs text-gray-400">Membresía</p>
@@ -233,9 +250,7 @@ export default function UsersPage() {
                   <p className="text-gray-400">Email: <span className="text-white">{user.email}</span></p>
                   <p className="text-gray-400">Dirección: 
                     <span className="text-white">
-                      {user.calle && user.numero ? 
-                        `${user.calle} ${user.numero}, ${user.localidad || ''}` : 
-                        'No especificada'}
+                      {user.domicilio?.calle ? 'Dirección registrada' : 'No especificada'}
                     </span>
                   </p>
                   <p className="text-gray-400">Membresía: <span className="text-white">{user.membresia}</span></p>
@@ -302,7 +317,9 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.usuario}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.nombreApellido}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.email}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.calle && user.numero ? `${user.calle} ${user.numero}, ${user.localidad || ''}` : 'No especificada'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-300">
+                        {user.domicilio?.calle ? 'Dirección registrada' : 'No especificada'}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.membresia}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <button
@@ -433,6 +450,48 @@ export default function UsersPage() {
               >
                 Aceptar
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showAddressModal && selectedAddress && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-white">Dirección Completa</h3>
+              <button
+                onClick={() => setShowAddressModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <p className="text-gray-400 text-sm">Calle</p>
+                <p className="text-white">{selectedAddress.calle}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Número</p>
+                <p className="text-white">{selectedAddress.numero}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Ciudad</p>
+                <p className="text-white">{selectedAddress.ciudad || 'No especificada'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Código Postal</p>
+                <p className="text-white">{selectedAddress.codigoPostal || 'No especificado'}</p>
+              </div>
+              {selectedAddress.provincia && (
+                <div>
+                  <p className="text-gray-400 text-sm">Provincia</p>
+                  <p className="text-white">{selectedAddress.provincia}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
