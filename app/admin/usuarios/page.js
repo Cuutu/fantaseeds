@@ -148,6 +148,10 @@ export default function UsersPage() {
           <p className="text-gray-300">{user.email}</p>
         </div>
         <div>
+          <p className="text-xs text-gray-400">Dirección</p>
+          <p className="text-gray-300">{user.calle && user.numero ? `${user.calle} ${user.numero}, ${user.localidad || ''}` : 'No especificada'}</p>
+        </div>
+        <div>
           <p className="text-xs text-gray-400">Membresía</p>
           <p className="text-gray-300">{user.membresia}</p>
         </div>
@@ -222,7 +226,41 @@ export default function UsersPage() {
         <div className="grid grid-cols-1 gap-4 lg:hidden">
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user) => (
-              <UserCard key={user._id} user={user} />
+              <div key={user._id} className="bg-gray-800 p-4 rounded-lg">
+                <div className="space-y-2">
+                  <p className="text-gray-400">Usuario: <span className="text-white">{user.usuario}</span></p>
+                  <p className="text-gray-400">Nombre: <span className="text-white">{user.nombreApellido}</span></p>
+                  <p className="text-gray-400">Email: <span className="text-white">{user.email}</span></p>
+                  <p className="text-gray-400">Dirección: 
+                    <span className="text-white">
+                      {user.calle && user.numero ? 
+                        `${user.calle} ${user.numero}, ${user.localidad || ''}` : 
+                        'No especificada'}
+                    </span>
+                  </p>
+                  <p className="text-gray-400">Membresía: <span className="text-white">{user.membresia}</span></p>
+                </div>
+                <div className="mt-4 flex space-x-2">
+                  <button 
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setIsEditModalOpen(true);
+                    }}
+                    className="flex-1 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 py-2 rounded-lg transition-colors"
+                  >
+                    Editar
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setIsDeleteModalOpen(true);
+                    }}
+                    className="flex-1 bg-red-500/10 text-red-400 hover:bg-red-500/20 py-2 rounded-lg transition-colors"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
             ))
           ) : (
             <div className="text-center text-gray-400 py-4">
@@ -247,6 +285,9 @@ export default function UsersPage() {
                     Email
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Dirección
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Membresía
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
@@ -261,6 +302,7 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.usuario}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.nombreApellido}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.calle && user.numero ? `${user.calle} ${user.numero}, ${user.localidad || ''}` : 'No especificada'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-300">{user.membresia}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <button

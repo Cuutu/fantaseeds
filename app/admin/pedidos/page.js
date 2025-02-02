@@ -365,11 +365,23 @@ export default function AdminPedidosPage() {
                         <p className="text-gray-300">
                           Email: {pedido.compradorInfo.email || 'No disponible'}
                         </p>
+                        <p className="text-gray-300">
+                          Dirección: {pedido.retiro ? 'Retira en local' : 
+                            `${pedido.direccion || ''} ${pedido.localidad || ''} ${pedido.provincia || ''}`}
+                        </p>
                       </>
                     ) : (
                       <>
-                        <p className="text-gray-300">Nombre: {pedido.usuario?.nombreApellido || 'Usuario no disponible'}</p>
-                        <p className="text-gray-300">Email: {pedido.usuario?.email || 'Email no disponible'}</p>
+                        <p className="text-gray-300">
+                          Nombre: {pedido.usuario?.nombreApellido || 'Usuario no disponible'}
+                        </p>
+                        <p className="text-gray-300">
+                          Email: {pedido.usuario?.email || 'Email no disponible'}
+                        </p>
+                        <p className="text-gray-300">
+                          Dirección: {pedido.retiro ? 'Retira en local' : 
+                            `${pedido.usuario?.calle || ''} ${pedido.usuario?.numero || ''}, ${pedido.usuario?.localidad || ''}`}
+                        </p>
                       </>
                     )}
                   </div>
