@@ -7,6 +7,7 @@ import AlertModal from '@/components/ui/AlertModal';
 export default function Perfil() {
   const { data: session, update } = useSession();
   const [isEditing, setIsEditing] = useState(false);
+  const [showAddress, setShowAddress] = useState(false);
   const [formData, setFormData] = useState({
     nombreApellido: '',
     email: '',
@@ -90,8 +91,8 @@ export default function Perfil() {
         body: JSON.stringify({
           calle: formData.calle,
           numero: formData.numero,
-          localidad: formData.localidad,
-          codigoPostal: formData.codigoPostal
+          codigoPostal: formData.codigoPostal,
+          localidad: formData.localidad
         }),
       });
 
@@ -103,11 +104,10 @@ export default function Perfil() {
           user: {
             ...session.user,
             domicilio: {
-              ...session.user.domicilio,
               calle: formData.calle,
               numero: formData.numero,
-              ciudad: formData.localidad,
-              codigoPostal: formData.codigoPostal
+              codigoPostal: formData.codigoPostal,
+              ciudad: formData.localidad
             }
           }
         });
@@ -115,6 +115,8 @@ export default function Perfil() {
         setAlertMessage('Domicilio actualizado correctamente');
         setAlertType('success');
         setIsEditing(false);
+        
+        window.location.reload();
       } else {
         throw new Error(data.error || 'Error al actualizar el domicilio');
       }
@@ -122,8 +124,22 @@ export default function Perfil() {
       console.error('Error:', error);
       setAlertMessage('Error al actualizar el domicilio');
       setAlertType('error');
+      setShowAlert(true);
     }
-    setShowAlert(true);
+  };
+
+  const getFullAddress = () => {
+    const domicilio = session?.user?.domicilio;
+    if (!domicilio) return 'No especificado';
+    
+    const parts = [
+      domicilio.calle,
+      domicilio.numero,
+      domicilio.ciudad,
+      domicilio.codigoPostal
+    ].filter(Boolean);
+    
+    return parts.length > 0 ? parts.join(' ') : 'No especificado';
   };
 
   if (!session) {
@@ -196,90 +212,104 @@ export default function Perfil() {
         </div>
 
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-6">Domicilio</h2>
-          <div className="space-y-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-white">Domicilio</h2>
+            <div className="flex gap-2">
+              {!isEditing && (
+                <button
+                  onClick={() => setShowAddress(!showAddress)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  {showAddress ? 'Ocultar Dirección' : 'Ver Dirección'}
+                </button>
+              )}
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+              >
+                {isEditing ? 'Cancelar' : 'Editar'}
+              </button>
+            </div>
+          </div>
+
+          {showAddress && !isEditing ? (
+            <div className="bg-gray-700 p-4 rounded-lg mb-6">
+              <p className="text-white">{getFullAddress()}</p>
+            </div>
+          ) : !isEditing && (
+            <div className="space-y-6">
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Calle</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.calle || 'No especificado'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Número</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.numero || 'No especificado'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Localidad</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.ciudad || 'No especificado'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-1">Código Postal</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.codigoPostal || 'No especificado'}</p>
+              </div>
+            </div>
+          )}
+
+          <div className={`space-y-6 ${isEditing ? 'block' : 'hidden'}`}>
             <div>
               <p className="text-gray-400 text-sm mb-1">Calle</p>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={formData.calle}
-                  onChange={(e) => setFormData({...formData, calle: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  placeholder="Ingresa tu calle"
-                />
-              ) : (
-                <p className="text-white text-lg">{session?.user?.domicilio?.calle || 'No especificado'}</p>
-              )}
+              <input
+                type="text"
+                value={formData.calle}
+                onChange={(e) => setFormData({...formData, calle: e.target.value})}
+                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                placeholder="Ingresa tu calle"
+              />
             </div>
             <div>
               <p className="text-gray-400 text-sm mb-1">Número</p>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={formData.numero}
-                  onChange={(e) => setFormData({...formData, numero: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  placeholder="Ingresa el número"
-                />
-              ) : (
-                <p className="text-white text-lg">{session?.user?.domicilio?.numero || 'No especificado'}</p>
-              )}
+              <input
+                type="text"
+                value={formData.numero}
+                onChange={(e) => setFormData({...formData, numero: e.target.value})}
+                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                placeholder="Ingresa el número"
+              />
             </div>
             <div>
               <p className="text-gray-400 text-sm mb-1">Localidad</p>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={formData.localidad}
-                  onChange={(e) => setFormData({...formData, localidad: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  placeholder="Ingresa tu localidad"
-                />
-              ) : (
-                <p className="text-white text-lg">{session?.user?.domicilio?.ciudad || 'No especificado'}</p>
-              )}
+              <input
+                type="text"
+                value={formData.localidad}
+                onChange={(e) => setFormData({...formData, localidad: e.target.value})}
+                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                placeholder="Ingresa tu localidad"
+              />
             </div>
             <div>
               <p className="text-gray-400 text-sm mb-1">Código Postal</p>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={formData.codigoPostal}
-                  onChange={(e) => setFormData({...formData, codigoPostal: e.target.value})}
-                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  placeholder="Ingresa el código postal"
-                />
-              ) : (
-                <p className="text-white text-lg">{session?.user?.domicilio?.codigoPostal || 'No especificado'}</p>
-              )}
+              <input
+                type="text"
+                value={formData.codigoPostal}
+                onChange={(e) => setFormData({...formData, codigoPostal: e.target.value})}
+                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                placeholder="Ingresa el código postal"
+              />
             </div>
           </div>
-          <div className="mt-6 flex justify-end">
-            {isEditing ? (
-              <>
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="mr-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleSaveAddress}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Guardar
-                </button>
-              </>
-            ) : (
+
+          {isEditing && (
+            <div className="mt-6 flex justify-end">
               <button
-                onClick={() => setIsEditing(true)}
+                onClick={handleSaveAddress}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
-                Editar
+                Guardar
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
