@@ -232,14 +232,23 @@ export default function Perfil() {
           </div>
 
           {!isEditing && (
-            <div>
-              <p className="text-gray-400 text-sm mb-1">Dirección</p>
-              <p className="text-white text-lg">
-                {session?.user?.domicilio?.calle ? 
-                  `${session.user.domicilio.calle} ${session.user.domicilio.numero}, ${session.user.domicilio.ciudad} (${session.user.domicilio.codigoPostal})` 
-                  : 'No especificada'
-                }
-              </p>
+            <div className="space-y-3">
+              <div>
+                <p className="text-gray-400 text-sm">Calle</p>
+                <p className="text-white">{userData?.domicilio?.calle || 'No especificada'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Número</p>
+                <p className="text-white">{userData?.domicilio?.numero || 'No especificado'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Ciudad</p>
+                <p className="text-white">{userData?.domicilio?.ciudad || 'No especificada'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Código Postal</p>
+                <p className="text-white">{userData?.domicilio?.codigoPostal || 'No especificado'}</p>
+              </div>
             </div>
           )}
 
