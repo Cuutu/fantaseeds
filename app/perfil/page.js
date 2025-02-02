@@ -29,6 +29,13 @@ export default function Perfil() {
         const data = await response.json();
         if (data.success) {
           setUserData(data.user);
+          setFormData({
+            ...formData,
+            calle: data.user.domicilio?.calle || '',
+            numero: data.user.domicilio?.numero || '',
+            localidad: data.user.domicilio?.ciudad || '',
+            codigoPostal: data.user.domicilio?.codigoPostal || ''
+          });
         }
       } catch (error) {
         console.error('Error al obtener datos del usuario:', error);
