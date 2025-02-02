@@ -221,36 +221,31 @@ export default function Perfil() {
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-white">Domicilio</h2>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
-              >
-                {isEditing ? 'Cancelar' : 'Editar'}
-              </button>
-            </div>
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+            >
+              {isEditing ? 'Cancelar' : 'Editar'}
+            </button>
           </div>
 
           {!isEditing && (
-            <div>
-              <h2 className="text-xl font-bold text-white mb-6">Domicilio</h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-gray-400 text-sm">Calle</p>
-                  <p className="text-white">{userData?.domicilio?.calle || 'No especificada'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Número</p>
-                  <p className="text-white">{userData?.domicilio?.numero || 'No especificado'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Localidad</p>
-                  <p className="text-white">{userData?.domicilio?.ciudad || 'No especificada'}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Código Postal</p>
-                  <p className="text-white">{userData?.domicilio?.codigoPostal || 'No especificado'}</p>
-                </div>
+            <div className="space-y-3">
+              <div>
+                <p className="text-gray-400 text-sm">Calle</p>
+                <p className="text-white">{userData?.domicilio?.calle || 'No especificada'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Número</p>
+                <p className="text-white">{userData?.domicilio?.numero || 'No especificado'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Localidad</p>
+                <p className="text-white">{userData?.domicilio?.ciudad || 'No especificada'}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm">Código Postal</p>
+                <p className="text-white">{userData?.domicilio?.codigoPostal || 'No especificado'}</p>
               </div>
             </div>
           )}
