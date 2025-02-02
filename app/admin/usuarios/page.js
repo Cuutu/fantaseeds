@@ -501,6 +501,25 @@ export default function UsersPage() {
                   <p className="text-white">{selectedAddress.provincia}</p>
                 </div>
               )}
+              <div className="pt-4">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    `${selectedAddress.calle} ${selectedAddress.numero}, ${selectedAddress.ciudad}, Argentina`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  <svg 
+                    className="w-5 h-5 mr-2" 
+                    fill="currentColor" 
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M10 0C6.12 0 3 3.12 3 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.88-3.12-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S8.62 4.5 10 4.5s2.5 1.12 2.5 2.5S11.38 9.5 10 9.5z"/>
+                  </svg>
+                  Ver en Google Maps
+                </a>
+              </div>
             </div>
           </div>
         </div>
