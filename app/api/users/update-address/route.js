@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { connectDB } from "@/lib/mongoose";
+import dbConnect from "@/lib/db/mongodb";
 import User from "@/models/User";
 
 export async function POST(req) {
@@ -10,17 +10,17 @@ export async function POST(req) {
       return Response.json({ success: false, error: "No autorizado" }, { status: 401 });
     }
 
-    await connectDB();
+    await dbConnect();
     const { calle, numero, codigoPostal, localidad } = await req.json();
 
     const updatedUser = await User.findByIdAndUpdate(
       session.user.id,
       {
         $set: {
-          'domicilio.calle': calle,
-          'domicilio.numero': numero,
-          'domicilio.codigoPostal': codigoPostal,
-          'domicilio.localidad': localidad
+          calle: calle,
+          numero: numero,
+          codigoPostal: codigoPostal,
+          localidad: localidad
         }
       },
       { new: true }
