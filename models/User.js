@@ -9,11 +9,14 @@ const userSchema = new mongoose.Schema({
   rol: { type: String, default: 'usuario' },
   membresia: { type: String, default: '10G' },
   fechaAlta: { type: Date, default: Date.now },
-  // Agregamos los campos de dirección directamente en el esquema
-  calle: { type: String },
-  numero: { type: String },
-  localidad: { type: String },
-  codigoPostal: { type: String }
+  domicilio: {
+    calle: { type: String, default: '' },
+    numero: { type: String, default: '' },
+    codigoPostal: { type: String, default: '' },
+    ciudad: { type: String, default: '' },
+    provincia: { type: String, default: '' }
+  },
+  activo: { type: Boolean, default: true }
 });
 
 // Mantener el middleware de hash de contraseña
