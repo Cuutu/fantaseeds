@@ -20,17 +20,23 @@ export default function Perfil() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('success');
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/user/get-profile');
+        const data = await response.json();
+        if (data.success) {
+          setUserData(data.user);
+        }
+      } catch (error) {
+        console.error('Error al obtener datos del usuario:', error);
+      }
+    };
+
     if (session?.user) {
-      setFormData({
-        nombreApellido: session.user.nombreApellido || '',
-        email: session.user.email || '',
-        calle: session.user.domicilio?.calle || '',
-        numero: session.user.domicilio?.numero || '',
-        localidad: session.user.domicilio?.ciudad || '',
-        codigoPostal: session.user.domicilio?.codigoPostal || ''
-      });
+      fetchUserData();
     }
   }, [session]);
 
@@ -228,10 +234,15 @@ export default function Perfil() {
             <div>
               <p className="text-gray-400 text-sm mb-1">Dirección</p>
               <p className="text-white text-lg">
-                {session?.user?.domicilio?.calle && session?.user?.domicilio?.numero ? 
-                  `${session.user.domicilio.calle} ${session.user.domicilio.numero}, ${session.user.domicilio.ciudad || ''} ${session.user.domicilio.codigoPostal || ''}` 
-                  : 'No especificada'
-                }
+                {userData?.domicilio?.calle ? (
+                  <>
+                    {userData.domicilio.calle} {userData.domicilio.numero}
+                    {userData.domicilio.ciudad && `, ${userData.domicilio.ciudad}`}
+                    {userData.domicilio.codigoPostal && ` (${userData.domicilio.codigoPostal})`}
+                  </>
+                ) : (
+                  'No especificada'
+                )}
               </p>
             </div>
           )}
