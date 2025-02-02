@@ -166,12 +166,7 @@ export default function Perfil() {
                 onClick={() => setShowPasswordModal(true)}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm transition-colors duration-200 flex items-center"
               >
-                <svg 
-                  className="w-4 h-4 mr-2" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 Cambiar Contraseña
@@ -180,15 +175,10 @@ export default function Perfil() {
                 onClick={() => setIsEditing(!isEditing)}
                 className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md text-sm transition-colors duration-200 flex items-center"
               >
-                <svg 
-                  className="w-4 h-4 mr-2" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Editar Perfil
+                {isEditing ? 'Cancelar' : 'Editar'}
               </button>
             </div>
           </div>
@@ -221,36 +211,28 @@ export default function Perfil() {
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-white">Domicilio</h2>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
-            >
-              {isEditing ? 'Cancelar' : 'Editar'}
-            </button>
           </div>
 
-          {!isEditing && (
-            <div className="space-y-3">
+          {!isEditing ? (
+            <div className="space-y-6">
               <div>
-                <p className="text-gray-400 text-sm">Calle</p>
-                <p className="text-white">{userData?.domicilio?.calle || 'No especificada'}</p>
+                <p className="text-gray-400 text-sm mb-1">Calle</p>
+                <p className="text-white text-lg">{userData?.domicilio?.calle || 'No especificada'}</p>
               </div>
               <div>
-                <p className="text-gray-400 text-sm">Número</p>
-                <p className="text-white">{userData?.domicilio?.numero || 'No especificado'}</p>
+                <p className="text-gray-400 text-sm mb-1">Número</p>
+                <p className="text-white text-lg">{userData?.domicilio?.numero || 'No especificado'}</p>
               </div>
               <div>
-                <p className="text-gray-400 text-sm">Localidad</p>
-                <p className="text-white">{userData?.domicilio?.ciudad || 'No especificada'}</p>
+                <p className="text-gray-400 text-sm mb-1">Localidad</p>
+                <p className="text-white text-lg">{userData?.domicilio?.ciudad || 'No especificada'}</p>
               </div>
               <div>
-                <p className="text-gray-400 text-sm">Código Postal</p>
-                <p className="text-white">{userData?.domicilio?.codigoPostal || 'No especificado'}</p>
+                <p className="text-gray-400 text-sm mb-1">Código Postal</p>
+                <p className="text-white text-lg">{userData?.domicilio?.codigoPostal || 'No especificado'}</p>
               </div>
             </div>
-          )}
-
-          {isEditing && (
+          ) : (
             <div className="space-y-6">
               <div>
                 <p className="text-gray-400 text-sm mb-1">Calle</p>
