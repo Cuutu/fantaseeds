@@ -25,10 +25,10 @@ export default function Perfil() {
       setFormData({
         nombreApellido: session.user.nombreApellido || '',
         email: session.user.email || '',
-        calle: session.user.calle || '',
-        numero: session.user.numero || '',
-        localidad: session.user.localidad || '',
-        codigoPostal: session.user.codigoPostal || ''
+        calle: session.user.domicilio?.calle || '',
+        numero: session.user.domicilio?.numero || '',
+        localidad: session.user.domicilio?.ciudad || '',
+        codigoPostal: session.user.domicilio?.codigoPostal || ''
       });
     }
   }, [session]);
@@ -102,10 +102,13 @@ export default function Perfil() {
           ...session,
           user: {
             ...session.user,
-            calle: formData.calle,
-            numero: formData.numero,
-            localidad: formData.localidad,
-            codigoPostal: formData.codigoPostal
+            domicilio: {
+              ...session.user.domicilio,
+              calle: formData.calle,
+              numero: formData.numero,
+              ciudad: formData.localidad,
+              codigoPostal: formData.codigoPostal
+            }
           }
         });
         
@@ -206,7 +209,7 @@ export default function Perfil() {
                   placeholder="Ingresa tu calle"
                 />
               ) : (
-                <p className="text-white text-lg">{formData.calle || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.calle || 'No especificado'}</p>
               )}
             </div>
             <div>
@@ -220,7 +223,7 @@ export default function Perfil() {
                   placeholder="Ingresa el número"
                 />
               ) : (
-                <p className="text-white text-lg">{formData.numero || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.numero || 'No especificado'}</p>
               )}
             </div>
             <div>
@@ -234,7 +237,7 @@ export default function Perfil() {
                   placeholder="Ingresa tu localidad"
                 />
               ) : (
-                <p className="text-white text-lg">{formData.localidad || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.ciudad || 'No especificado'}</p>
               )}
             </div>
             <div>
@@ -248,7 +251,7 @@ export default function Perfil() {
                   placeholder="Ingresa el código postal"
                 />
               ) : (
-                <p className="text-white text-lg">{formData.codigoPostal || 'No especificado'}</p>
+                <p className="text-white text-lg">{session?.user?.domicilio?.codigoPostal || 'No especificado'}</p>
               )}
             </div>
           </div>
