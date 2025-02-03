@@ -218,35 +218,32 @@ export default function Genetics() {
       </div>
       <Cart />
       {showModal && (
-        <div className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="relative flex items-center justify-center min-h-screen p-4">
-            <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-white">Límite de Membresía Alcanzado</h3>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="space-y-4">
-                <p className="text-gray-300">
-                  Llegaste al límite de tu membresía. ¿Querés aumentar tu límite?{' '}
-                  <a href="#" className="text-green-400 hover:text-green-300 underline">
-                    Hacé click acá para upgradear
-                  </a>
-                </p>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
-                >
-                  Aceptar
-                </button>
-              </div>
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+          <div className="relative bg-black/40 backdrop-blur-md rounded-2xl p-6 max-w-md w-full border border-white/10">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-white">Límite de Membresía Alcanzado</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-4">
+              <p className="text-gray-300">
+                Llegaste al límite de tu membresía. ¿Querés aumentar tu límite?{' '}
+                <a href="#" className="text-green-400 hover:text-green-300 underline">
+                  Hacé click acá para upgradear
+                </a>
+              </p>
+              <button
+                onClick={() => setShowModal(false)}
+                className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Aceptar
+              </button>
             </div>
           </div>
         </div>
