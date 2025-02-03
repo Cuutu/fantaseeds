@@ -144,3 +144,12 @@ section {
 .react-datepicker__triangle::after {
   @apply border-gray-700;
 }
+
+/* Estilos para modales */
+.modal-content {
+  @apply bg-gray-900 border border-gray-800;
+}
+
+.modal-header {
+  @apply border-b border-gray-800;
+}
