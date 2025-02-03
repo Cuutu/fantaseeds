@@ -165,7 +165,7 @@ export function CartProvider({ children }) {
       {/* Modal de límite de membresía */}
       {showLimitModal && (
         <div className="fixed inset-0 z-50 overflow-auto backdrop-blur-sm bg-black/40 flex items-center justify-center">
-          <div className="relative bg-gray-800/90 rounded-lg p-8 m-4 max-w-sm w-full shadow-xl">
+          <div className="relative bg-gray-800 rounded-lg p-8 m-4 max-w-sm w-full shadow-xl">
             <div className="mb-4">
               <h3 className="text-xl font-semibold text-white">
                 Límite de Membresía Alcanzado
