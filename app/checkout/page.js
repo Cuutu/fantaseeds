@@ -33,6 +33,39 @@ export default function Checkout() {
   };
 
   useEffect(() => {
+    const fetchUserAddress = async () => {
+      try {
+        const response = await fetch('/api/user/get-profile');
+        const data = await response.json();
+        
+        if (data.success && data.user) {
+          if (!data.user.calle || !data.user.numero) {
+            // Si no tiene dirección, redirigir al perfil
+            router.push('/perfil?redirect=checkout');
+            return;
+          }
+          
+          setShippingAddress({
+            calle: data.user.calle || '',
+            numero: data.user.numero || '',
+            piso: data.user.piso || '',
+            depto: data.user.depto || '',
+            codigoPostal: data.user.codigoPostal || '',
+            localidad: data.user.localidad || '',
+            provincia: data.user.provincia || ''
+          });
+        }
+      } catch (error) {
+        console.error('Error al obtener la dirección:', error);
+      }
+    };
+
+    if (deliveryMethod === 'envio') {
+      fetchUserAddress();
+    }
+  }, [deliveryMethod]);
+
+  useEffect(() => {
     if (!cart || cart.length === 0) {
       router.push('/');
       return;
@@ -143,7 +176,7 @@ export default function Checkout() {
                   : 'border-gray-700 hover:border-green-500'
               } transition-colors`}
             >
-              <span className="text-white">Envío a Domicilio (+$500)</span>
+              <span className="text-white">Envío a Domicilio</span>
             </button>
           </div>
         </div>
@@ -266,8 +299,7 @@ export default function Checkout() {
           <div className="flex justify-between mt-4 pt-4 border-t border-gray-700">
             <span className="text-white font-semibold">Total</span>
             <span className="text-white font-semibold">
-              ${cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0) + 
-                (deliveryMethod === 'envio' ? 500 : 0)}
+              ${cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0)}
             </span>
           </div>
         </div>

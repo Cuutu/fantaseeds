@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { useSession, signOut } from 'next-auth/react';
 import AlertModal from '@/components/ui/AlertModal';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Perfil() {
   const { data: session, update } = useSession();
@@ -22,6 +23,9 @@ export default function Perfil() {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('success');
   const [userData, setUserData] = useState(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -123,7 +127,9 @@ export default function Perfil() {
         setAlertType('success');
         setIsEditing(false);
         
-        window.location.reload();
+        if (redirect === 'checkout') {
+          router.push('/checkout');
+        }
       } else {
         throw new Error(data.error || 'Error al actualizar el domicilio');
       }
