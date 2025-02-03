@@ -160,34 +160,10 @@ export default function Genetics() {
                     Destacados
                   </button>
                   <button
-                    onClick={() => {handleSort('price-low'); setShowSort(false);}}
-                    className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700"
-                  >
-                    Precio: Menor a Mayor
-                  </button>
-                  <button
-                    onClick={() => {handleSort('price-high'); setShowSort(false);}}
-                    className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700"
-                  >
-                    Precio: Mayor a Menor
-                  </button>
-                  <button
                     onClick={() => {handleSort('a-z'); setShowSort(false);}}
                     className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700"
                   >
                     A-Z
-                  </button>
-                  <button
-                    onClick={() => {handleSort('z-a'); setShowSort(false);}}
-                    className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700"
-                  >
-                    Z-A
-                  </button>
-                  <button
-                    onClick={() => {handleSort('best-selling'); setShowSort(false);}}
-                    className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700"
-                  >
-                    Más Vendidos
                   </button>
                 </div>
               </div>
