@@ -3,17 +3,17 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import User from '@/models/User';
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+
+export async function GET(req) {
   try {
     await dbConnect();
     
     const session = await getServerSession(authOptions);
-    if (session?.user?.rol !== 'administrador') {
-      return Response.json({ 
-        success: false, 
-        error: 'No autorizado' 
-      }, { 
-        status: 401 
+    if (!session || session.user.role !== 'admin') {
+      return new Response(JSON.stringify({ error: 'No autorizado' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
       });
     }
 
@@ -34,20 +34,21 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .limit(5);
 
-    return Response.json({
+    return new Response(JSON.stringify({
       success: true,
       totalUsuarios,
       membresias,
       ultimosUsuarios
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
     console.error('Error en dashboard:', error);
-    return Response.json({ 
-      success: false, 
-      error: error.message 
-    }, { 
-      status: 500 
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 } 
