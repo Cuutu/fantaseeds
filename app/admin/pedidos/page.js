@@ -87,8 +87,7 @@ export default function AdminPedidosPage() {
         alert('Error al cargar el comprobante');
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('Error al cargar el comprobante');
+      console.error('Error al cargar el comprobante:', error);
     }
   };
 
