@@ -83,24 +83,23 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    await dbConnect();
-    
     const session = await getServerSession(authOptions);
-    
     if (!session) {
-      return Response.json({ 
-        success: false, 
-        error: 'No autorizado' 
-      }, { 
-        status: 401 
-      });
+      return Response.json({ error: 'No autorizado' }, { status: 401 });
     }
 
-    // Modificamos la consulta para poblar la información de los productos
-    const orders = await Order.find({})
-      .populate('usuario', 'nombreApellido email')
-      .populate('productos.genetic', 'nombre precio')
-      .sort({ fechaPedido: -1 });
+    await dbConnect();
+
+    // Si es admin, obtener todos los pedidos
+    // Si es usuario normal, obtener solo sus pedidos
+    const query = session.user.role === 'admin' 
+      ? {} 
+      : { usuario: session.user.id };
+
+    const orders = await Order.find(query)
+      .sort({ createdAt: -1 })
+      .populate('usuario', 'email name')
+      .populate('productos.genetic', 'nombre precio');
 
     return Response.json({
       success: true,
@@ -108,10 +107,10 @@ export async function GET(request) {
     });
 
   } catch (error) {
-    console.error('Error en GET /api/orders:', error);
+    console.error('Error al obtener pedidos:', error);
     return Response.json({ 
       success: false, 
-      error: 'Error al obtener pedidos: ' + error.message 
+      error: 'Error al obtener los pedidos' 
     }, { 
       status: 500 
     });

@@ -20,6 +20,7 @@ export default function AdminPedidosPage() {
   const [statusFilter, setStatusFilter] = useState('todos');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const estadosPedido = [
     { value: 'todos', label: 'Todos los estados' },
@@ -137,15 +138,28 @@ export default function AdminPedidosPage() {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
+        setIsLoading(true);
+        setError(null);
         const response = await fetch('/api/orders');
+        
+        if (!response.ok) {
+          throw new Error('Error al cargar los pedidos');
+        }
+        
         const data = await response.json();
         if (data.success) {
-          setPedidos(data.orders);
+          setPedidos(data.orders || []);
+        } else {
+          throw new Error(data.error || 'Error al cargar los pedidos');
         }
       } catch (error) {
         console.error('Error al cargar pedidos:', error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
+
     fetchPedidos();
   }, []);
 
@@ -164,6 +178,33 @@ export default function AdminPedidosPage() {
 
     return matchesSearch && matchesStatus && matchesDate;
   });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p>Cargando pedidos...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white text-center">
+          <p className="text-red-500 mb-4">Error: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-800">
@@ -289,14 +330,7 @@ export default function AdminPedidosPage() {
             </p>
           )}
 
-          {loading ? (
-            <div className="text-center p-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
-              <p className="mt-2 text-white">Cargando pedidos...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center p-4 text-red-500">Error: {error}</div>
-          ) : pedidos.length === 0 ? (
+          {pedidos.length === 0 ? (
             <div className="text-center p-4 text-white">No hay pedidos disponibles</div>
           ) : (
             <div className="grid gap-6">
