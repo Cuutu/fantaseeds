@@ -440,28 +440,48 @@ export default function AdminPedidosPage() {
                     </div>
                   </div>
 
-                  {/* Método de Pago */}
+                  {/* Método de Pago y Entrega */}
                   <div className="p-4 border-t border-gray-700">
-                    <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
-                    <div className="flex items-center gap-4">
-                      <span className="text-gray-300">{pedido.metodoPago}</span>
-                      {pedido.metodoPago === 'transferencia' && (
-                        <button
-                          onClick={() => handleVerComprobante(pedido._id)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
-                        >
-                          Ver Comprobante
-                        </button>
-                      )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
+                        <div className="flex items-center gap-4">
+                          <span className="text-gray-300 capitalize">{pedido.metodoPago}</span>
+                          {pedido.metodoPago === 'transferencia' && (
+                            <button
+                              onClick={() => handleVerComprobante(pedido._id)}
+                              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                            >
+                              Ver Comprobante
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="text-white font-semibold mb-2">Método de Entrega:</h4>
+                        <div className="flex items-center gap-4">
+                          <span className="text-gray-300 capitalize">
+                            {pedido.metodoEntrega === 'envio' ? 'Envío a domicilio' : 'Retiro en local'}
+                          </span>
+                        </div>
+                        {pedido.metodoEntrega === 'envio' && pedido.direccionEnvio && (
+                          <p className="text-gray-300 text-sm mt-1">
+                            Dirección: {`${pedido.direccionEnvio.calle} ${pedido.direccionEnvio.numero}, ${pedido.direccionEnvio.localidad}`}
+                          </p>
+                        )}
+                      </div>
                     </div>
+
                     <div className="mt-2">
                       <span className={`inline-block px-3 py-1 rounded-full text-sm ${
-                        pedido.estado === 'Pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
-                        pedido.estado === 'Aprobado' ? 'bg-green-500/20 text-green-500' :
-                        pedido.estado === 'Rechazado' ? 'bg-red-500/20 text-red-500' :
+                        pedido.estado === 'pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
+                        pedido.estado === 'confirmado' ? 'bg-green-500/20 text-green-500' :
+                        pedido.estado === 'completado' ? 'bg-blue-500/20 text-blue-500' :
+                        pedido.estado === 'cancelado' ? 'bg-red-500/20 text-red-500' :
                         'bg-gray-500/20 text-gray-500'
                       }`}>
-                        {pedido.estado}
+                        {pedido.estado.charAt(0).toUpperCase() + pedido.estado.slice(1)}
                       </span>
                     </div>
                   </div>
