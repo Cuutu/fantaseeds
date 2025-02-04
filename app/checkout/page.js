@@ -157,6 +157,7 @@ export default function Checkout() {
 
     setIsLoading(true);
     try {
+      // Convertir el archivo a base64
       const fileReader = new FileReader();
       fileReader.readAsDataURL(comprobante);
       
@@ -176,7 +177,6 @@ export default function Checkout() {
           informacionCliente: {
             nombre: session?.user?.name || '',
             email: session?.user?.email || '',
-            // Puedes agregar más campos si los tienes disponibles
           },
           comprobante: {
             archivo: base64Data,

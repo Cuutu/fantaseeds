@@ -137,36 +137,17 @@ export default function AdminPedidosPage() {
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
-        const response = await fetch('/api/orders', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Error al cargar los pedidos');
-        }
-
+        const response = await fetch('/api/orders');
         const data = await response.json();
-        console.log('Pedidos cargados:', data); // Debug
-        
         if (data.success) {
           setPedidos(data.orders);
-        } else {
-          console.error('Error en la respuesta:', data.error);
         }
       } catch (error) {
         console.error('Error al cargar pedidos:', error);
-      } finally {
-        setLoading(false);
       }
     };
-
-    if (session) {
-      fetchPedidos();
-    }
-  }, [session]);
+    fetchPedidos();
+  }, []);
 
   // Función para filtrar pedidos
   const filteredPedidos = pedidos.filter(pedido => {
