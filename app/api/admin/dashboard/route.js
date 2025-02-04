@@ -11,7 +11,7 @@ export async function GET() {
     if (session?.user?.rol !== 'administrador') {
       return Response.json({ 
         success: false, 
-        error: 'No autorizado' 
+        error: 'No autorizado.' 
       }, { 
         status: 401 
       });
