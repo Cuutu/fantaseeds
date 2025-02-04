@@ -3,7 +3,9 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import User from '@/models/User';
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+
+export async function GET(request) {
   try {
     await dbConnect();
     

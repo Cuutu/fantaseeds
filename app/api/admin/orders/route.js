@@ -5,7 +5,9 @@ import Order from '@/models/Order';
 import User from '@/models/User';
 import Genetic from '@/models/Genetic';
 
-export async function GET() {
+export const dynamic = 'force-dynamic';
+
+export async function GET(request) {
   try {
     const session = await getServerSession(authOptions);
 
