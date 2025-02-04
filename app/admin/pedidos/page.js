@@ -385,11 +385,14 @@ export default function AdminPedidosPage() {
                       Nombre: {pedido.usuario?.nombreApellido || pedido.informacionCliente?.nombre || 'No disponible'}
                     </p>
                     <p className="text-gray-300">
-                      Email: {pedido.usuario?.email || pedido.compradorInfo?.email || 'No disponible'}
+                      Email: {pedido.usuario?.email || pedido.informacionCliente?.email || 'No disponible'}
                     </p>
                     <p className="text-gray-300">
-                      Dirección: {pedido.retiro ? 'Retira en local' : 
-                        `${pedido.direccion || ''} ${pedido.localidad || ''} ${pedido.provincia || ''}`}
+                      Dirección: {
+                        pedido.usuario?.domicilio ? 
+                        `${pedido.usuario.domicilio.calle} ${pedido.usuario.domicilio.numero}, ${pedido.usuario.domicilio.ciudad}` 
+                        : 'No disponible'
+                      }
                     </p>
                   </div>
 

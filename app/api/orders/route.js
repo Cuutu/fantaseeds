@@ -98,7 +98,7 @@ export async function GET(request) {
 
     const orders = await Order.find(query)
       .sort({ createdAt: -1 })
-      .populate('usuario', 'email nombreApellido')
+      .populate('usuario', 'email nombreApellido domicilio')
       .populate('productos.genetic', 'nombre precio');
 
     return Response.json({
