@@ -20,6 +20,19 @@ export default function Checkout() {
   const { cart, clearCart } = useCart();
   const session = useSession();
 
+  // Agregar este cálculo después de los estados iniciales
+  const subtotal = cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0);
+  const [total, setTotal] = useState(subtotal);
+
+  useEffect(() => {
+    // Aplicar recargo del 10% si el método es MercadoPago
+    if (paymentMethod === 'mercadopago') {
+      setTotal(subtotal * 1.10); // 10% más
+    } else {
+      setTotal(subtotal);
+    }
+  }, [paymentMethod, subtotal]);
+
   useEffect(() => {
     const fetchUserAddress = async () => {
       if (deliveryMethod === 'envio') {
@@ -108,6 +121,7 @@ export default function Checkout() {
         },
         body: JSON.stringify({
           cart,
+          total: total,
           deliveryMethod,
           shippingAddress: deliveryMethod === 'envio' ? shippingAddress : null
         }),
@@ -313,11 +327,19 @@ export default function Checkout() {
           ))}
           
           <div className="border-t border-gray-700 mt-4 pt-4">
-            <div className="flex justify-between font-semibold">
+            <div className="flex justify-between">
+              <span className="text-gray-300">Subtotal</span>
+              <span className="text-gray-300">${subtotal}</span>
+            </div>
+            {paymentMethod === 'mercadopago' && (
+              <div className="flex justify-between mt-2">
+                <span className="text-gray-300">Costo de procesamiento</span>
+                <span className="text-gray-300">${(total - subtotal).toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex justify-between font-semibold mt-2">
               <span className="text-white">Total</span>
-              <span className="text-white">
-                ${cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0)}
-              </span>
+              <span className="text-white">${total.toFixed(2)}</span>
             </div>
           </div>
         </div>
