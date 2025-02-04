@@ -14,12 +14,8 @@ export default function Checkout() {
   const [shippingAddress, setShippingAddress] = useState({
     calle: '',
     numero: '',
-    piso: '',
-    departamento: '',
     codigoPostal: '',
     localidad: '',
-    provincia: '',
-    telefono: ''
   });
   const router = useRouter();
   const { cart, clearCart } = useCart();
@@ -32,21 +28,16 @@ export default function Checkout() {
           const data = await response.json();
           
           if (data.success && data.user) {
-            if (!data.user.calle || !data.user.numero) {
-              // Si no tiene dirección cargada, redirigir al perfil
+            if (!data.user?.domicilio?.calle || !data.user?.domicilio?.numero) {
               router.push('/perfil?redirect=checkout');
               return;
             }
             
             setShippingAddress({
-              calle: data.user.calle || '',
-              numero: data.user.numero || '',
-              piso: data.user.piso || '',
-              departamento: data.user.depto || '',
-              codigoPostal: data.user.codigoPostal || '',
-              localidad: data.user.localidad || '',
-              provincia: data.user.provincia || '',
-              telefono: data.user.telefono || ''
+              calle: data.user?.domicilio?.calle || '',
+              numero: data.user?.domicilio?.numero || '',
+              codigoPostal: data.user?.domicilio?.codigoPostal || '',
+              localidad: data.user?.domicilio?.ciudad || '',
             });
           }
         } catch (error) {
@@ -72,12 +63,8 @@ export default function Checkout() {
       setShippingAddress({
         calle: '',
         numero: '',
-        piso: '',
-        departamento: '',
         codigoPostal: '',
         localidad: '',
-        provincia: '',
-        telefono: ''
       });
     }
   };
@@ -94,9 +81,7 @@ export default function Checkout() {
            shippingAddress.calle && 
            shippingAddress.numero && 
            shippingAddress.codigoPostal && 
-           shippingAddress.localidad && 
-           shippingAddress.provincia && 
-           shippingAddress.telefono)) {
+           shippingAddress.localidad )) {
         try {
           await createPreference();
         } catch (error) {
@@ -223,24 +208,6 @@ export default function Checkout() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300">Piso</label>
-                <input
-                  type="text"
-                  value={shippingAddress.piso}
-                  onChange={(e) => setShippingAddress({...shippingAddress, piso: e.target.value})}
-                  className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300">Departamento</label>
-                <input
-                  type="text"
-                  value={shippingAddress.departamento}
-                  onChange={(e) => setShippingAddress({...shippingAddress, departamento: e.target.value})}
-                  className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
-              <div>
                 <label className="block text-sm font-medium text-gray-300">Código Postal *</label>
                 <input
                   type="text"
@@ -257,26 +224,6 @@ export default function Checkout() {
                   required
                   value={shippingAddress.localidad}
                   onChange={(e) => setShippingAddress({...shippingAddress, localidad: e.target.value})}
-                  className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300">Provincia *</label>
-                <input
-                  type="text"
-                  required
-                  value={shippingAddress.provincia}
-                  onChange={(e) => setShippingAddress({...shippingAddress, provincia: e.target.value})}
-                  className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300">Teléfono *</label>
-                <input
-                  type="tel"
-                  required
-                  value={shippingAddress.telefono}
-                  onChange={(e) => setShippingAddress({...shippingAddress, telefono: e.target.value})}
                   className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white"
                 />
               </div>
