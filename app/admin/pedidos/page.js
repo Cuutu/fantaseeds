@@ -419,9 +419,17 @@ export default function AdminPedidosPage() {
                   {/* Método de Pago */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
-                    <p className="text-gray-300">
-                      {pedido.metodoPago === 'transferencia' ? 'Transferencia' : 'MercadoPago'}
-                    </p>
+                    <div className="flex items-center gap-4">
+                      <span className="text-gray-300">{pedido.metodoPago}</span>
+                      {pedido.metodoPago === 'transferencia' && (
+                        <button
+                          onClick={() => handleVerComprobante(pedido._id)}
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                        >
+                          Ver Comprobante
+                        </button>
+                      )}
+                    </div>
                     <div className="mt-2">
                       <span className={`inline-block px-3 py-1 rounded-full text-sm ${
                         pedido.estado === 'Pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
@@ -454,16 +462,6 @@ export default function AdminPedidosPage() {
                         </a>
                       </div>
                     </div>
-                  )}
-
-                  {/* Botón para ver el comprobante en la lista de pedidos */}
-                  {pedido.metodoPago === 'transferencia' && (
-                    <button
-                      onClick={() => handleVerComprobante(pedido._id)}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
-                    >
-                      Ver Comprobante
-                    </button>
                   )}
                 </div>
               ))}
