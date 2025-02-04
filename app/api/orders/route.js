@@ -8,53 +8,33 @@ import User from '@/models/User';
 
 export async function POST(request) {
   try {
-    await dbConnect();
-    
     const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.id) {
-      return Response.json({ 
-        success: false, 
-        error: 'No autorizado' 
-      }, { 
-        status: 401 
-      });
+    if (!session) {
+      return Response.json({ error: 'No autorizado' }, { status: 401 });
     }
 
     const data = await request.json();
-    
-    if (!data.metodoPago) {
-      return Response.json({ 
-        success: false, 
-        error: 'El método de pago es requerido' 
-      }, { 
-        status: 400 
-      });
-    }
+    await dbConnect();
 
-    // Validar stock disponible antes de crear el pedido
-    for (const producto of data.productos) {
-      const genetic = await Genetic.findById(producto.genetic._id);
-      if (!genetic || genetic.stock < producto.cantidad) {
-        return Response.json({
-          success: false,
-          error: `Stock insuficiente para ${genetic?.nombre || 'producto'}`
+    // Verificar stock disponible
+    for (const item of data.productos) {
+      const genetic = await Genetic.findById(item.genetic._id);
+      if (!genetic) {
+        return Response.json({ 
+          success: false, 
+          error: `Producto no encontrado: ${item.genetic.nombre}` 
+        }, { status: 404 });
+      }
+      
+      if (genetic.stock < item.cantidad) {
+        return Response.json({ 
+          success: false, 
+          error: `Stock insuficiente para ${genetic.nombre}. Disponible: ${genetic.stock}` 
         }, { status: 400 });
       }
     }
 
-    // Obtener la información completa del usuario
-    const usuario = await User.findById(session.user.id);
-    if (!usuario) {
-      return Response.json({ 
-        success: false, 
-        error: 'Usuario no encontrado' 
-      }, { 
-        status: 404 
-      });
-    }
-
-    // Crear el pedido con la información del usuario
+    // Crear el pedido
     const order = await Order.create({
       usuario: session.user.id,
       productos: data.productos,
@@ -63,13 +43,16 @@ export async function POST(request) {
       metodoPago: data.metodoPago,
       metodoEntrega: data.metodoEntrega,
       direccionEnvio: data.direccionEnvio,
-      // Agregar información del cliente
-      informacionCliente: {
-        nombre: usuario.nombre || usuario.name,
-        email: usuario.email,
-        telefono: usuario.telefono
-      }
+      informacionCliente: data.informacionCliente
     });
+
+    // Actualizar stock
+    for (const item of data.productos) {
+      await Genetic.findByIdAndUpdate(
+        item.genetic._id,
+        { $inc: { stock: -item.cantidad } }
+      );
+    }
 
     // Si es transferencia, crear el comprobante
     if (data.metodoPago === 'transferencia' && data.comprobante) {
@@ -94,9 +77,7 @@ export async function POST(request) {
     return Response.json({ 
       success: false, 
       error: error.message 
-    }, { 
-      status: 500 
-    });
+    }, { status: 500 });
   }
 }
 
