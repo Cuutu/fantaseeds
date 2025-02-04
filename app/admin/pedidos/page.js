@@ -382,7 +382,7 @@ export default function AdminPedidosPage() {
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
                     <p className="text-gray-300">
-                      Nombre: {pedido.usuario?.name || pedido.compradorInfo?.nombre || 'No disponible'}
+                      Nombre: {pedido.informacionCliente?.nombre || pedido.usuario?.name || 'No disponible'}
                     </p>
                     <p className="text-gray-300">
                       Email: {pedido.usuario?.email || pedido.compradorInfo?.email || 'No disponible'}
