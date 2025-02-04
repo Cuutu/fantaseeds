@@ -166,11 +166,10 @@ export default function Checkout() {
     }
 
     setIsLoading(true);
-    try {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(comprobante);
-      
-      fileReader.onload = async () => {
+    const fileReader = new FileReader();
+    
+    fileReader.onload = async () => {
+      try {
         const base64Data = fileReader.result.split(',')[1];
         
         const orderData = {
@@ -194,20 +193,21 @@ export default function Checkout() {
           }
         };
 
-        try {
-          const response = await fetch('/api/orders', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData)
-          });
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData)
+        });
 
-          const data = await response.json();
-
-          if (data.success && data.order && data.order._id) {
-            // Enviar email usando el template correcto
-            const templateParams = {
+        const data = await response.json();
+        
+        if (data.success) {
+          await emailjs.send(
+            process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+            'template_sk14xfk',
+            {
               to_name: session.data?.user?.name || 'Cliente',
               to_email: session.data?.user?.email,
               order_id: data.order._id,
@@ -217,31 +217,24 @@ export default function Checkout() {
                 `${shippingAddress.calle} ${shippingAddress.numero}, ${shippingAddress.localidad}` : 
                 'Retiro en local',
               products_list: cart.map(item => `${item.genetic.nombre} x${item.cantidad}`).join(', ')
-            };
+            },
+            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+          );
 
-            await emailjs.send(
-              process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-              'template_sk14xfk',
-              templateParams,
-              process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-            );
-
-            clearCart();
-            router.push(`/checkout/transfer-success?orderId=${data.order._id}`);
-          } else {
-            throw new Error(data.error || 'Error al crear el pedido');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
-          setIsLoading(false);
+          clearCart();
+          window.location.href = `/checkout/transfer-success?orderId=${data.order._id}`;
+        } else {
+          throw new Error(data.error || 'Error al crear el pedido');
         }
-      };
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
-      setIsLoading(false);
-    }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fileReader.readAsDataURL(comprobante);
   };
 
   if (!cart || cart.length === 0) {
