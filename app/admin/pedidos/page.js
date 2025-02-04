@@ -406,7 +406,7 @@ export default function AdminPedidosPage() {
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Método de Pago:</h4>
                     <p className="text-gray-300">
-                      MercadoPago
+                      {pedido.metodoPago === 'transferencia' ? 'Transferencia' : 'MercadoPago'}
                     </p>
                     <div className="mt-2">
                       <span className={`inline-block px-3 py-1 rounded-full text-sm ${
@@ -419,6 +419,28 @@ export default function AdminPedidosPage() {
                       </span>
                     </div>
                   </div>
+
+                  {pedido.metodoPago === 'transferencia' && pedido.comprobante && (
+                    <div className="mt-4">
+                      <h4 className="text-white font-semibold mb-2">Comprobante de Transferencia</h4>
+                      <div className="relative bg-gray-700 rounded-lg p-2">
+                        <img
+                          src={pedido.comprobante}
+                          alt="Comprobante de transferencia"
+                          className="w-full h-auto rounded-lg cursor-pointer"
+                          onClick={() => window.open(pedido.comprobante, '_blank')}
+                        />
+                        <a 
+                          href={pedido.comprobante}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                        >
+                          Ver completo
+                        </a>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
