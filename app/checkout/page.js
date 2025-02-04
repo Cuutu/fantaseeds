@@ -205,7 +205,7 @@ export default function Checkout() {
         const data = await response.json();
 
         if (data.success) {
-          // Enviar email usando el template de transferencias
+          // Enviar email usando el template correcto
           const templateParams = {
             to_name: session.data?.user?.name || 'Cliente',
             to_email: session.data?.user?.email,
@@ -220,7 +220,7 @@ export default function Checkout() {
 
           await emailjs.send(
             process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-            'rn4mukj',
+            'template_sk14xfk',
             templateParams,
             process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
           );
