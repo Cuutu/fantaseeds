@@ -6,25 +6,14 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  compradorInfo: {
-    nombre: String,
-    apellido: String,
-    email: String
-  },
   productos: [{
     genetic: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Genetic',
       required: true
     },
-    cantidad: {
-      type: Number,
-      required: true
-    },
-    precio: {
-      type: Number,
-      required: true
-    }
+    cantidad: Number,
+    precio: Number
   }],
   total: {
     type: Number,
@@ -32,6 +21,7 @@ const orderSchema = new mongoose.Schema({
   },
   estado: {
     type: String,
+    enum: ['pendiente', 'confirmado', 'completado', 'cancelado'],
     default: 'pendiente'
   },
   metodoPago: {
@@ -41,42 +31,25 @@ const orderSchema = new mongoose.Schema({
   },
   metodoEntrega: {
     type: String,
-    enum: ['retiro', 'envio'],
+    enum: ['envio', 'retiro'],
     required: true
   },
   direccionEnvio: {
-    type: Object,
-    required: function() {
-      return this.metodoEntrega === 'envio';
-    }
-  },
-  fechaPedido: {
-    type: Date,
-    default: Date.now
-  },
-  pagoId: String,
-  estadoPago: {
-    type: String,
-    enum: ['pending', 'approved', 'rejected', 'cancelled'],
-    default: 'pending'
-  },
-  fechaActualizacion: {
-    type: Date,
-    default: Date.now
+    calle: String,
+    numero: String,
+    localidad: String,
+    provincia: String,
+    codigoPostal: String
   },
   informacionCliente: {
-    nombre: {
-      type: String,
-      required: true
-    },
-    email: {
-      type: String,
-      required: true
-    },
-    telefono: {
-      type: String,
-      required: false
-    }
+    nombre: String,
+    apellido: String,
+    email: String,
+    telefono: String
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 }, {
   timestamps: true

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useSession } from 'next-auth/react';
 
 // Inicializar MercadoPago
 initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY);
@@ -22,6 +23,7 @@ export default function Checkout() {
   });
   const router = useRouter();
   const { cart, clearCart } = useCart();
+  const session = useSession();
 
   useEffect(() => {
     const fetchUserAddress = async () => {
@@ -155,7 +157,6 @@ export default function Checkout() {
 
     setIsLoading(true);
     try {
-      // Convertir el archivo a base64
       const fileReader = new FileReader();
       fileReader.readAsDataURL(comprobante);
       
@@ -172,6 +173,11 @@ export default function Checkout() {
           metodoPago: 'transferencia',
           metodoEntrega: deliveryMethod,
           direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
+          informacionCliente: {
+            nombre: session?.user?.name || '',
+            email: session?.user?.email || '',
+            // Puedes agregar más campos si los tienes disponibles
+          },
           comprobante: {
             archivo: base64Data,
             nombreArchivo: comprobante.name,
