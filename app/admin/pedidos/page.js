@@ -135,6 +135,15 @@ export default function AdminPedidosPage() {
     link.click();
   };
 
+  const formatearFecha = (fecha) => {
+    if (!fecha) return 'Fecha no disponible';
+    return new Date(fecha).toLocaleDateString('es-AR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   useEffect(() => {
     const fetchPedidos = async () => {
       try {
@@ -343,7 +352,7 @@ export default function AdminPedidosPage() {
                         Pedido #{pedido._id.slice(-6)}
                       </h3>
                       <p className="text-gray-300">
-                        {new Date(pedido.fechaPedido).toLocaleDateString()}
+                        {formatearFecha(pedido.fechaPedido)}
                       </p>
                     </div>
                     <div className="flex items-center gap-4">
@@ -371,33 +380,16 @@ export default function AdminPedidosPage() {
                   {/* Información del cliente */}
                   <div className="p-4 border-t border-gray-700">
                     <h4 className="text-white font-semibold mb-2">Información del Cliente</h4>
-                    {pedido.compradorInfo ? (
-                      <>
-                        <p className="text-gray-300">
-                          Nombre: {`${pedido.compradorInfo.nombre} ${pedido.compradorInfo.apellido}`.trim() || 'No disponible'}
-                        </p>
-                        <p className="text-gray-300">
-                          Email: {pedido.compradorInfo.email || 'No disponible'}
-                        </p>
-                        <p className="text-gray-300">
-                          Dirección: {pedido.retiro ? 'Retira en local' : 
-                            `${pedido.direccion || ''} ${pedido.localidad || ''} ${pedido.provincia || ''}`}
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-gray-300">
-                          Nombre: {pedido.usuario?.nombreApellido || 'Usuario no disponible'}
-                        </p>
-                        <p className="text-gray-300">
-                          Email: {pedido.usuario?.email || 'Email no disponible'}
-                        </p>
-                        <p className="text-gray-300">
-                          Dirección: {pedido.retiro ? 'Retira en local' : 
-                            `${pedido.usuario?.calle || ''} ${pedido.usuario?.numero || ''}, ${pedido.usuario?.localidad || ''}`}
-                        </p>
-                      </>
-                    )}
+                    <p className="text-gray-300">
+                      Nombre: {pedido.usuario?.name || pedido.compradorInfo?.nombre || 'No disponible'}
+                    </p>
+                    <p className="text-gray-300">
+                      Email: {pedido.usuario?.email || pedido.compradorInfo?.email || 'No disponible'}
+                    </p>
+                    <p className="text-gray-300">
+                      Dirección: {pedido.retiro ? 'Retira en local' : 
+                        `${pedido.direccion || ''} ${pedido.localidad || ''} ${pedido.provincia || ''}`}
+                    </p>
                   </div>
 
                   {/* Productos */}

@@ -11,16 +11,11 @@ initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY);
 export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [preferenceId, setPreferenceId] = useState(null);
-  const [deliveryMethod, setDeliveryMethod] = useState('retiro');
+  const [deliveryMethod, setDeliveryMethod] = useState('envio');
   const [paymentMethod, setPaymentMethod] = useState('mercadopago');
   const [comprobante, setComprobante] = useState(null);
   const [showComprobanteError, setShowComprobanteError] = useState(false);
-  const [shippingAddress, setShippingAddress] = useState({
-    calle: '',
-    numero: '',
-    codigoPostal: '',
-    localidad: '',
-  });
+  const [shippingAddress, setShippingAddress] = useState(null);
   const router = useRouter();
   const { cart, clearCart } = useCart();
   const session = useSession();
