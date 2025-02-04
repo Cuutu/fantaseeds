@@ -121,9 +121,9 @@ export default function Checkout() {
         <h1 className="text-2xl font-bold text-white mb-8">Checkout</h1>
 
         {/* Método de entrega */}
-        <div className="mb-8">
-          <h3 className="text-white font-semibold mb-4">Método de Entrega:</h3>
-          <div className="space-y-3">
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-white">Método de entrega</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               onClick={() => setDeliveryMethod('retiro')}
               className={`w-full p-4 rounded-lg border ${
@@ -132,9 +132,8 @@ export default function Checkout() {
                   : 'border-gray-700 hover:border-green-500'
               } transition-colors`}
             >
-              <span className="text-white">Retiro en Sucursal</span>
+              <span className="text-white">Retiro en Local</span>
             </button>
-            
             <button
               onClick={() => setDeliveryMethod('envio')}
               className={`w-full p-4 rounded-lg border ${
@@ -143,7 +142,7 @@ export default function Checkout() {
                   : 'border-gray-700 hover:border-green-500'
               } transition-colors`}
             >
-              <span className="text-white">Envío a Domicilio (+$500)</span>
+              <span className="text-white">Envío a Domicilio</span>
             </button>
           </div>
         </div>
@@ -266,8 +265,7 @@ export default function Checkout() {
           <div className="flex justify-between mt-4 pt-4 border-t border-gray-700">
             <span className="text-white font-semibold">Total</span>
             <span className="text-white font-semibold">
-              ${cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0) + 
-                (deliveryMethod === 'envio' ? 500 : 0)}
+              ${cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0)}
             </span>
           </div>
         </div>
