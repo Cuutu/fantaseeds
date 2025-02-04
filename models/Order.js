@@ -39,12 +39,6 @@ const orderSchema = new mongoose.Schema({
     enum: ['mercadopago', 'transferencia'],
     required: true
   },
-  comprobante: {
-    type: String, // URL del comprobante
-    required: function() {
-      return this.metodoPago === 'transferencia';
-    }
-  },
   metodoEntrega: {
     type: String,
     enum: ['retiro', 'envio'],

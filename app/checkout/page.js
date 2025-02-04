@@ -187,12 +187,13 @@ export default function Checkout() {
           body: JSON.stringify(orderData)
         });
 
-        if (!response.ok) {
-          throw new Error('Error al crear el pedido');
+        if (response.ok) {
+          clearCart();
+          router.push('/pedidos');
+        } else {
+          const error = await response.json();
+          throw new Error(error.error || 'Error al crear el pedido');
         }
-
-        clearCart();
-        router.push('/pedidos');
       };
     } catch (error) {
       console.error('Error:', error);
