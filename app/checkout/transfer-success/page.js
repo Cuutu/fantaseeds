@@ -14,7 +14,15 @@ function TransferSuccessContent() {
   }, [clearCart]);
 
   const handleVerPedidos = () => {
+    // Intentamos primero con router.push
     router.push('/pedidos');
+    
+    // Como respaldo, si router.push no funciona
+    setTimeout(() => {
+      if (window.location.pathname !== '/pedidos') {
+        window.location.href = '/pedidos';
+      }
+    }, 100);
   };
 
   return (
