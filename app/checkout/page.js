@@ -11,6 +11,9 @@ export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [preferenceId, setPreferenceId] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState('retiro');
+  const [paymentMethod, setPaymentMethod] = useState('mercadopago');
+  const [comprobante, setComprobante] = useState(null);
+  const [showComprobanteError, setShowComprobanteError] = useState(false);
   const [shippingAddress, setShippingAddress] = useState({
     calle: '',
     numero: '',
@@ -134,6 +137,48 @@ export default function Checkout() {
     }
   };
 
+  const handleComprobanteUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setComprobante(file);
+      setShowComprobanteError(false);
+    } else {
+      setShowComprobanteError(true);
+    }
+  };
+
+  const handleTransferSubmit = async () => {
+    if (!comprobante) {
+      setShowComprobanteError(true);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('comprobante', comprobante);
+      formData.append('cart', JSON.stringify(cart));
+      formData.append('deliveryMethod', deliveryMethod);
+      if (deliveryMethod === 'envio') {
+        formData.append('shippingAddress', JSON.stringify(shippingAddress));
+      }
+
+      const response = await fetch('/api/orders/create-transfer', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        clearCart();
+        router.push('/pedidos');
+      }
+    } catch (error) {
+      console.error('Error al procesar la transferencia:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (!cart || cart.length === 0) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -252,28 +297,102 @@ export default function Checkout() {
           </div>
         </div>
 
-        {/* Botón de Mercado Pago */}
-        {preferenceId && (
-          <div className="mt-4">
-            <Wallet 
-              initialization={{ preferenceId }}
-              customization={{ 
-                texts: { valueProp: 'smart_option' },
-                visual: { 
-                  buttonBackground: 'black',
-                  borderRadius: '6px'
-                }
-              }}
-            />
+        {/* Sección de pago */}
+        <div className="max-w-2xl mx-auto mt-8 p-6 bg-gray-800 rounded-lg">
+          <h3 className="text-xl font-semibold text-white mb-6">Método de pago</h3>
+          
+          {/* Selector de método de pago */}
+          <div className="space-y-4 mb-6">
+            <button
+              onClick={() => setPaymentMethod('mercadopago')}
+              className={`w-full p-4 rounded-lg border ${
+                paymentMethod === 'mercadopago' 
+                  ? 'border-green-500 bg-green-500/10' 
+                  : 'border-gray-700 hover:border-green-500'
+              } transition-colors`}
+            >
+              <span className="text-white">MercadoPago</span>
+            </button>
+            
+            <button
+              onClick={() => setPaymentMethod('transferencia')}
+              className={`w-full p-4 rounded-lg border ${
+                paymentMethod === 'transferencia' 
+                  ? 'border-green-500 bg-green-500/10' 
+                  : 'border-gray-700 hover:border-green-500'
+              } transition-colors`}
+            >
+              <span className="text-white">Transferencia Bancaria</span>
+            </button>
           </div>
-        )}
 
-        {isLoading && (
-          <div className="text-center mt-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
-            <p className="text-white mt-2">Procesando...</p>
-          </div>
-        )}
+          {/* Mostrar botón de MercadoPago o formulario de transferencia según selección */}
+          {paymentMethod === 'mercadopago' && preferenceId && (
+            <div className="mt-4">
+              <Wallet 
+                initialization={{ preferenceId }}
+                customization={{ 
+                  texts: { valueProp: 'smart_option' },
+                  visual: { 
+                    buttonBackground: 'black',
+                    borderRadius: '6px'
+                  }
+                }}
+              />
+            </div>
+          )}
+
+          {paymentMethod === 'transferencia' && (
+            <div className="space-y-4">
+              <div className="bg-gray-700/50 p-4 rounded-lg">
+                <h4 className="text-white font-semibold mb-2">Datos bancarios:</h4>
+                <p className="text-gray-300">Banco: XXXXX</p>
+                <p className="text-gray-300">CBU: XXXXX</p>
+                <p className="text-gray-300">Alias: XXXXX</p>
+                <p className="text-gray-300">Titular: XXXXX</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Cargar comprobante de transferencia
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleComprobanteUpload}
+                  className="block w-full text-sm text-gray-300
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-lg file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-green-500 file:text-white
+                    hover:file:bg-green-600
+                    file:cursor-pointer"
+                />
+                {showComprobanteError && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Por favor, carga una imagen del comprobante
+                  </p>
+                )}
+              </div>
+
+              <button
+                onClick={handleTransferSubmit}
+                disabled={!comprobante || isLoading}
+                className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-600 
+                  text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+              >
+                {isLoading ? 'Procesando...' : 'Confirmar pedido'}
+              </button>
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="text-center mt-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+              <p className="text-white mt-2">Procesando...</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
