@@ -184,8 +184,8 @@ export default function Checkout() {
           metodoEntrega: deliveryMethod,
           direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
           informacionCliente: {
-            nombre: session?.data?.user?.name || '',
-            email: session?.data?.user?.email || '',
+            nombre: session.data?.user?.name || '',
+            email: session.data?.user?.email || '',
           },
           comprobante: {
             archivo: base64Data,
@@ -226,7 +226,7 @@ export default function Checkout() {
           );
 
           clearCart();
-          router.push('/pedidos');
+          router.push(`/checkout/transfer-success?orderId=${data.order._id}`);
         } else {
           throw new Error(data.error || 'Error al crear el pedido');
         }
