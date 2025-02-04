@@ -155,36 +155,51 @@ export default function Checkout() {
 
     setIsLoading(true);
     try {
-      const formData = new FormData();
-      formData.append('comprobante', comprobante);
-      formData.append('cart', JSON.stringify(cart));
-      formData.append('deliveryMethod', deliveryMethod);
-      if (deliveryMethod === 'envio') {
-        formData.append('shippingAddress', JSON.stringify(shippingAddress));
+      // Primero crear el pedido
+      const orderData = {
+        productos: cart.map(item => ({
+          genetic: item.genetic,
+          cantidad: item.cantidad,
+          precio: item.genetic.precio
+        })),
+        total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0),
+        metodoPago: 'transferencia',
+        metodoEntrega: deliveryMethod,
+        direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null
+      };
+
+      const orderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!orderResponse.ok) {
+        throw new Error('Error al crear el pedido');
       }
 
-      console.log('Enviando formulario...'); // Debug
+      const { order } = await orderResponse.json();
 
-      const response = await fetch('/api/orders/create-transfer', {
+      // Luego subir el comprobante
+      const formData = new FormData();
+      formData.append('comprobante', comprobante);
+      formData.append('orderId', order._id);
+
+      const comprobanteResponse = await fetch('/api/comprobantes', {
         method: 'POST',
         body: formData
       });
 
-      console.log('Respuesta:', response); // Debug
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Pedido creado:', data); // Debug
-        clearCart();
-        router.push('/pedidos');
-      } else {
-        const error = await response.json();
-        console.error('Error en la respuesta:', error);
-        // Mostrar algún mensaje de error al usuario
-        alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
+      if (!comprobanteResponse.ok) {
+        throw new Error('Error al subir el comprobante');
       }
+
+      clearCart();
+      router.push('/pedidos');
     } catch (error) {
-      console.error('Error al procesar la transferencia:', error);
+      console.error('Error:', error);
       alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
     } finally {
       setIsLoading(false);
