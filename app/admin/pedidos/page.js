@@ -135,7 +135,8 @@ export default function AdminPedidosPage() {
     link.click();
   };
 
-  const formatearFecha = (fecha) => {
+  const formatearFecha = (pedido) => {
+    const fecha = pedido.fechaPedido || pedido.createdAt;
     if (!fecha) return 'Fecha no disponible';
     return new Date(fecha).toLocaleDateString('es-AR', {
       year: 'numeric',
@@ -352,7 +353,7 @@ export default function AdminPedidosPage() {
                         Pedido #{pedido._id.slice(-6)}
                       </h3>
                       <p className="text-gray-300">
-                        {formatearFecha(pedido.fechaPedido)}
+                        {formatearFecha(pedido)}
                       </p>
                     </div>
                     <div className="flex items-center gap-4">
