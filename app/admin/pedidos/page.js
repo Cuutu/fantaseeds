@@ -441,6 +441,16 @@ export default function AdminPedidosPage() {
                       </div>
                     </div>
                   )}
+
+                  {/* Botón para ver el comprobante en la lista de pedidos */}
+                  {pedido.metodoPago === 'transferencia' && (
+                    <button
+                      onClick={() => handleVerComprobante(pedido._id)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                    >
+                      Ver Comprobante
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

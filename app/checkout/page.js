@@ -155,49 +155,45 @@ export default function Checkout() {
 
     setIsLoading(true);
     try {
-      // Primero crear el pedido
-      const orderData = {
-        productos: cart.map(item => ({
-          genetic: item.genetic,
-          cantidad: item.cantidad,
-          precio: item.genetic.precio
-        })),
-        total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0),
-        metodoPago: 'transferencia',
-        metodoEntrega: deliveryMethod,
-        direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null
+      // Convertir el archivo a base64
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(comprobante);
+      
+      fileReader.onload = async () => {
+        const base64Data = fileReader.result.split(',')[1];
+        
+        const orderData = {
+          productos: cart.map(item => ({
+            genetic: item.genetic,
+            cantidad: item.cantidad,
+            precio: item.genetic.precio
+          })),
+          total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0),
+          metodoPago: 'transferencia',
+          metodoEntrega: deliveryMethod,
+          direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
+          comprobante: {
+            archivo: base64Data,
+            nombreArchivo: comprobante.name,
+            tipoArchivo: comprobante.type
+          }
+        };
+
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al crear el pedido');
+        }
+
+        clearCart();
+        router.push('/pedidos');
       };
-
-      const orderResponse = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData)
-      });
-
-      if (!orderResponse.ok) {
-        throw new Error('Error al crear el pedido');
-      }
-
-      const { order } = await orderResponse.json();
-
-      // Luego subir el comprobante
-      const formData = new FormData();
-      formData.append('comprobante', comprobante);
-      formData.append('orderId', order._id);
-
-      const comprobanteResponse = await fetch('/api/comprobantes', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!comprobanteResponse.ok) {
-        throw new Error('Error al subir el comprobante');
-      }
-
-      clearCart();
-      router.push('/pedidos');
     } catch (error) {
       console.error('Error:', error);
       alert('Error al procesar el pedido. Por favor, intenta nuevamente.');

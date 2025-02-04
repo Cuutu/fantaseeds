@@ -15,24 +15,13 @@ const comprobanteSchema = new mongoose.Schema({
     type: Buffer,
     required: true
   },
-  nombreArchivo: {
-    type: String,
-    required: true
-  },
-  tipoArchivo: {
-    type: String,
-    required: true
-  },
-  tamano: {
-    type: Number,
-    required: true
-  },
-  fechaSubida: {
+  nombreArchivo: String,
+  tipoArchivo: String,
+  tamano: Number,
+  createdAt: {
     type: Date,
     default: Date.now
   }
-}, {
-  timestamps: true
 });
 
 export default mongoose.models.Comprobante || mongoose.model('Comprobante', comprobanteSchema); 
