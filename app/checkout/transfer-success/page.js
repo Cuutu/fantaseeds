@@ -13,6 +13,10 @@ function TransferSuccessContent() {
     clearCart();
   }, [clearCart]);
 
+  const handleVerPedidos = () => {
+    router.push('/pedidos');
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <div className="bg-gray-800 p-8 rounded-lg shadow-xl max-w-md w-full text-center">
@@ -38,7 +42,7 @@ function TransferSuccessContent() {
           El pedido con el número <span className="font-semibold">{orderId}</span> fue recibido, estaremos preparándolo a la brevedad.
         </p>
         <button
-          onClick={() => router.push('/pedidos')}
+          onClick={handleVerPedidos}
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
         >
           Ver mis pedidos
