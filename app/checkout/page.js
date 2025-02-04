@@ -163,17 +163,29 @@ export default function Checkout() {
         formData.append('shippingAddress', JSON.stringify(shippingAddress));
       }
 
+      console.log('Enviando formulario...'); // Debug
+
       const response = await fetch('/api/orders/create-transfer', {
         method: 'POST',
         body: formData
       });
 
+      console.log('Respuesta:', response); // Debug
+
       if (response.ok) {
+        const data = await response.json();
+        console.log('Pedido creado:', data); // Debug
         clearCart();
         router.push('/pedidos');
+      } else {
+        const error = await response.json();
+        console.error('Error en la respuesta:', error);
+        // Mostrar algún mensaje de error al usuario
+        alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
       }
     } catch (error) {
       console.error('Error al procesar la transferencia:', error);
+      alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
     } finally {
       setIsLoading(false);
     }
