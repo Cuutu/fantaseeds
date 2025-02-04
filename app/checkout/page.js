@@ -15,7 +15,12 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState('mercadopago');
   const [comprobante, setComprobante] = useState(null);
   const [showComprobanteError, setShowComprobanteError] = useState(false);
-  const [shippingAddress, setShippingAddress] = useState(null);
+  const [shippingAddress, setShippingAddress] = useState({
+    calle: '',
+    numero: '',
+    codigoPostal: '',
+    localidad: ''
+  });
   const router = useRouter();
   const { cart, clearCart } = useCart();
   const session = useSession();
@@ -40,17 +45,12 @@ export default function Checkout() {
           const response = await fetch('/api/user/get-profile');
           const data = await response.json();
           
-          if (data.success && data.user) {
-            if (!data.user?.domicilio?.calle || !data.user?.domicilio?.numero) {
-              router.push('/perfil?redirect=checkout');
-              return;
-            }
-            
+          if (data.success && data.user?.domicilio) {
             setShippingAddress({
-              calle: data.user?.domicilio?.calle || '',
-              numero: data.user?.domicilio?.numero || '',
-              codigoPostal: data.user?.domicilio?.codigoPostal || '',
-              localidad: data.user?.domicilio?.ciudad || '',
+              calle: data.user.domicilio.calle || '',
+              numero: data.user.domicilio.numero || '',
+              codigoPostal: data.user.domicilio.codigoPostal || '',
+              localidad: data.user.domicilio.ciudad || ''
             });
           }
         } catch (error) {
