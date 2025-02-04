@@ -184,8 +184,8 @@ export default function Checkout() {
           metodoEntrega: deliveryMethod,
           direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
           informacionCliente: {
-            nombre: session.data?.user?.name || '',
-            email: session.data?.user?.email || '',
+            nombre: session?.data?.user?.name || '',
+            email: session?.data?.user?.email || '',
           },
           comprobante: {
             archivo: base64Data,
@@ -194,47 +194,52 @@ export default function Checkout() {
           }
         };
 
-        const response = await fetch('/api/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData)
-        });
+        try {
+          const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData)
+          });
 
-        const data = await response.json();
+          const data = await response.json();
 
-        if (data.success) {
-          // Enviar email usando el template correcto
-          const templateParams = {
-            to_name: session.data?.user?.name || 'Cliente',
-            to_email: session.data?.user?.email,
-            order_id: data.order._id,
-            total_amount: total.toFixed(2),
-            delivery_method: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en local',
-            delivery_address: deliveryMethod === 'envio' ? 
-              `${shippingAddress.calle} ${shippingAddress.numero}, ${shippingAddress.localidad}` : 
-              'Retiro en local',
-            products_list: cart.map(item => `${item.genetic.nombre} x${item.cantidad}`).join(', ')
-          };
+          if (data.success && data.order && data.order._id) {
+            // Enviar email usando el template correcto
+            const templateParams = {
+              to_name: session.data?.user?.name || 'Cliente',
+              to_email: session.data?.user?.email,
+              order_id: data.order._id,
+              total_amount: total.toFixed(2),
+              delivery_method: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en local',
+              delivery_address: deliveryMethod === 'envio' ? 
+                `${shippingAddress.calle} ${shippingAddress.numero}, ${shippingAddress.localidad}` : 
+                'Retiro en local',
+              products_list: cart.map(item => `${item.genetic.nombre} x${item.cantidad}`).join(', ')
+            };
 
-          await emailjs.send(
-            process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-            'template_sk14xfk',
-            templateParams,
-            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-          );
+            await emailjs.send(
+              process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+              'template_sk14xfk',
+              templateParams,
+              process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+            );
 
-          clearCart();
-          router.push(`/checkout/transfer-success?orderId=${data.order._id}`);
-        } else {
-          throw new Error(data.error || 'Error al crear el pedido');
+            clearCart();
+            router.push(`/checkout/transfer-success?orderId=${data.order._id}`);
+          } else {
+            throw new Error(data.error || 'Error al crear el pedido');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
+          setIsLoading(false);
         }
       };
     } catch (error) {
       console.error('Error:', error);
       alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
-    } finally {
       setIsLoading(false);
     }
   };
