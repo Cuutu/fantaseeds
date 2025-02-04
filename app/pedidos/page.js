@@ -78,7 +78,11 @@ export default function PedidosPage() {
                 <div>
                   <p className="text-gray-400">Pedido ID: {pedido._id}</p>
                   <p className="text-gray-400">
-                    Fecha: {new Date(pedido.fechaPedido).toLocaleDateString()}
+                    Fecha: {new Date(pedido.fechaPedido).toLocaleDateString('es-AR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
                   </p>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-sm ${
