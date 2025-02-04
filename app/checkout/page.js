@@ -222,7 +222,18 @@ export default function Checkout() {
           );
 
           clearCart();
-          router.replace(`/checkout/transfer-success?orderId=${data.order._id}`);
+          
+          // Intentemos con una redirección más directa
+          const redirectUrl = `/checkout/transfer-success?orderId=${data.order._id}`;
+          router.push(redirectUrl, { shallow: false });
+          
+          // Como respaldo, si la redirección del router falla
+          setTimeout(() => {
+            if (window.location.pathname !== '/checkout/transfer-success') {
+              window.location.href = redirectUrl;
+            }
+          }, 100);
+
         } else {
           throw new Error(data.error || 'Error al crear el pedido');
         }
