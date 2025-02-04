@@ -71,57 +71,51 @@ export default function PedidosPage() {
     <div className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-8">Mis Pedidos</h1>
-
-        {pedidos.length === 0 ? (
-          <div className="bg-gray-800 rounded-lg p-6">
-            <p className="text-gray-300 text-center">No tienes pedidos realizados.</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {pedidos.map((pedido) => (
-              <div key={pedido._id} className="bg-gray-800 rounded-lg p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <p className="text-gray-400">Pedido ID: {pedido._id}</p>
-                    <p className="text-white">
-                      Fecha: {formatearFecha(pedido.fechaPedido)}
-                    </p>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-sm ${
-                    pedido.estado === 'pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
-                    pedido.estado === 'confirmado' ? 'bg-green-500/20 text-green-500' :
-                    pedido.estado === 'en_proceso' ? 'bg-blue-500/20 text-blue-500' :
-                    pedido.estado === 'completado' ? 'bg-purple-500/20 text-purple-500' :
-                    'bg-red-500/20 text-red-500'
-                  }`}>
-                    {pedido.estado}
-                  </span>
+        <div className="space-y-6">
+          {pedidos.map((pedido) => (
+            <div key={pedido._id} className="bg-gray-800 rounded-lg p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <p className="text-gray-400">Pedido ID: {pedido._id}</p>
+                  <p className="text-gray-400">
+                    Fecha: {new Date(pedido.fechaPedido).toLocaleDateString()}
+                  </p>
                 </div>
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  pedido.estado === 'pendiente' ? 'bg-yellow-500/20 text-yellow-500' :
+                  pedido.estado === 'confirmado' ? 'bg-green-500/20 text-green-500' :
+                  pedido.estado === 'completado' ? 'bg-blue-500/20 text-blue-500' :
+                  pedido.estado === 'cancelado' ? 'bg-red-500/20 text-red-500' :
+                  'bg-gray-500/20 text-gray-500'
+                }`}>
+                  {pedido.estado.charAt(0).toUpperCase() + pedido.estado.slice(1)}
+                </span>
+              </div>
 
-                <div className="space-y-2">
-                  <h3 className="text-white font-semibold">Productos:</h3>
-                  {pedido.productos.map((producto, index) => (
-                    <div key={index} className="flex justify-between text-gray-300">
-                      <span>{producto.genetic?.nombre} x{producto.cantidad}</span>
-                      <span>${producto.precio * producto.cantidad}</span>
-                    </div>
-                  ))}
+              <div className="space-y-2">
+                {pedido.productos.map((producto, index) => (
+                  <div key={index} className="flex justify-between text-white">
+                    <span>{producto.genetic.nombre} x{producto.cantidad}</span>
+                    <span>${producto.precio * producto.cantidad}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-gray-700">
+                <div className="text-gray-400">
+                  <p>Método de pago: {pedido.metodoPago}</p>
+                  <p>Método de entrega: {pedido.metodoEntrega === 'envio' ? 'Envío a domicilio' : 'Retiro en local'}</p>
+                  {pedido.metodoEntrega === 'envio' && pedido.direccionEnvio && (
+                    <p>Dirección: {`${pedido.direccionEnvio.calle} ${pedido.direccionEnvio.numero}, ${pedido.direccionEnvio.localidad}`}</p>
+                  )}
                 </div>
-
-                <div className="mt-4 pt-4 border-t border-gray-700">
-                  <div className="flex justify-between">
-                    <span className="text-white">Total:</span>
-                    <span className="text-white font-bold">${pedido.total}</span>
-                  </div>
-                  <div className="mt-2 text-gray-400">
-                    <p>Método de pago: {pedido.metodoPago}</p>
-                    <p>Método de entrega: {pedido.metodoEntrega}</p>
-                  </div>
+                <div className="mt-4 text-right">
+                  <p className="text-xl font-bold text-white">Total: ${pedido.total}</p>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
