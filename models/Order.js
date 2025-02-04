@@ -47,6 +47,11 @@ const orderSchema = new mongoose.Schema({
     email: String,
     telefono: String
   },
+  comprobante: String,
+  fechaPedido: {
+    type: Date,
+    default: Date.now
+  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -37,13 +37,18 @@ export async function POST(request) {
     // Crear el pedido
     const order = await Order.create({
       usuario: session.user.id,
-      productos: data.productos,
+      productos: data.productos.map(item => ({
+        genetic: item.genetic._id,
+        cantidad: item.cantidad,
+        precio: item.precio
+      })),
       total: data.total,
       estado: 'pendiente',
       metodoPago: data.metodoPago,
       metodoEntrega: data.metodoEntrega,
       direccionEnvio: data.direccionEnvio,
-      informacionCliente: data.informacionCliente
+      comprobante: data.comprobante,
+      fechaPedido: new Date()
     });
 
     // Actualizar stock
