@@ -4,6 +4,7 @@ import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { useSession } from 'next-auth/react';
+import emailjs from '@emailjs/browser';
 
 // Inicializar MercadoPago
 initMercadoPago(process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY);
@@ -166,50 +167,47 @@ export default function Checkout() {
 
     setIsLoading(true);
     try {
-      // Convertir el archivo a base64
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(comprobante);
-      
-      fileReader.onload = async () => {
-        const base64Data = fileReader.result.split(',')[1];
-        
-        const orderData = {
-          productos: cart.map(item => ({
-            genetic: item.genetic,
-            cantidad: item.cantidad,
-            precio: item.genetic.precio
-          })),
-          total: cart.reduce((acc, item) => acc + (item.genetic.precio * item.cantidad), 0),
-          metodoPago: 'transferencia',
-          metodoEntrega: deliveryMethod,
-          direccionEnvio: deliveryMethod === 'envio' ? shippingAddress : null,
-          informacionCliente: {
-            nombre: session?.user?.name || '',
-            email: session?.user?.email || '',
-          },
-          comprobante: {
-            archivo: base64Data,
-            nombreArchivo: comprobante.name,
-            tipoArchivo: comprobante.type
-          }
+      const formData = new FormData();
+      formData.append('comprobante', comprobante);
+      formData.append('cart', JSON.stringify(cart));
+      formData.append('deliveryMethod', deliveryMethod);
+      if (deliveryMethod === 'envio') {
+        formData.append('shippingAddress', JSON.stringify(shippingAddress));
+      }
+
+      const response = await fetch('/api/orders/create-transfer', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Enviar email usando el template de transferencias
+        const templateParams = {
+          to_name: session.data?.user?.name || 'Cliente',
+          to_email: session.data?.user?.email,
+          order_id: data.orderId,
+          total_amount: total.toFixed(2),
+          delivery_method: deliveryMethod === 'envio' ? 'Envío a domicilio' : 'Retiro en local',
+          delivery_address: deliveryMethod === 'envio' ? 
+            `${shippingAddress.calle} ${shippingAddress.numero}, ${shippingAddress.localidad}` : 
+            'Retiro en local',
+          products_list: cart.map(item => `${item.genetic.nombre} x${item.cantidad}`).join(', ')
         };
 
-        const response = await fetch('/api/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData)
-        });
+        await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+          'rn4mukj', // ID del template de transferencias
+          templateParams,
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        );
 
-        if (response.ok) {
-          clearCart();
-          router.push('/pedidos');
-        } else {
-          const error = await response.json();
-          throw new Error(error.error || 'Error al crear el pedido');
-        }
-      };
+        clearCart();
+        router.push('/pedidos');
+      } else {
+        throw new Error(data.error || 'Error al crear el pedido');
+      }
     } catch (error) {
       console.error('Error:', error);
       alert('Error al procesar el pedido. Por favor, intenta nuevamente.');
