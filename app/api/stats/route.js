@@ -2,6 +2,8 @@ import dbConnect from '@/lib/db/mongodb';
 import User from '@/models/User';
 import { getServerSession } from 'next-auth/next';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   try {
     await dbConnect();
