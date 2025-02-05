@@ -19,8 +19,8 @@ export default function Footer() {
           </div>
           
           {/* Contenido a la derecha */}
-          <div className="flex flex-col items-center md:items-end space-y-4">
-            <div className="flex space-x-6">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="flex justify-center space-x-6">
               <a
                 href="https://www.instagram.com/fantaseedss.ong"
                 target="_blank"
@@ -39,7 +39,7 @@ export default function Footer() {
               </a>
             </div>
 
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-sm text-center">
               © 2024 Fantaseeds. Todos los derechos reservados.
             </p>
           </div>
