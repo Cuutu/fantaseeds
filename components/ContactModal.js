@@ -49,6 +49,7 @@ export default function ContactModal({ isOpen, onClose }) {
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
         {
           from_name: formData.nombre,
+          to_email: "contacto@fantaseeds.com.ar",
           from_email: formData.email,
           phone: formData.telefono,
           subject: getMotivoText(formData.motivo),
