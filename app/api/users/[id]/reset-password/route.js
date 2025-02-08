@@ -41,14 +41,14 @@ export async function POST(request, { params }) {
 
     // Enviar email con la nueva contraseña
     await resend.emails.send({
-      from: 'Fantaseeds <onboarding@resend.dev>',
+      from: 'FANTASEEDS <contacto@fantaseeds.com.ar>',
       to: updatedUser.email,
       subject: 'Tu contraseña ha sido reseteada',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h2 style="color: #333; text-align: center;">Reseteo de Contraseña</h2>
           
-          <p style="color: #666; line-height: 1.6;">
+          <p style="color: #666; line-height: 3.6;">
             Hola ${updatedUser.nombreApellido},
           </p>
           
