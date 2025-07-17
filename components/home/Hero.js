@@ -8,6 +8,7 @@ import ContactModal from '../ContactModal';
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/8JzQ6Z8l4gA');
+  const [isShort, setIsShort] = useState(false);
 
   useEffect(() => {
     async function fetchVideoUrl() {
@@ -17,12 +18,19 @@ export default function Hero() {
         if (data.success) {
           const videoSetting = data.settings.find(s => s.key === 'youtube_video_url');
           if (videoSetting && videoSetting.value) {
-            // Convertir link normal a embed si es necesario
-            let url = videoSetting.value;
+            // Detectar si es un Short o video normal
+            const url = videoSetting.value;
+            const isShortVideo = url.includes('/shorts/');
+            setIsShort(isShortVideo);
+            
+            // Convertir link a embed
+            let embedUrl = url;
             if (url.includes('watch?v=')) {
-              url = url.replace('watch?v=', 'embed/');
+              embedUrl = url.replace('watch?v=', 'embed/');
+            } else if (url.includes('/shorts/')) {
+              embedUrl = url.replace('/shorts/', '/embed/');
             }
-            setVideoUrl(url);
+            setVideoUrl(embedUrl);
           }
         }
       } catch (e) { /* ignorar error */ }
@@ -81,7 +89,11 @@ export default function Hero() {
           </button>
         </div>
         <div className="flex-1 flex justify-center items-center w-full max-w-3xl min-w-[320px] py-8 lg:py-0">
-          <div className="w-full aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 bg-black min-h-[220px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[400px] max-h-[480px]">
+          <div className={`w-full rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 bg-black ${
+            isShort 
+              ? 'aspect-[9/16] max-w-[280px] sm:max-w-[320px] lg:max-w-[360px] min-h-[400px] max-h-[640px]' 
+              : 'aspect-[16/9] min-h-[220px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[400px] max-h-[480px]'
+          }`}>
             <iframe
               width="100%"
               height="100%"
