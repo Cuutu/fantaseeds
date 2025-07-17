@@ -63,28 +63,24 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative h-screen flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:px-8 gap-8">
+      <div className="relative h-screen flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:px-8 gap-12">
         <ScrollReveal>
-          <div className="text-center lg:text-left flex flex-col items-center lg:items-start justify-center flex-1">
-            <div className="space-y-4">
-              <div className="relative w-full max-w-[200px] sm:max-w-[280px] mx-auto lg:mx-0">
-                <Image
-                  src="https://i.imgur.com/YcJ9dfr.png"
-                  alt="FANTASEEDS"
-                  width={500}
-                  height={150}
-                  className="w-full h-auto"
-                  priority
-                />
-              </div>
+          <div className="flex flex-col items-center lg:items-start justify-center flex-1 min-w-[320px] max-w-md w-full space-y-8">
+            <div className="w-full flex flex-col items-center lg:items-start">
+              <Image
+                src="https://i.imgur.com/YcJ9dfr.png"
+                alt="FANTASEEDS"
+                width={400}
+                height={120}
+                className="w-full max-w-[260px] h-auto mb-4"
+                priority
+              />
+              <span className="block text-white text-lg font-semibold tracking-wide mb-2">ONG DE LA SALUD</span>
             </div>
             <ScrollReveal delay={200}>
               <button
                 onClick={handleContactClick}
-                className="mt-8 bg-green-500 hover:bg-green-600 text-white font-bold 
-                         py-3 px-8 rounded-full transition-all duration-300 
-                         transform hover:scale-105 text-base
-                         shadow-lg hover:shadow-xl"
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-base shadow-lg hover:shadow-xl w-full max-w-[200px]"
               >
                 ¡INSCRIBITE!
               </button>
@@ -92,8 +88,8 @@ export default function Hero() {
           </div>
         </ScrollReveal>
         {/* Video YouTube */}
-        <div className="flex-1 flex justify-center items-center w-full max-w-2xl">
-          <div className="w-full aspect-video rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 bg-black">
+        <div className="flex-1 flex justify-center items-center w-full max-w-3xl min-w-[320px]">
+          <div className="w-full aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 bg-black min-h-[320px] max-h-[480px]">
             <iframe
               width="100%"
               height="100%"
