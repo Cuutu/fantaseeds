@@ -75,7 +75,6 @@ export default function Hero() {
                 className="w-full max-w-[260px] h-auto mb-4"
                 priority
               />
-              <span className="block text-white text-lg font-semibold tracking-wide mb-2">ONG DE LA SALUD</span>
             </div>
             <ScrollReveal delay={200}>
               <button
