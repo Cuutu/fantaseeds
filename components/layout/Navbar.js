@@ -51,6 +51,10 @@ export default function Navbar() {
               className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
               Galería
             </Link>
+            <Link href="/membresias"
+              className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
+              Membresías
+            </Link>
             <Link href="/#faq"
               className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm uppercase tracking-wider">
               FAQ
@@ -164,6 +168,11 @@ export default function Navbar() {
                 className="block px-3 py-2 text-gray-300 hover:text-green-400"
                 onClick={() => setIsMenuOpen(false)}>
                 Galería
+              </Link>
+              <Link href="/membresias"
+                className="block px-3 py-2 text-gray-300 hover:text-green-400"
+                onClick={() => setIsMenuOpen(false)}>
+                Membresías
               </Link>
               <Link href="/#faq"
                 className="block px-3 py-2 text-gray-300 hover:text-green-400"
