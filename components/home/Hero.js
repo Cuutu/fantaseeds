@@ -64,7 +64,7 @@ export default function Hero() {
       />
 
       <div className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16">
-        <div className="flex-1 flex flex-col items-center lg:items-end justify-center min-h-[320px] max-w-md w-full py-8 lg:py-0">
+        <div className="flex-1 flex flex-col items-center justify-center min-h-[320px] max-w-md w-full py-8 lg:py-0">
           <Image
             src="https://i.imgur.com/YcJ9dfr.png"
             alt="FANTASEEDS"
@@ -75,7 +75,7 @@ export default function Hero() {
           />
           <button
             onClick={handleContactClick}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-base shadow-lg hover:shadow-xl max-w-[200px] block mx-auto lg:mx-0 lg:ml-[-32px]"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-base shadow-lg hover:shadow-xl max-w-[200px] block mx-auto"
           >
             ¡INSCRIBITE!
           </button>
