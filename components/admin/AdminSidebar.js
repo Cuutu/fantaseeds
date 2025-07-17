@@ -51,6 +51,32 @@ const AdminSidebar = () => {
             <span>Genéticas</span>
           </div>
         </Link>
+
+        <Link
+          href="/admin/pedidos"
+          className={`block py-2.5 px-4 rounded transition duration-200 ${
+            pathname === '/admin/pedidos'
+              ? 'bg-gray-700 text-green-500'
+              : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+          }`}
+        >
+          <div className="flex items-center space-x-2">
+            <span>Pedidos</span>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/membresias"
+          className={`block py-2.5 px-4 rounded transition duration-200 ${
+            pathname === '/admin/membresias'
+              ? 'bg-gray-700 text-green-500'
+              : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+          }`}
+        >
+          <div className="flex items-center space-x-2">
+            <span>Membresías</span>
+          </div>
+        </Link>
       </nav>
 
       <div className="px-4 mt-auto">

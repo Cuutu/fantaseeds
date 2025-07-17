@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Membership from '@/models/Membership';
 
 // PUT - Actualizar membresía
 export async function PUT(request, { params }) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession();
     
     if (!session || session.user.rol !== 'administrador') {
       return NextResponse.json(
@@ -58,7 +57,7 @@ export async function PUT(request, { params }) {
 // DELETE - Eliminar membresía
 export async function DELETE(request, { params }) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession();
     
     if (!session || session.user.rol !== 'administrador') {
       return NextResponse.json(
