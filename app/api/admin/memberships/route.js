@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Membership from '@/models/Membership';
 
@@ -25,7 +26,7 @@ export async function GET() {
 // POST - Crear nueva membresía
 export async function POST(request) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     
     if (!session || session.user.rol !== 'administrador') {
       return NextResponse.json(
