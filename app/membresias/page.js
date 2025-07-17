@@ -22,7 +22,7 @@ export default function MembresiasPage() {
         'Soporte básico',
         'Envíos a todo el país'
       ],
-      popular: false,
+      popular: false, 
       color: 'green'
     },
     {
