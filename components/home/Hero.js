@@ -63,32 +63,25 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative h-screen flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:px-8 gap-12">
-        <ScrollReveal>
-          <div className="flex flex-col items-center lg:items-start justify-center flex-1 min-w-[320px] max-w-md w-full space-y-8">
-            <div className="w-full flex flex-col items-center lg:items-start">
-              <Image
-                src="https://i.imgur.com/YcJ9dfr.png"
-                alt="FANTASEEDS"
-                width={400}
-                height={120}
-                className="w-full max-w-[260px] h-auto mb-4"
-                priority
-              />
-            </div>
-            <ScrollReveal delay={200}>
-              <button
-                onClick={handleContactClick}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-base shadow-lg hover:shadow-xl w-full max-w-[200px]"
-              >
-                ¡INSCRIBITE!
-              </button>
-            </ScrollReveal>
-          </div>
-        </ScrollReveal>
-        {/* Video YouTube */}
-        <div className="flex-1 flex justify-center items-center w-full max-w-3xl min-w-[320px]">
-          <div className="w-full aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 bg-black min-h-[320px] max-h-[480px]">
+      <div className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16">
+        <div className="flex-1 flex flex-col items-center lg:items-end justify-center min-h-[320px] max-w-md w-full py-8 lg:py-0">
+          <Image
+            src="https://i.imgur.com/YcJ9dfr.png"
+            alt="FANTASEEDS"
+            width={400}
+            height={120}
+            className="w-full max-w-[260px] h-auto mb-8 lg:mb-12"
+            priority
+          />
+          <button
+            onClick={handleContactClick}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-base shadow-lg hover:shadow-xl w-full max-w-[200px]"
+          >
+            ¡INSCRIBITE!
+          </button>
+        </div>
+        <div className="flex-1 flex justify-center items-center w-full max-w-3xl min-w-[320px] py-8 lg:py-0">
+          <div className="w-full aspect-[16/9] rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 bg-black min-h-[220px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[400px] max-h-[480px]">
             <iframe
               width="100%"
               height="100%"
