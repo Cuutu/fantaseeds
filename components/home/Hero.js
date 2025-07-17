@@ -75,7 +75,7 @@ export default function Hero() {
           />
           <button
             onClick={handleContactClick}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-base shadow-lg hover:shadow-xl w-full max-w-[200px]"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-base shadow-lg hover:shadow-xl max-w-[200px] block mx-auto lg:mx-0 lg:ml-[-32px]"
           >
             ¡INSCRIBITE!
           </button>
