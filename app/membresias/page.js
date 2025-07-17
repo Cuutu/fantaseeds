@@ -1,95 +1,36 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { FiCheck, FiStar, FiArrowRight } from 'react-icons/fi';
+import { FiCheck, FiArrowRight } from 'react-icons/fi';
 
 export default function MembresiasPage() {
   const { data: session } = useSession();
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [memberships, setMemberships] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const memberships = [
-    {
-      id: '10G',
-      name: '10G',
-      price: '$15.000',
-      period: '/mes',
-      description: 'Ideal para empezar',
-      limit: '10 unidades por mes',
-      features: [
-        'Hasta 10 unidades mensuales',
-        'Acceso a todas las genéticas',
-        'Soporte básico',
-        'Envíos a todo el país'
-      ],
-      popular: false, 
-      color: 'green'
-    },
-    {
-      id: '20G',
-      name: '20G',
-      price: '$28.000',
-      period: '/mes',
-      description: 'La más popular',
-      limit: '20 unidades por mes',
-      features: [
-        'Hasta 20 unidades mensuales',
-        'Acceso a todas las genéticas',
-        'Soporte prioritario',
-        'Envíos gratis',
-        'Descuentos especiales'
-      ],
-      popular: true,
-      color: 'emerald'
-    },
-    {
-      id: '30G',
-      name: '30G',
-      price: '$40.000',
-      period: '/mes',
-      description: 'Para usuarios frecuentes',
-      limit: '30 unidades por mes',
-      features: [
-        'Hasta 30 unidades mensuales',
-        'Acceso a todas las genéticas',
-        'Soporte VIP',
-        'Envíos gratis express',
-        'Descuentos premium',
-        'Acceso anticipado a nuevas genéticas'
-      ],
-      popular: false,
-      color: 'teal'
-    },
-    {
-      id: '40G',
-      name: '40G',
-      price: '$50.000',
-      period: '/mes',
-      description: 'Membresía premium',
-      limit: '40 unidades por mes',
-      features: [
-        'Hasta 40 unidades mensuales',
-        'Acceso a todas las genéticas',
-        'Soporte VIP 24/7',
-        'Envíos gratis express',
-        'Descuentos máximos',
-        'Acceso anticipado',
-        'Asesoramiento personalizado',
-        'Genéticas exclusivas'
-      ],
-      popular: false,
-      color: 'cyan'
-    }
-  ];
+  useEffect(() => {
+    fetchMemberships();
+  }, []);
 
-  const getCardClasses = (membership) => {
-    const baseClasses = "relative rounded-2xl border transition-all duration-300 transform hover:scale-105";
-    
-    if (membership.popular) {
-      return `${baseClasses} border-emerald-500 bg-gradient-to-br from-emerald-900/20 to-emerald-800/20 shadow-emerald-500/20 shadow-xl`;
+  const fetchMemberships = async () => {
+    try {
+      const response = await fetch('/api/memberships');
+      const data = await response.json();
+      
+      if (data.success) {
+        setMemberships(data.memberships);
+      }
+    } catch (error) {
+      console.error('Error al cargar membresías:', error);
+    } finally {
+      setLoading(false);
     }
-    
-    return `${baseClasses} border-gray-700 bg-gradient-to-br from-gray-900/50 to-gray-800/50 hover:border-gray-600`;
+  };
+
+  const getCardClasses = () => {
+    return "relative rounded-2xl border border-gray-700 bg-gradient-to-br from-gray-900/50 to-gray-800/50 hover:border-gray-600 transition-all duration-300 transform hover:scale-105";
   };
 
   const handleUpgrade = (membershipId) => {
@@ -98,6 +39,14 @@ export default function MembresiasPage() {
     const whatsappUrl = `https://api.whatsapp.com/send/?phone=5491127064165&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
     window.open(whatsappUrl, '_blank');
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-24 pb-16 flex items-center justify-center">
+        <div className="text-white text-xl">Cargando membresías...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-24 pb-16">
@@ -115,22 +64,18 @@ export default function MembresiasPage() {
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {memberships.map((membership) => (
+          {memberships.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-400 text-lg">No hay membresías disponibles</p>
+            </div>
+          ) : (
+            memberships.map((membership) => (
             <div
               key={membership.id}
-              className={getCardClasses(membership)}
+              className={getCardClasses()}
               onMouseEnter={() => setHoveredCard(membership.id)}
               onMouseLeave={() => setHoveredCard(null)}
             >
-              {/* Popular Badge */}
-              {membership.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-emerald-500 text-white px-4 py-1 rounded-full text-sm font-medium flex items-center">
-                    <FiStar className="mr-1 h-4 w-4" />
-                    Más Popular
-                  </div>
-                </div>
-              )}
 
               <div className="p-8 h-full flex flex-col">
                 {/* Plan Name */}
@@ -161,18 +106,15 @@ export default function MembresiasPage() {
                 {/* CTA Button */}
                 <button
                   onClick={() => handleUpgrade(membership.id)}
-                  className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center group mt-auto ${
-                    membership.popular
-                      ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
-                      : 'bg-gray-700 hover:bg-gray-600 text-white hover:text-emerald-400'
-                  }`}
+                  className="w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center group mt-auto bg-gray-700 hover:bg-gray-600 text-white hover:text-emerald-400"
                 >
                   Elegir Plan
                   <FiArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
-          ))}
+          ))
+          )}
         </div>
 
         {/* Additional Info */}
