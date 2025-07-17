@@ -132,7 +132,7 @@ export default function MembresiasPage() {
                 </div>
               )}
 
-              <div className="p-8">
+              <div className="p-8 h-full flex flex-col">
                 {/* Plan Name */}
                 <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold text-white mb-2">{membership.name}</h3>
@@ -149,7 +149,7 @@ export default function MembresiasPage() {
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 mb-8 flex-1">
                   {membership.features.map((feature, index) => (
                     <li key={index} className="flex items-center text-gray-300">
                       <FiCheck className="h-5 w-5 text-emerald-400 mr-3 flex-shrink-0" />
@@ -161,7 +161,7 @@ export default function MembresiasPage() {
                 {/* CTA Button */}
                 <button
                   onClick={() => handleUpgrade(membership.id)}
-                  className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center group ${
+                  className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center group mt-auto ${
                     membership.popular
                       ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
                       : 'bg-gray-700 hover:bg-gray-600 text-white hover:text-emerald-400'
@@ -182,7 +182,7 @@ export default function MembresiasPage() {
             Nuestro equipo está disponible para ayudarte a encontrar la membresía perfecta 
             según tus necesidades y consumo.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <a
               href="https://api.whatsapp.com/send/?phone=5491127064165&text=Hola!%20Me%20gustar%C3%ADa%20recibir%20asesoramiento%20sobre%20las%20membres%C3%ADas&type=phone_number&app_absent=0"
               target="_blank"
@@ -191,14 +191,6 @@ export default function MembresiasPage() {
             >
               Contactar por WhatsApp
             </a>
-            {!session && (
-              <Link
-                href="/login"
-                className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center justify-center"
-              >
-                Iniciar Sesión
-              </Link>
-            )}
           </div>
         </div>
 
