@@ -7,8 +7,47 @@ import ContactModal from '../ContactModal';
 
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/8JzQ6Z8l4gA');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/8JzQ6Z8l4gA?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&cc_load_policy=0&iv_load_policy=3&autoplay=0');
   const [isShort, setIsShort] = useState(false);
+
+  // Extraer ID del video de YouTube
+  const getVideoId = (url) => {
+    if (!url) return null;
+    
+    // Para URLs normales: youtube.com/watch?v=ID
+    const normalMatch = url.match(/[?&]v=([^&#]*)/);
+    if (normalMatch) return normalMatch[1];
+    
+    // Para shorts: youtube.com/shorts/ID
+    const shortsMatch = url.match(/\/shorts\/([^?&#]*)/);
+    if (shortsMatch) return shortsMatch[1];
+    
+    // Para URLs cortas: youtu.be/ID
+    const shortMatch = url.match(/youtu\.be\/([^?&#]*)/);
+    if (shortMatch) return shortMatch[1];
+    
+    return null;
+  };
+  
+  // Convertir URL para embed con parámetros optimizados
+  const getEmbedUrl = (url) => {
+    const videoId = getVideoId(url);
+    if (!videoId) return url; // Fallback a la URL original si no se puede extraer
+    
+    // Parámetros para mejor compatibilidad y experiencia
+    const params = new URLSearchParams({
+      rel: '0',              // No mostrar videos relacionados
+      modestbranding: '1',   // Menos branding de YouTube
+      controls: '1',         // Mostrar controles
+      showinfo: '0',         // No mostrar info del video
+      fs: '1',               // Permitir pantalla completa
+      cc_load_policy: '0',   // No cargar subtítulos automáticamente
+      iv_load_policy: '3',   // No cargar anotaciones
+      autoplay: '0'          // No reproducir automáticamente
+    });
+    
+    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+  };
 
   useEffect(() => {
     async function fetchVideoUrl() {
@@ -23,17 +62,15 @@ export default function Hero() {
             const isShortVideo = url.includes('/shorts/');
             setIsShort(isShortVideo);
             
-            // Convertir link a embed
-            let embedUrl = url;
-            if (url.includes('watch?v=')) {
-              embedUrl = url.replace('watch?v=', 'embed/');
-            } else if (url.includes('/shorts/')) {
-              embedUrl = url.replace('/shorts/', '/embed/');
-            }
+            // Convertir link a embed con parámetros optimizados
+            const embedUrl = getEmbedUrl(url);
             setVideoUrl(embedUrl);
           }
         }
-      } catch (e) { /* ignorar error */ }
+      } catch (e) { 
+        console.log('Error cargando video:', e);
+        // Mantener video por defecto con parámetros optimizados
+      }
     }
     fetchVideoUrl();
   }, []);
@@ -103,6 +140,7 @@ export default function Hero() {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               className="w-full h-full"
+              referrerPolicy="strict-origin-when-cross-origin"
             ></iframe>
           </div>
         </div>
@@ -114,4 +152,4 @@ export default function Hero() {
       />
     </div>
   );
-} 
+}
