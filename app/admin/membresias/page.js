@@ -410,7 +410,7 @@ export default function AdminMembresiasPage() {
           <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-xl font-bold text-white mb-4">Confirmar Eliminación</h3>
             <p className="text-gray-300 mb-6">
-              ¿Estás seguro de que querés eliminar la membresía "{membershipToDelete?.name}"?
+              ¿Estás seguro de que querés eliminar la membresía &quot;{membershipToDelete?.name}&quot;?
             </p>
             <div className="flex gap-4">
               <button
