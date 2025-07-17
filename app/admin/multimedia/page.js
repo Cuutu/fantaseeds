@@ -33,20 +33,29 @@ export default function AdminMultimediaPage() {
     setSaving(true);
     setError('');
     setSuccess(false);
+    
     try {
+      console.log('Enviando:', { key: 'youtube_video_url', value: videoUrl });
+      
       const res = await fetch('/api/admin/settings', {
-        method: 'PUT',
+        method: 'POST', // Cambio de PUT a POST
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: 'youtube_video_url', value: videoUrl })
       });
+      
+      console.log('Respuesta status:', res.status);
       const data = await res.json();
+      console.log('Respuesta data:', data);
+      
       if (data.success) {
         setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
       } else {
-        setError('Error al guardar');
+        setError(data.error || 'Error al guardar');
       }
     } catch (e) {
-      setError('Error al guardar');
+      console.error('Error catch:', e);
+      setError('Error de conexión');
     } finally {
       setSaving(false);
     }
