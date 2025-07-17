@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import dbConnect from '@/lib/db/mongodb';
 import Membership from '@/models/Membership';
 
 // GET - Obtener todas las membresías
 export async function GET() {
   try {
+    // Si en el futuro se requiere autenticación, descomentar:
+    // const session = await getServerSession(authOptions);
     await dbConnect();
     const memberships = await Membership.find({}).sort({ order: 1 });
     
@@ -25,7 +28,7 @@ export async function GET() {
 // POST - Crear nueva membresía
 export async function POST(request) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     
     if (!session || session.user.rol !== 'administrador') {
       return NextResponse.json(
