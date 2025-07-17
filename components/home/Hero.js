@@ -8,9 +8,10 @@ import ContactModal from '../ContactModal';
 
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/ESZQGGiZ_KU?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&cc_load_policy=0&iv_load_policy=3&autoplay=1&mute=0&enablejsapi=1&playsinline=1');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/ESZQGGiZ_KU?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&cc_load_policy=0&iv_load_policy=3&autoplay=1&mute=1&enablejsapi=1&playsinline=1');
   const [isShort, setIsShort] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [iframeRef, setIframeRef] = useState(null);
   const router = useRouter();
 
   // Extraer ID del video de YouTube
@@ -37,7 +38,7 @@ export default function Hero() {
     const videoId = getVideoId(url);
     if (!videoId) return url;
     
-    // Parámetros optimizados con autoplay y configuraciones para la API
+    // Parámetros optimizados - iniciar silenciado para luego controlar volumen
     const params = new URLSearchParams({
       rel: '0',              // No mostrar videos relacionados
       modestbranding: '1',   // Menos branding de YouTube
@@ -47,13 +48,28 @@ export default function Hero() {
       cc_load_policy: '0',   // No cargar subtítulos automáticamente
       iv_load_policy: '3',   // No cargar anotaciones
       autoplay: '1',         // Reproducir automáticamente
-      mute: '0',             // No silenciar (para controlar volumen)
+      mute: '1',             // Iniciar silenciado para luego controlar
       enablejsapi: '1',      // Habilitar JavaScript API
-      playsinline: '1'       // Para móviles
+      playsinline: '1',      // Para móviles
+      origin: typeof window !== 'undefined' ? window.location.origin : ''
     });
     
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
   };
+
+  // Cargar la API de YouTube para control avanzado
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.YT) {
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      document.body.appendChild(script);
+      
+      window.onYouTubeIframeAPIReady = () => {
+        console.log('🎵 YouTube API cargada');
+      };
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchVideoUrl() {
@@ -106,7 +122,53 @@ export default function Hero() {
     fetchVideoUrl();
   }, []);
 
-  // Manejar evento de finalización del video
+  // Configurar player cuando el iframe esté listo
+  useEffect(() => {
+    if (!iframeRef) return;
+
+    const setupPlayerControl = () => {
+      if (window.YT && window.YT.Player) {
+        try {
+          console.log('🎛️ Configurando control del player...');
+          
+          const player = new window.YT.Player(iframeRef, {
+            events: {
+              onReady: (event) => {
+                console.log('🎵 Player listo, configurando volumen al 20%');
+                // Unmute primero, luego establecer volumen
+                event.target.unMute();
+                event.target.setVolume(20);
+                console.log('🔊 Volumen establecido al 20%');
+              },
+              onStateChange: (event) => {
+                console.log('📺 Estado del video cambiado:', event.data);
+                // Estado 0 = ENDED
+                if (event.data === 0) {
+                  console.log('🎬 Video terminado, redirigiendo a membresías...');
+                  setTimeout(() => {
+                    router.push('/membresias');
+                  }, 1000);
+                }
+              },
+              onError: (event) => {
+                console.log('❌ Error en el player:', event.data);
+              }
+            }
+          });
+        } catch (error) {
+          console.log('💥 Error configurando player:', error);
+        }
+      } else {
+        // Reintentar después de un tiempo si la API no está lista
+        setTimeout(setupPlayerControl, 1000);
+      }
+    };
+
+    // Esperar un poco para que el iframe se cargue completamente
+    setTimeout(setupPlayerControl, 2000);
+  }, [iframeRef, router]);
+
+  // Manejar eventos de mensaje del iframe (fallback)
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.origin !== 'https://www.youtube.com') return;
@@ -114,11 +176,9 @@ export default function Hero() {
       if (event.data && typeof event.data === 'string') {
         try {
           const data = JSON.parse(event.data);
-          if (data.event === 'video-progress' && data.info && data.info.currentTime) {
-            // Video está reproduciéndose
-          } else if (data.event === 'onStateChange' && data.info === 0) {
-            // Video terminó (estado 0)
-            console.log('🎬 Video terminado, redirigiendo a membresías...');
+          if (data.event === 'onStateChange' && data.info === 0) {
+            // Video terminó (estado 0) - fallback si el player directo no funciona
+            console.log('🎬 Video terminado (fallback), redirigiendo a membresías...');
             setTimeout(() => {
               router.push('/membresias');
             }, 1000);
@@ -140,6 +200,11 @@ export default function Hero() {
     } else {
       setIsContactModalOpen(true);
     }
+  };
+
+  const handleIframeLoad = (iframe) => {
+    console.log('📺 Iframe cargado, configurando referencia...');
+    setIframeRef(iframe);
   };
 
   if (loading) {
@@ -201,6 +266,7 @@ export default function Hero() {
               : 'aspect-[16/9] min-h-[220px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[400px] max-h-[480px]'
           }`}>
             <iframe
+              ref={handleIframeLoad}
               width="100%"
               height="100%"
               src={videoUrl}
@@ -210,6 +276,7 @@ export default function Hero() {
               allowFullScreen
               className="w-full h-full"
               referrerPolicy="strict-origin-when-cross-origin"
+              id="youtube-iframe"
             />
           </div>
         </div>
