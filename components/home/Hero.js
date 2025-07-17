@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -8,10 +8,9 @@ import ContactModal from '../ContactModal';
 
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/ESZQGGiZ_KU');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/ESZQGGiZ_KU?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&cc_load_policy=0&iv_load_policy=3&autoplay=1&mute=0&enablejsapi=1&playsinline=1');
   const [isShort, setIsShort] = useState(false);
-  const [videoId, setVideoId] = useState('ESZQGGiZ_KU');
-  const playerRef = useRef(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   // Extraer ID del video de YouTube
@@ -56,110 +55,83 @@ export default function Hero() {
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
   };
 
-  // Cargar la API de YouTube
-  useEffect(() => {
-    // Cargar script de YouTube API si no está cargado
-    if (!window.YT) {
-      const script = document.createElement('script');
-      script.src = 'https://www.youtube.com/iframe_api';
-      script.async = true;
-      document.body.appendChild(script);
-      
-      window.onYouTubeIframeAPIReady = () => {
-        console.log('YouTube API cargada');
-      };
-    }
-  }, []);
-
   useEffect(() => {
     async function fetchVideoUrl() {
+      console.log('🎬 Iniciando carga de video...');
+      setLoading(true);
       try {
         const res = await fetch('/api/admin/settings');
+        console.log('📡 Respuesta de API settings:', res.status);
+        
         const data = await res.json();
+        console.log('📋 Datos recibidos:', data);
+        
         if (data.success) {
           const videoSetting = data.settings.find(s => s.key === 'youtube_video_url');
+          console.log('🔍 Video setting encontrado:', videoSetting);
+          
           if (videoSetting && videoSetting.value) {
             // Detectar si es un Short o video normal
             const url = videoSetting.value;
+            console.log('🎥 URL del video:', url);
+            
             const isShortVideo = url.includes('/shorts/');
             setIsShort(isShortVideo);
+            console.log('📱 Es Short:', isShortVideo);
             
             // Extraer ID del video
             const extractedVideoId = getVideoId(url);
-            if (extractedVideoId) {
-              setVideoId(extractedVideoId);
-            }
+            console.log('🆔 ID extraído:', extractedVideoId);
             
             // Convertir link a embed con parámetros optimizados
             const embedUrl = getEmbedUrl(url);
+            console.log('🔗 URL embed generada:', embedUrl);
+            
             setVideoUrl(embedUrl);
+            console.log('✅ Video configurado correctamente');
+          } else {
+            console.log('⚠️ No se encontró configuración de video, usando por defecto');
           }
+        } else {
+          console.log('❌ Error en la respuesta:', data);
         }
       } catch (e) { 
-        console.log('Error cargando video:', e);
+        console.log('💥 Error cargando video:', e);
         // Mantener video por defecto
-        setVideoId('ESZQGGiZ_KU');
+      } finally {
+        setLoading(false);
+        console.log('🏁 Carga de video finalizada');
       }
     }
     fetchVideoUrl();
   }, []);
 
-  // Configurar el player cuando esté listo
+  // Manejar evento de finalización del video
   useEffect(() => {
-    const setupPlayer = () => {
-      if (window.YT && window.YT.Player && playerRef.current) {
+    const handleMessage = (event) => {
+      if (event.origin !== 'https://www.youtube.com') return;
+      
+      if (event.data && typeof event.data === 'string') {
         try {
-          const player = new window.YT.Player(playerRef.current, {
-            videoId: videoId,
-            playerVars: {
-              rel: 0,
-              modestbranding: 1,
-              controls: 1,
-              showinfo: 0,
-              fs: 1,
-              cc_load_policy: 0,
-              iv_load_policy: 3,
-              autoplay: 1,
-              mute: 0,
-              enablejsapi: 1,
-              playsinline: 1
-            },
-            events: {
-              onReady: (event) => {
-                console.log('Player listo');
-                // Establecer volumen al 20%
-                event.target.setVolume(20);
-                // Reproducir automáticamente
-                event.target.playVideo();
-              },
-              onStateChange: (event) => {
-                // Cuando el video termine (estado 0)
-                if (event.data === window.YT.PlayerState.ENDED) {
-                  console.log('Video terminado, redirigiendo a membresías...');
-                  setTimeout(() => {
-                    router.push('/membresias');
-                  }, 1000); // Esperar 1 segundo antes de redirigir
-                }
-              },
-              onError: (event) => {
-                console.log('Error en el player:', event.data);
-              }
-            }
-          });
-        } catch (error) {
-          console.log('Error creando player:', error);
+          const data = JSON.parse(event.data);
+          if (data.event === 'video-progress' && data.info && data.info.currentTime) {
+            // Video está reproduciéndose
+          } else if (data.event === 'onStateChange' && data.info === 0) {
+            // Video terminó (estado 0)
+            console.log('🎬 Video terminado, redirigiendo a membresías...');
+            setTimeout(() => {
+              router.push('/membresias');
+            }, 1000);
+          }
+        } catch (e) {
+          // Ignorar errores de parsing
         }
       }
     };
 
-    // Si la API ya está cargada, configurar inmediatamente
-    if (window.YT && window.YT.Player) {
-      setupPlayer();
-    } else {
-      // Si no, esperar a que se cargue
-      window.onYouTubeIframeAPIReady = setupPlayer;
-    }
-  }, [videoId, router]);
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [router]);
 
   const handleContactClick = () => {
     const isSmallScreen = window.innerWidth < 768;
@@ -169,6 +141,17 @@ export default function Hero() {
       setIsContactModalOpen(true);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white mb-4"></div>
+          <p>Cargando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen">
@@ -217,11 +200,16 @@ export default function Hero() {
               ? 'aspect-[9/16] max-w-[280px] sm:max-w-[320px] lg:max-w-[360px] min-h-[400px] max-h-[640px]' 
               : 'aspect-[16/9] min-h-[220px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[400px] max-h-[480px]'
           }`}>
-            {/* Div contenedor para el player de YouTube */}
-            <div
-              ref={playerRef}
+            <iframe
+              width="100%"
+              height="100%"
+              src={videoUrl}
+              title="Bienvenidos a Fantaseeds"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
               className="w-full h-full"
-              id="youtube-player"
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>
         </div>
