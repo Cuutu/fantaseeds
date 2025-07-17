@@ -8,9 +8,9 @@ import ContactModal from '../ContactModal';
 
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/8JzQ6Z8l4gA');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/ESZQGGiZ_KU');
   const [isShort, setIsShort] = useState(false);
-  const [videoId, setVideoId] = useState('8JzQ6Z8l4gA');
+  const [videoId, setVideoId] = useState('ESZQGGiZ_KU');
   const playerRef = useRef(null);
   const router = useRouter();
 
@@ -98,7 +98,7 @@ export default function Hero() {
       } catch (e) { 
         console.log('Error cargando video:', e);
         // Mantener video por defecto
-        setVideoId('8JzQ6Z8l4gA');
+        setVideoId('ESZQGGiZ_KU');
       }
     }
     fetchVideoUrl();
