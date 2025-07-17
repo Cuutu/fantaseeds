@@ -37,7 +37,7 @@ export default function AdminMultimediaPage() {
     const videoId = getVideoId(url);
     if (!videoId) return '';
     
-    // Parámetros para mejor compatibilidad
+    // Parámetros para mejor compatibilidad (SIN autoplay en el preview)
     const params = new URLSearchParams({
       rel: '0',              // No mostrar videos relacionados
       modestbranding: '1',   // Menos branding de YouTube
@@ -46,7 +46,7 @@ export default function AdminMultimediaPage() {
       fs: '1',               // Permitir pantalla completa
       cc_load_policy: '0',   // No cargar subtítulos automáticamente
       iv_load_policy: '3',   // No cargar anotaciones
-      autoplay: '0'          // No reproducir automáticamente
+      autoplay: '0'          // No reproducir automáticamente en preview
     });
     
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
@@ -149,6 +149,9 @@ export default function AdminMultimediaPage() {
             placeholder="https://www.youtube.com/watch?v=... o https://www.youtube.com/shorts/..."
             required
           />
+          <p className="text-xs text-gray-400 mb-2">
+            Este video se mostrará en la página principal, se reproducirá automáticamente al 20% de volumen y al finalizar redirigirá a la página de Membresías.
+          </p>
           
           {/* Validación en tiempo real */}
           {videoUrl && !isValidYouTubeUrl(videoUrl) && (
@@ -213,7 +216,7 @@ export default function AdminMultimediaPage() {
             </div>
             
             {/* Información adicional */}
-            <div className="mt-2 text-xs text-gray-400 text-center">
+            <div className="mt-2 text-xs text-gray-400 text-center space-y-1">
               {previewError ? (
                 <span className="text-yellow-400">
                   ⚠️ Si el video no se muestra aquí, aún funcionará en la página principal
@@ -223,6 +226,11 @@ export default function AdminMultimediaPage() {
                   ✅ Preview cargado correctamente
                 </span>
               )}
+              <div className="text-blue-300 mt-2">
+                <p>ℹ️ En la página principal el video:</p>
+                <p>• Se reproduce automáticamente al 20% de volumen</p>
+                <p>• Al terminar redirige a la página de Membresías</p>
+              </div>
             </div>
           </div>
         )}

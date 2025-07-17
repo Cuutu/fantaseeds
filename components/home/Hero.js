@@ -1,14 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import ScrollReveal from '@/components/animations/ScrollReveal';
 import ContactModal from '../ContactModal';
 
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/8JzQ6Z8l4gA?rel=0&modestbranding=1&controls=1&showinfo=0&fs=1&cc_load_policy=0&iv_load_policy=3&autoplay=0');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/8JzQ6Z8l4gA');
   const [isShort, setIsShort] = useState(false);
+  const [videoId, setVideoId] = useState('8JzQ6Z8l4gA');
+  const playerRef = useRef(null);
+  const router = useRouter();
 
   // Extraer ID del video de YouTube
   const getVideoId = (url) => {
@@ -32,9 +36,9 @@ export default function Hero() {
   // Convertir URL para embed con parámetros optimizados
   const getEmbedUrl = (url) => {
     const videoId = getVideoId(url);
-    if (!videoId) return url; // Fallback a la URL original si no se puede extraer
+    if (!videoId) return url;
     
-    // Parámetros para mejor compatibilidad y experiencia
+    // Parámetros optimizados con autoplay y configuraciones para la API
     const params = new URLSearchParams({
       rel: '0',              // No mostrar videos relacionados
       modestbranding: '1',   // Menos branding de YouTube
@@ -43,11 +47,29 @@ export default function Hero() {
       fs: '1',               // Permitir pantalla completa
       cc_load_policy: '0',   // No cargar subtítulos automáticamente
       iv_load_policy: '3',   // No cargar anotaciones
-      autoplay: '0'          // No reproducir automáticamente
+      autoplay: '1',         // Reproducir automáticamente
+      mute: '0',             // No silenciar (para controlar volumen)
+      enablejsapi: '1',      // Habilitar JavaScript API
+      playsinline: '1'       // Para móviles
     });
     
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
   };
+
+  // Cargar la API de YouTube
+  useEffect(() => {
+    // Cargar script de YouTube API si no está cargado
+    if (!window.YT) {
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      document.body.appendChild(script);
+      
+      window.onYouTubeIframeAPIReady = () => {
+        console.log('YouTube API cargada');
+      };
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchVideoUrl() {
@@ -62,6 +84,12 @@ export default function Hero() {
             const isShortVideo = url.includes('/shorts/');
             setIsShort(isShortVideo);
             
+            // Extraer ID del video
+            const extractedVideoId = getVideoId(url);
+            if (extractedVideoId) {
+              setVideoId(extractedVideoId);
+            }
+            
             // Convertir link a embed con parámetros optimizados
             const embedUrl = getEmbedUrl(url);
             setVideoUrl(embedUrl);
@@ -69,14 +97,72 @@ export default function Hero() {
         }
       } catch (e) { 
         console.log('Error cargando video:', e);
-        // Mantener video por defecto con parámetros optimizados
+        // Mantener video por defecto
+        setVideoId('8JzQ6Z8l4gA');
       }
     }
     fetchVideoUrl();
   }, []);
 
+  // Configurar el player cuando esté listo
+  useEffect(() => {
+    const setupPlayer = () => {
+      if (window.YT && window.YT.Player && playerRef.current) {
+        try {
+          const player = new window.YT.Player(playerRef.current, {
+            videoId: videoId,
+            playerVars: {
+              rel: 0,
+              modestbranding: 1,
+              controls: 1,
+              showinfo: 0,
+              fs: 1,
+              cc_load_policy: 0,
+              iv_load_policy: 3,
+              autoplay: 1,
+              mute: 0,
+              enablejsapi: 1,
+              playsinline: 1
+            },
+            events: {
+              onReady: (event) => {
+                console.log('Player listo');
+                // Establecer volumen al 20%
+                event.target.setVolume(20);
+                // Reproducir automáticamente
+                event.target.playVideo();
+              },
+              onStateChange: (event) => {
+                // Cuando el video termine (estado 0)
+                if (event.data === window.YT.PlayerState.ENDED) {
+                  console.log('Video terminado, redirigiendo a membresías...');
+                  setTimeout(() => {
+                    router.push('/membresias');
+                  }, 1000); // Esperar 1 segundo antes de redirigir
+                }
+              },
+              onError: (event) => {
+                console.log('Error en el player:', event.data);
+              }
+            }
+          });
+        } catch (error) {
+          console.log('Error creando player:', error);
+        }
+      }
+    };
+
+    // Si la API ya está cargada, configurar inmediatamente
+    if (window.YT && window.YT.Player) {
+      setupPlayer();
+    } else {
+      // Si no, esperar a que se cargue
+      window.onYouTubeIframeAPIReady = setupPlayer;
+    }
+  }, [videoId, router]);
+
   const handleContactClick = () => {
-    const isSmallScreen = window.innerWidth < 768; // Ajusta el tamaño según el modal
+    const isSmallScreen = window.innerWidth < 768;
     if (isSmallScreen) {
       document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
     } else {
@@ -131,17 +217,12 @@ export default function Hero() {
               ? 'aspect-[9/16] max-w-[280px] sm:max-w-[320px] lg:max-w-[360px] min-h-[400px] max-h-[640px]' 
               : 'aspect-[16/9] min-h-[220px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[400px] max-h-[480px]'
           }`}>
-            <iframe
-              width="100%"
-              height="100%"
-              src={videoUrl}
-              title="Bienvenidos a Fantaseeds"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
+            {/* Div contenedor para el player de YouTube */}
+            <div
+              ref={playerRef}
               className="w-full h-full"
-              referrerPolicy="strict-origin-when-cross-origin"
-            ></iframe>
+              id="youtube-player"
+            />
           </div>
         </div>
       </div>
