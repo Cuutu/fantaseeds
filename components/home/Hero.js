@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ScrollReveal from '@/components/animations/ScrollReveal';
@@ -7,6 +7,28 @@ import ContactModal from '../ContactModal';
 
 export default function Hero() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/embed/8JzQ6Z8l4gA');
+
+  useEffect(() => {
+    async function fetchVideoUrl() {
+      try {
+        const res = await fetch('/api/admin/settings');
+        const data = await res.json();
+        if (data.success) {
+          const videoSetting = data.settings.find(s => s.key === 'youtube_video_url');
+          if (videoSetting && videoSetting.value) {
+            // Convertir link normal a embed si es necesario
+            let url = videoSetting.value;
+            if (url.includes('watch?v=')) {
+              url = url.replace('watch?v=', 'embed/');
+            }
+            setVideoUrl(url);
+          }
+        }
+      } catch (e) { /* ignorar error */ }
+    }
+    fetchVideoUrl();
+  }, []);
 
   const handleContactClick = () => {
     const isSmallScreen = window.innerWidth < 768; // Ajusta el tamaño según el modal
@@ -41,11 +63,11 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
+      <div className="relative h-screen flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:px-8 gap-8">
         <ScrollReveal>
-          <div className="text-center">
+          <div className="text-center lg:text-left flex flex-col items-center lg:items-start justify-center flex-1">
             <div className="space-y-4">
-              <div className="relative w-full max-w-[200px] sm:max-w-[280px] mx-auto">
+              <div className="relative w-full max-w-[200px] sm:max-w-[280px] mx-auto lg:mx-0">
                 <Image
                   src="https://i.imgur.com/YcJ9dfr.png"
                   alt="FANTASEEDS"
@@ -56,7 +78,6 @@ export default function Hero() {
                 />
               </div>
             </div>
-            
             <ScrollReveal delay={200}>
               <button
                 onClick={handleContactClick}
@@ -70,6 +91,21 @@ export default function Hero() {
             </ScrollReveal>
           </div>
         </ScrollReveal>
+        {/* Video YouTube */}
+        <div className="flex-1 flex justify-center items-center w-full max-w-2xl">
+          <div className="w-full aspect-video rounded-xl overflow-hidden shadow-2xl border-4 border-gray-800 bg-black">
+            <iframe
+              width="100%"
+              height="100%"
+              src={videoUrl}
+              title="Bienvenidos a Fantaseeds"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="w-full h-full"
+            ></iframe>
+          </div>
+        </div>
       </div>
 
       <ContactModal 

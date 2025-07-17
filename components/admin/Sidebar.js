@@ -94,6 +94,21 @@ export default function Sidebar({ onClose }) {
             Membresías
           </Link>
 
+          <Link 
+            href="/admin/multimedia"
+            onClick={onClose}
+            className={`flex items-center px-4 py-3 rounded transition-colors duration-200 ${
+              pathname === '/admin/multimedia' 
+                ? 'bg-gray-700 text-green-500' 
+                : 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-300'
+            }`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A2 2 0 0021 6.382V5a2 2 0 00-2-2H5a2 2 0 00-2 2v1.382a2 2 0 00.447 1.342L8 10m7 0v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4m10 0l-2 2m-6-2l-2 2" />
+            </svg>
+            Multimedia
+          </Link>
+
           <button
             onClick={() => signOut()}
             className="flex items-center w-full px-4 py-3 text-gray-400 hover:bg-gray-700/50 hover:text-gray-300 rounded transition-colors duration-200"

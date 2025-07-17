@@ -77,6 +77,19 @@ const AdminSidebar = () => {
             <span>Membresías</span>
           </div>
         </Link>
+
+        <Link
+          href="/admin/multimedia"
+          className={`block py-2.5 px-4 rounded transition duration-200 ${
+            pathname === '/admin/multimedia'
+              ? 'bg-gray-700 text-green-500'
+              : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+          }`}
+        >
+          <div className="flex items-center space-x-2">
+            <span>Multimedia</span>
+          </div>
+        </Link>
       </nav>
 
       <div className="px-4 mt-auto">
