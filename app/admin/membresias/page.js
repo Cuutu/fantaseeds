@@ -16,7 +16,6 @@ export default function AdminMembresiasPage() {
     price: '',
     period: '/mes',
     description: '',
-    limit: '',
     features: [''],
     active: true,
     order: 0
@@ -86,7 +85,6 @@ export default function AdminMembresiasPage() {
       price: '',
       period: '/mes',
       description: '',
-      limit: '',
       features: [''],
       active: true,
       order: 0
@@ -103,7 +101,6 @@ export default function AdminMembresiasPage() {
         price: membership.price,
         period: membership.period,
         description: membership.description,
-        limit: membership.limit,
         features: membership.features,
         active: membership.active,
         order: membership.order
@@ -232,7 +229,6 @@ export default function AdminMembresiasPage() {
             <tr>
               <th className="text-left p-4 text-gray-300">Nombre</th>
               <th className="text-left p-4 text-gray-300">Precio</th>
-              <th className="text-left p-4 text-gray-300">Límite</th>
               <th className="text-left p-4 text-gray-300">Estado</th>
               <th className="text-left p-4 text-gray-300">Orden</th>
               <th className="text-left p-4 text-gray-300">Acciones</th>
@@ -243,7 +239,6 @@ export default function AdminMembresiasPage() {
               <tr key={membership._id} className="border-b border-gray-700">
                 <td className="p-4 text-white">{membership.name}</td>
                 <td className="p-4 text-white">{membership.price}{membership.period}</td>
-                <td className="p-4 text-white">{membership.limit}</td>
                 <td className="p-4">
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     membership.active 
@@ -348,16 +343,7 @@ export default function AdminMembresiasPage() {
                 />
               </div>
 
-              <div>
-                <label className="block text-gray-300 mb-2">Límite</label>
-                <input
-                  type="text"
-                  value={formData.limit}
-                  onChange={(e) => setFormData({...formData, limit: e.target.value})}
-                  className="w-full bg-gray-700 text-white rounded-lg px-3 py-2"
-                  required
-                />
-              </div>
+
 
               <div>
                 <label className="block text-gray-300 mb-2">Características</label>
