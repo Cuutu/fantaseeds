@@ -57,6 +57,28 @@ export default function AdminMembresiasPage() {
     }
   };
 
+  const repairMemberships = async () => {
+    try {
+      const response = await fetch('/api/admin/memberships/repair', {
+        method: 'POST'
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        console.log('✅ Membresías reparadas:', data);
+        await fetchMemberships();
+        alert('Membresías reparadas exitosamente!');
+      } else {
+        console.error('Error al reparar membresías:', data);
+        alert('Error al reparar membresías');
+      }
+    } catch (error) {
+      console.error('Error al reparar membresías:', error);
+      alert('Error al reparar membresías');
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       id: '',
@@ -187,6 +209,12 @@ export default function AdminMembresiasPage() {
               Inicializar Membresías por Defecto
             </button>
           )}
+          <button
+            onClick={repairMemberships}
+            className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          >
+            🔧 Reparar Membresías
+          </button>
           <button
             onClick={() => openModal()}
             className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"

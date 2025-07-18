@@ -19,7 +19,10 @@ export default function MembresiasPage() {
       const response = await fetch('/api/memberships');
       const data = await response.json();
       
+      console.log('🎯 Respuesta de API membresías:', data);
+      
       if (data.success) {
+        console.log('📝 Membresías recibidas:', data.memberships);
         setMemberships(data.memberships);
       }
     } catch (error) {

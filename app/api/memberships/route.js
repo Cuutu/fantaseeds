@@ -6,7 +6,13 @@ import Membership from '@/models/Membership';
 export async function GET() {
   try {
     await dbConnect();
+    
+    // Debug: Obtener TODAS las membresías para ver qué está pasando
+    const allMemberships = await Membership.find({});
+    console.log('🔍 Todas las membresías en DB:', allMemberships);
+    
     const memberships = await Membership.find({ active: true }).sort({ order: 1 });
+    console.log('✅ Membresías activas encontradas:', memberships);
     
     return NextResponse.json({
       success: true,
