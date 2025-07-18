@@ -93,7 +93,6 @@ export default function MembresiasPage() {
                     <span className="text-4xl font-bold text-white">{membership.price}</span>
                     <span className="text-gray-400 ml-1">{membership.period}</span>
                   </div>
-                  <p className="text-emerald-400 font-medium mt-2">{membership.limit}</p>
                 </div>
 
                 {/* Features */}
