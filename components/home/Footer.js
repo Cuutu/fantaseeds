@@ -28,7 +28,7 @@ function Footer() {
               <FaInstagram className="text-3xl" />
             </a>
             <a
-              href="https://api.whatsapp.com/send/?phone=5491127064165&text&type=phone_number&app_absent=0"
+              href="https://api.whatsapp.com/send/?phone=5491127415571&text&type=phone_number&app_absent=0"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-green-400 transition-colors"

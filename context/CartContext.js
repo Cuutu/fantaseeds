@@ -176,7 +176,7 @@ export function CartProvider({ children }) {
               <p className="text-gray-300">
                 Llegaste al límite de tu membresía. ¿Querés aumentar tu límite?{' '}
                 <a 
-                  href="https://api.whatsapp.com/send/?phone=5491127064165&text&type=phone_number&app_absent=0"
+                  href="https://api.whatsapp.com/send/?phone=5491127415571&text&type=phone_number&app_absent=0"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-green-500 hover:text-green-400 font-medium"
