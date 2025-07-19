@@ -39,7 +39,7 @@ export default function MembresiasPage() {
   const handleUpgrade = (membershipName) => {
     // Abrir WhatsApp con mensaje personalizado
     const message = `Hola! Me interesa la ${membershipName}. ¿Hay cupos disponibles?`;
-    const whatsappUrl = `https://api.whatsapp.com/send/?phone=5491127415571&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
+    const whatsappUrl = `https://api.whatsapp.com/send/?phone=5491153325799&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -128,7 +128,7 @@ export default function MembresiasPage() {
           </p>
           <div className="flex justify-center">
             <a
-              href="https://api.whatsapp.com/send/?phone=5491127415571&text=Hola!%20Me%20gustar%C3%ADa%20recibir%20asesoramiento%20sobre%20las%20membres%C3%ADas&type=phone_number&app_absent=0"
+              href="https://api.whatsapp.com/send/?phone=5491153325799&text=Hola!%20Me%20gustar%C3%ADa%20recibir%20asesoramiento%20sobre%20las%20membres%C3%ADas&type=phone_number&app_absent=0"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center justify-center"
