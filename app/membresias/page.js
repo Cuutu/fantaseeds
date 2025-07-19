@@ -38,7 +38,7 @@ export default function MembresiasPage() {
 
   const handleUpgrade = (membershipName) => {
     // Abrir WhatsApp con mensaje personalizado
-    const message = `Hola! Me interesa upgradear a la ${membershipName}. ¿Podrían darme más información?`;
+    const message = `Hola! Me interesa la ${membershipName}. ¿Hay cupos disponibles?`;
     const whatsappUrl = `https://api.whatsapp.com/send/?phone=5491127415571&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
     window.open(whatsappUrl, '_blank');
   };
