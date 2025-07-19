@@ -36,9 +36,9 @@ export default function MembresiasPage() {
     return "relative rounded-2xl border border-gray-700 bg-gradient-to-br from-gray-900/50 to-gray-800/50 hover:border-gray-600 transition-all duration-300 transform hover:scale-105";
   };
 
-  const handleUpgrade = (membershipId) => {
+  const handleUpgrade = (membershipName) => {
     // Abrir WhatsApp con mensaje personalizado
-    const message = `Hola! Me interesa upgradear a la membresía ${membershipId}. ¿Podrían darme más información?`;
+    const message = `Hola! Me interesa upgradear a la ${membershipName}. ¿Podrían darme más información?`;
     const whatsappUrl = `https://api.whatsapp.com/send/?phone=5491127415571&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
     window.open(whatsappUrl, '_blank');
   };
@@ -107,7 +107,7 @@ export default function MembresiasPage() {
 
                 {/* CTA Button */}
                 <button
-                  onClick={() => handleUpgrade(membership.id)}
+                  onClick={() => handleUpgrade(membership.name)}
                   className="w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center group mt-auto bg-gray-700 hover:bg-gray-600 text-white hover:text-emerald-400"
                 >
                   Elegir Plan
