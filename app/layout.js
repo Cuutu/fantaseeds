@@ -35,6 +35,9 @@ export const tajawal = Tajawal({
 export const metadata = {
   title: 'FANTASEEDS',
   description: 'ONG DE LA SALUD.',
+  icons: {
+    icon: '/images/fanta-logo-chico.png',
+  },
 };
 
 export default function RootLayout({ children }) {

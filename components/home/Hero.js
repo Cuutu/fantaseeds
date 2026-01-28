@@ -245,7 +245,7 @@ export default function Hero() {
       <div className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 gap-8 lg:gap-16">
         <div className="flex-1 flex flex-col items-center justify-center min-h-[320px] max-w-md w-full py-8 lg:py-0">
           <Image
-            src="/images/fantaseeds-logo.png"
+            src="https://i.imgur.com/YcJ9dfr.png"
             alt="FANTASEEDS"
             width={400}
             height={120}
