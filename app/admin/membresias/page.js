@@ -16,6 +16,7 @@ export default function AdminMembresiasPage() {
     price: '',
     period: '/mes',
     description: '',
+    limit: '',
     features: [''],
     active: true,
     order: 0
@@ -85,6 +86,7 @@ export default function AdminMembresiasPage() {
       price: '',
       period: '/mes',
       description: '',
+      limit: '',
       features: [''],
       active: true,
       order: 0
@@ -101,6 +103,7 @@ export default function AdminMembresiasPage() {
         price: membership.price,
         period: membership.period,
         description: membership.description,
+        limit: membership.limit || '',
         features: membership.features,
         active: membership.active,
         order: membership.order
@@ -343,7 +346,17 @@ export default function AdminMembresiasPage() {
                 />
               </div>
 
-
+              <div>
+                <label className="block text-gray-300 mb-2">Límite</label>
+                <input
+                  type="text"
+                  value={formData.limit}
+                  onChange={(e) => setFormData({...formData, limit: e.target.value})}
+                  className="w-full bg-gray-700 text-white rounded-lg px-3 py-2"
+                  placeholder="Ej: 10 unidades por mes"
+                  required
+                />
+              </div>
 
               <div>
                 <label className="block text-gray-300 mb-2">Características</label>

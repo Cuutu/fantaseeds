@@ -20,7 +20,7 @@ export default function LoadingScreen() {
       <div className="text-center space-y-12">
         <div className="relative w-96 h-32 mb-8">
           <Image
-            src="https://i.imgur.com/XTwltQ6.png"
+            src="/images/fantaseeds-logo.png"
             alt="FANTASEEDS"
             fill
             className="object-contain"
