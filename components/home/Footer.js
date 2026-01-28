@@ -28,7 +28,7 @@ function Footer() {
               <FaInstagram className="text-3xl" />
             </a>
             <a
-              href="https://api.whatsapp.com/send/?phone=5491127415571&text&type=phone_number&app_absent=0"
+              href="https://api.whatsapp.com/send/?phone=5491153325799&text&type=phone_number&app_absent=0"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-green-400 transition-colors"
@@ -37,9 +37,22 @@ function Footer() {
             </a>
           </div>
 
-          {/* Copyright */}
-          <div className="text-sm text-gray-400">
-            © 2024 Fantaseeds. Todos los derechos reservados.
+          {/* Copyright y Crédito */}
+          <div className="flex flex-col items-center space-y-2">
+            <div className="text-sm text-gray-400">
+              © 2024 Fantaseeds. Todos los derechos reservados.
+            </div>
+            <div className="text-sm text-gray-500">
+              Desarrollado por{' '}
+              <a
+                href="https://l40s.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-green-400 transition-colors font-medium"
+              >
+                L40S dev studio
+              </a>
+            </div>
           </div>
         </div>
       </div>
